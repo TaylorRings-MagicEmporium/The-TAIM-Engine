@@ -1,10 +1,12 @@
 #pragma once
 #include "Shader.h"
+#include "Mesh.h"
+#include "Model.h"
 #include <vector>
 
-struct Vertex {
-	glm::vec3 Position;
-};
+//struct Vertex {
+//	glm::vec3 Position;
+//};
 
 class MeshRenderer
 {
@@ -12,9 +14,9 @@ private:
 	unsigned int VAO;
 	unsigned int VBO;
 	Shader* shader;
-	std::vector<Vertex> vertices;
+	Mesh mesh;
 public:
-	MeshRenderer(Shader* shader);
+	MeshRenderer(std::string path, Shader* shader, bool flip);
 	void Setup();
 	void Draw();
 

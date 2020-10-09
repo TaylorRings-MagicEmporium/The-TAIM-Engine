@@ -126,7 +126,7 @@ Camera::~Camera() {
 }
 
 void Camera::UpdateCamera() {
-    glm::vec3 pos = glm::vec3(0,0,2);
+    glm::vec3 pos = glm::vec3(0,0,5);
     view = glm::lookAt(pos, pos + glm::vec3(0,0,-1), glm::vec3(0,1,0));
     proj = glm::perspective(glm::radians(zoom), 800.0f / 600.0f, 0.1f, 100.0f);
     UIProj = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1000.0f, 1000.0f);

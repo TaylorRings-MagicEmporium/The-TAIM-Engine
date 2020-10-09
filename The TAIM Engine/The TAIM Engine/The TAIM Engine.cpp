@@ -218,6 +218,8 @@
 #include <glad/glad.h>
 #include <SDL2\SDL_opengl.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
 #include <string>
 #include <iostream>
@@ -358,14 +360,16 @@ int main(int argc, char* args[])
 	else
 	{
 
-		Shader temp = Shader("Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl");
-		MeshRenderer mr = MeshRenderer(&temp);
+
+		glEnable(GL_DEPTH_TEST);
+
+		Shader basic = Shader("Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl");
+		Shader model_Loading = Shader("Shaders/model_loadingV.glsl", "Shaders/model_loadingF.glsl");
+		MeshRenderer mr = MeshRenderer("Objects/duck/duck.obj",&model_Loading, false);
 
 		Camera c = Camera();
 
 		mr.Setup();
-
-
 
 		//Main loop flag
 		bool quit = false;
@@ -389,11 +393,16 @@ int main(int argc, char* args[])
 				}
 			}
 
+
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 			//Render quad
 			c.UpdateCamera();
-			c.SetProjMat(&temp);
-			c.SetViewMat(&temp);
-			temp.SetMat4("model", glm::mat4(1));
+			c.SetProjMat(&model_Loading);
+			c.SetViewMat(&model_Loading);
+			glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(0.1f * SDL_GetTicks()), glm::vec3(1, 1, 1));
+			model_Loading.SetMat4("model", model);
 			mr.Draw();
 
 			//Update screen
