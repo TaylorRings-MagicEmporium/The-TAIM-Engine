@@ -223,6 +223,7 @@
 #include <iostream>
 #include "Shader.h"
 #include "MeshRenderer.h"
+#include "Camera.h"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -349,8 +350,6 @@ void close()
 
 int main(int argc, char* args[])
 {
-
-
 	//Start up SDL and create window
 	if (!init())
 	{
@@ -361,6 +360,8 @@ int main(int argc, char* args[])
 
 		Shader temp = Shader("Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl");
 		MeshRenderer mr = MeshRenderer(&temp);
+
+		Camera c = Camera();
 
 		mr.Setup();
 
@@ -389,6 +390,10 @@ int main(int argc, char* args[])
 			}
 
 			//Render quad
+			c.UpdateCamera();
+			c.SetProjMat(&temp);
+			c.SetViewMat(&temp);
+			temp.SetMat4("model", glm::mat4(1));
 			mr.Draw();
 
 			//Update screen

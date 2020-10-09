@@ -78,21 +78,33 @@ void Shader::Use() {
 
 void Shader::SetBool(const std::string& name, bool value) const
 {
+	if (IsPresent(name))
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
 void Shader::SetInt(const std::string& name, int value) const
 {
+	if (IsPresent(name))
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 void Shader::SetFloat(const std::string& name, float value) const
 {
+	if (IsPresent(name))
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 void Shader::SetVec3(const std::string& name, glm::vec3 value) const
 {
+	if (IsPresent(name))
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1,glm::value_ptr(value));
 }
 void Shader::SetMat4(const std::string& name, glm::mat4 value) const 
 {
+	if(IsPresent(name))
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1,GL_FALSE, glm::value_ptr(value));
+}
+
+bool Shader::IsPresent(const std::string& name) const {
+	if (glGetUniformLocation(ID, name.c_str()) == -1) {
+		std::cout << name.c_str() << " does not exist in Shader!" << std::endl;
+		return false;
+	} return true;
 }

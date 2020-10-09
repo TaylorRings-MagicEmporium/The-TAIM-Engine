@@ -26,5 +26,7 @@ public:
 	void SetVec3(const std::string& name, glm::vec3 value) const;
 	void SetMat4(const std::string& name, glm::mat4 value) const;
 
+	bool IsPresent(const std::string& name) const;
+
 };
 
