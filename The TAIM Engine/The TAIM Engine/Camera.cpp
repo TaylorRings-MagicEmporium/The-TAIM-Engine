@@ -9,13 +9,8 @@
 
 #include <iostream>
 Camera::Camera() {
-    //type = "Camera";
+
 }
-//Camera::Camera(Slots slot) {
-//    type = "Camera";
-//    this->slot = slot;
-//    IsSet = true;
-//}
 
 void Camera::Setup() {
     //if (IsSet) {
@@ -89,27 +84,27 @@ void Camera::Update() {
 
 }
 
-void Camera::SetProjMat(Shader *shader) {
-    unsigned int transformLoc = glGetUniformLocation(shader->ID, "Proj");
-    if (transformLoc == -1) {
-        std::cout << "Proj does not exist in shader!" << std::endl;
-    }
-    else {
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(proj));
-    }
-
-}
-
-void Camera::SetViewMat(Shader *shader) {
-    unsigned int transformLoc = glGetUniformLocation(shader->ID, "View");
-    if (transformLoc == -1) {
-        std::cout << "View does not exist in shader!" << std::endl;
-    }
-    else {
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(view));
-    }
-
-}
+//void Camera::SetProjMat(Shader *shader) {
+//    unsigned int transformLoc = glGetUniformLocation(shader->ID, "Proj");
+//    if (transformLoc == -1) {
+//        std::cout << "Proj does not exist in shader!" << std::endl;
+//    }
+//    else {
+//        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(proj));
+//    }
+//
+//}
+//
+//void Camera::SetViewMat(Shader *shader) {
+//    unsigned int transformLoc = glGetUniformLocation(shader->ID, "View");
+//    if (transformLoc == -1) {
+//        std::cout << "View does not exist in shader!" << std::endl;
+//    }
+//    else {
+//        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(view));
+//    }
+//
+//}
 
 glm::mat4 Camera::GetProj() {
     return proj;
@@ -125,9 +120,9 @@ Camera::~Camera() {
     std::cout << "camera has been deleted!" << std::endl;
 }
 
-void Camera::UpdateCamera() {
-    glm::vec3 pos = glm::vec3(0,0,5);
+void Camera::UpdateCamera(int WIDTH, int HEIGHT) {
+    glm::vec3 pos = glm::vec3(0,0,10);
     view = glm::lookAt(pos, pos + glm::vec3(0,0,-1), glm::vec3(0,1,0));
-    proj = glm::perspective(glm::radians(zoom), 800.0f / 600.0f, 0.1f, 100.0f);
-    UIProj = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1000.0f, 1000.0f);
+    proj = glm::perspective(glm::radians(zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+    UIProj = glm::ortho(0.0f, (float)WIDTH, 0.0f, (float)HEIGHT, -1000.0f, 1000.0f);
 }

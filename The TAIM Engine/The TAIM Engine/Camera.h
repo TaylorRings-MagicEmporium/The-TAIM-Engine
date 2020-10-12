@@ -37,12 +37,12 @@ public:
 
 	void Update();
 
-	void SetViewMat(Shader *shader);
-	void SetProjMat(Shader *shader);
+	//void SetViewMat(Shader *shader);
+	//void SetProjMat(Shader *shader);
 
 	glm::mat4 GetProj();
 	glm::mat4 GetView();
 	glm::mat4 GetUIProj();
 
-	void UpdateCamera();
+	void UpdateCamera(int WIDTH, int HEIGHT);
 };

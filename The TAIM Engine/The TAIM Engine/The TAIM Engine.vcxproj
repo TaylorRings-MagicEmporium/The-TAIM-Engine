@@ -143,22 +143,36 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="EventQueue.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Graphics_System.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderRegistry.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="The TAIM Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventQueue.h" />
+    <ClInclude Include="Graphics_System.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderRegistry.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stb_image_write.h" />
+    <ClInclude Include="The_TAIM_Engine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\BasicFragment.glsl" />

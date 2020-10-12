@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 
 MeshRenderer::MeshRenderer(std::string path, Shader* shader, bool flip) {
+	type = ComponentType::MeshRenderer;
 	this->shader = shader;
 	Model t = Model(path, flip);
 	mesh = t.GetMesh();
