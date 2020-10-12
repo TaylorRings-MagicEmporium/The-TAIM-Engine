@@ -14,13 +14,15 @@ public:
 	MeshRenderer* CreateMeshRenderer(std::string path, Shader* shader, bool flip);
 	void Setup();
 	void Draw();
-	void Update(EventQueue EQ);
+	void Update(EventQueue* EQ);
 
 	void ResetGraphics();
 	~Graphics_System();
 
 	int MoveLeft(Event* e);
 	int MoveRight(Event* e);
+	int MoveUp(Event* e);
+	int MoveDown(Event* e);
 
 
 };

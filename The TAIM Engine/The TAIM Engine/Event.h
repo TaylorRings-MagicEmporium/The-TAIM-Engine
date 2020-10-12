@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include <vector>
-enum class EventType {MoveLeft, MoveRight};
+enum class EventType {MoveLeft, MoveRight, MoveUp, MoveDown};
 enum class Systems {Windows, Graphics, Physics, Audio};
 
 class Event

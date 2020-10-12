@@ -18,7 +18,7 @@ Graphics_System::~Graphics_System() {
 	ListOfMeshRenderers.clear();
 }
 
-void Graphics_System::Update(EventQueue EQ) {
+void Graphics_System::Update(EventQueue* EQ) {
 
 	//int(Graphics_System:: * MoveL)(Event e);
 	//MoveL = &Graphics_System::MoveLeft;
@@ -29,28 +29,33 @@ void Graphics_System::Update(EventQueue EQ) {
 	//int(Graphics_System::* Move[])(Event) = { MoveL,MoveR };
 
 	typedef int (Graphics_System::*method_Function)(Event*);
-	method_Function method_pointer[2] = { &Graphics_System::MoveLeft, &Graphics_System::MoveRight };
+	method_Function method_pointer[4] = { &Graphics_System::MoveLeft, &Graphics_System::MoveRight, &Graphics_System::MoveUp, &Graphics_System::MoveDown };
 
-	//Event* e;
-	//while (EQ.PollEvents(e)) {
-	//	if (e->SystemList[(int)Systems::Graphics]) {
-	//		method_Function func = method_pointer[(int)e->type];
-	//		(this->*func)(e);
-	//		e->SystemList[(int)Systems::Graphics] = false;
-	//	}
+	while (Event* e = EQ->PollEvents()) {
+		if (e->SystemList[(int)Systems::Graphics]) {
+			method_Function func = method_pointer[(int)e->type];
+			(this->*func)(e);
+			e->SystemList[(int)Systems::Graphics] = false;
+		}
 
-	//}
+	}
 }
 
 int Graphics_System::MoveLeft(Event* e) {
-	std::cout << "EVENT RECIEVED" << std::endl;
-	e->ListOfEntities[0]->pos += glm::vec3(0.1, 0, 0);
+	e->ListOfEntities[0]->pos += glm::vec3(-0.1, 0, 0);
 	return 1;
 }
 
 int Graphics_System::MoveRight(Event* e) {
-	std::cout << "EVENT RECIEVED" << std::endl;
-	e->ListOfEntities[0]->pos += glm::vec3(-0.1, 0, 0);
+	e->ListOfEntities[0]->pos += glm::vec3(0.1, 0, 0);
+	return 1;
+}
+int Graphics_System::MoveUp(Event* e) {
+	e->ListOfEntities[0]->pos += glm::vec3(0, 0.1, 0);
+	return 1;
+}
+int Graphics_System::MoveDown(Event* e) {
+	e->ListOfEntities[0]->pos += glm::vec3(0, -0.1, 0);
 	return 1;
 }
 

@@ -147,7 +147,6 @@ int The_TAIM_Engine::StartEngine() {
 				Event ev = Event();
 				switch (e.key.keysym.sym) {
 				case SDLK_a:
-					std::cout << "EVENT MADE" << std::endl;
 					ev.type = EventType::MoveLeft;
 					ev.SystemList[(int)Systems::Graphics] = true;
 					ev.ListOfEntities.push_back(&duck);
@@ -155,13 +154,27 @@ int The_TAIM_Engine::StartEngine() {
 					break;
 				
 				case SDLK_d:
-					std::cout << "EVENT MADE" << std::endl;
 					ev.type = EventType::MoveRight;
 					ev.SystemList[(int)Systems::Graphics] = true;
 					ev.ListOfEntities.push_back(&duck);
 					Event_Queue.AddEventToStack(ev);
 					break;
+
+				case SDLK_w:
+					ev.type = EventType::MoveUp;
+					ev.SystemList[(int)Systems::Graphics] = true;
+					ev.ListOfEntities.push_back(&duck);
+					Event_Queue.AddEventToStack(ev);
+					break;
+
+				case SDLK_s:
+					ev.type = EventType::MoveDown;
+					ev.SystemList[(int)Systems::Graphics] = true;
+					ev.ListOfEntities.push_back(&duck);
+					Event_Queue.AddEventToStack(ev);
+					break;
 				}
+
 			}
 		}
 
@@ -176,7 +189,12 @@ int The_TAIM_Engine::StartEngine() {
 		SR.GetShader("model_loading")->SetMat4("Proj", c.GetProj());
 		SR.GetShader("model_loading")->SetMat4("View", c.GetView());
 		
-		GS.Update(Event_Queue);
+		if (Event_Queue.GetTotalEvents() != 0) {
+			std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
+		}
+		GS.Update(&Event_Queue);
+
+		Event_Queue.RemoveEmptyEvents();
 
 		glm::mat4 model = glm::translate(glm::mat4(1.0), duck.pos);
 		SR.GetShader("model_loading")->SetMat4("model", model);
@@ -186,7 +204,7 @@ int The_TAIM_Engine::StartEngine() {
 		SDL_GL_SwapWindow(gWindow);
 	}
 		//Disable text input
-		SDL_StopTextInput();
+	SDL_StopTextInput();
 	
 
 	//Free resources and close SDL

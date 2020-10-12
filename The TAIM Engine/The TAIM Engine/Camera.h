@@ -10,8 +10,8 @@
 
 #include <iostream>
 
-// the camera creates an object that creates the matrices needed to view the world through it. this technically means that multiple cameras can be set up \
-if properly executed.
+// the camera creates an object that creates the matrices needed to view the world through it. this technically means that multiple cameras can be set up
+//if properly executed.
 class Camera {
 private:
 	//glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 20.0f);

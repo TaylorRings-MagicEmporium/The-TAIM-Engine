@@ -11,7 +11,9 @@ private:
 public:
 	EventQueue();
 	void AddEventToStack(Event e);
-	int PollEvents(Event* e);
+	Event* PollEvents();
 	void RemoveEmptyEvents();
+
+	inline int GetTotalEvents() { return EventsList.size(); };
 };
 
