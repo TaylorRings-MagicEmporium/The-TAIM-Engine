@@ -14,11 +14,13 @@
 #include "MeshRenderer.h"
 #include "Camera.h"
 #include "Entity.h"
+
 #include "Event.h"
 #include "EventQueue.h"
 
 #include "ShaderRegistry.h"
 #include "Graphics_System.h"
+#include "Input_System.h"
 
 class The_TAIM_Engine {
 	SDL_Window* gWindow = NULL;
@@ -31,6 +33,7 @@ class The_TAIM_Engine {
 	ShaderRegistry SR = ShaderRegistry();
 	Graphics_System GS = Graphics_System(100);
 	EventQueue Event_Queue = EventQueue();
+	Input_System IS;
 
 public:
 	The_TAIM_Engine();

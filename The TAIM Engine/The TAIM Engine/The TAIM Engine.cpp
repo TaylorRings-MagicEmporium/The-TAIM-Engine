@@ -104,7 +104,7 @@ int The_TAIM_Engine::SetupEngine() {
 		printf("Failed to initialize!\n");
 	}
 
-
+	IS = Input_System(gWindow);
 
 	return 0;
 }
@@ -136,6 +136,7 @@ int The_TAIM_Engine::StartEngine() {
 	while (!quit)
 	{
 		//Handle events on queue
+		//UPDATE INPUT SYSTEM
 		while (SDL_PollEvent(&e) != 0)
 		{
 			//User requests quit
@@ -143,45 +144,44 @@ int The_TAIM_Engine::StartEngine() {
 			{
 				quit = true;
 			}
-			else if (e.type == SDL_KEYDOWN) {
-				Event ev = Event();
-				switch (e.key.keysym.sym) {
-				case SDLK_a:
-					ev.type = EventType::MoveLeft;
-					ev.SystemList[(int)Systems::Graphics] = true;
-					ev.ListOfEntities.push_back(&duck);
-					Event_Queue.AddEventToStack(ev);
-					break;
-				
-				case SDLK_d:
-					ev.type = EventType::MoveRight;
-					ev.SystemList[(int)Systems::Graphics] = true;
-					ev.ListOfEntities.push_back(&duck);
-					Event_Queue.AddEventToStack(ev);
-					break;
-
-				case SDLK_w:
-					ev.type = EventType::MoveUp;
-					ev.SystemList[(int)Systems::Graphics] = true;
-					ev.ListOfEntities.push_back(&duck);
-					Event_Queue.AddEventToStack(ev);
-					break;
-
-				case SDLK_s:
-					ev.type = EventType::MoveDown;
-					ev.SystemList[(int)Systems::Graphics] = true;
-					ev.ListOfEntities.push_back(&duck);
-					Event_Queue.AddEventToStack(ev);
-					break;
-				}
-
-			}
 		}
 
+
+		//RESET FRAME
 		GS.ResetGraphics();
 
-		//SYSTEM LOOP
-		
+		Event ev = Event();
+		IS.Update_Input();
+		//GAMEPLAY LOOP (events go here for now)
+
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
+			ev.type = EventType::MoveUp;
+			ev.SystemList[(int)Systems::Graphics] = true;
+			ev.ListOfEntities.push_back(&duck);
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
+			ev.type = EventType::MoveLeft;
+			ev.SystemList[(int)Systems::Graphics] = true;
+			ev.ListOfEntities.push_back(&duck);
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
+			ev.type = EventType::MoveDown;
+			ev.SystemList[(int)Systems::Graphics] = true;
+			ev.ListOfEntities.push_back(&duck);
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
+			ev.type = EventType::MoveRight;
+			ev.SystemList[(int)Systems::Graphics] = true;
+			ev.ListOfEntities.push_back(&duck);
+			Event_Queue.AddEventToStack(ev);
+		}
+
+		// ENGINE LOOP
+
+
 
 		//Render quad
 		c.UpdateCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -189,9 +189,7 @@ int The_TAIM_Engine::StartEngine() {
 		SR.GetShader("model_loading")->SetMat4("Proj", c.GetProj());
 		SR.GetShader("model_loading")->SetMat4("View", c.GetView());
 		
-		if (Event_Queue.GetTotalEvents() != 0) {
-			std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
-		}
+		std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
 		GS.Update(&Event_Queue);
 
 		Event_Queue.RemoveEmptyEvents();

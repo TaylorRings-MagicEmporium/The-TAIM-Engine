@@ -11,7 +11,5 @@ public:
 	std::vector<Entity*> ListOfEntities;
 	bool SystemList[4];
 
-
-
 };
 

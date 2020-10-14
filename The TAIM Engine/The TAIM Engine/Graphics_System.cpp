@@ -20,14 +20,6 @@ Graphics_System::~Graphics_System() {
 
 void Graphics_System::Update(EventQueue* EQ) {
 
-	//int(Graphics_System:: * MoveL)(Event e);
-	//MoveL = &Graphics_System::MoveLeft;
-
-	//int(Graphics_System:: * MoveR)(Event e);
-	//MoveR = &Graphics_System::MoveLeft;
-
-	//int(Graphics_System::* Move[])(Event) = { MoveL,MoveR };
-
 	typedef int (Graphics_System::*method_Function)(Event*);
 	method_Function method_pointer[4] = { &Graphics_System::MoveLeft, &Graphics_System::MoveRight, &Graphics_System::MoveUp, &Graphics_System::MoveDown };
 
