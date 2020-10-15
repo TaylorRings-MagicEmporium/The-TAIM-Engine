@@ -1,11 +1,11 @@
-// The TAIM Engine.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 #include "The_TAIM_Engine.h"
+
 
 
 The_TAIM_Engine::The_TAIM_Engine() {
 
 }
+
 
 The_TAIM_Engine::~The_TAIM_Engine() {
 
@@ -65,6 +65,7 @@ bool The_TAIM_Engine::init()
 				{
 					printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 				}
+
 			}
 		}
 	}
@@ -72,20 +73,6 @@ bool The_TAIM_Engine::init()
 	return success;
 }
 
-
-void The_TAIM_Engine::handleKeys(unsigned char key, int x, int y)
-{
-	//Toggle quad
-	if (key == 'q')
-	{
-		gRenderQuad = !gRenderQuad;
-	}
-}
-
-void The_TAIM_Engine::update()
-{
-	//No per frame update needed
-}
 
 void The_TAIM_Engine::close()
 {
@@ -104,42 +91,41 @@ int The_TAIM_Engine::SetupEngine() {
 		printf("Failed to initialize!\n");
 	}
 
-	IS = Input_System(gWindow);
-
 	return 0;
 }
+
 
 int The_TAIM_Engine::StartEngine() {
 	glEnable(GL_DEPTH_TEST);
 
+
+	// (in file) "basic" is the engine's own shader in the case that no shader specified is found. MAKE INTO CODE INSTEAD
 	SR.CreateShader("basic", "Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl"); // ENGINE NEEDED
 	SR.CreateShader("model_loading", "Shaders/model_loadingV.glsl", "Shaders/model_loadingF.glsl");
 
+	// creates a temp entity and adds it to the entity list.
 	Entity duck = Entity();
 	duck.SetComponent(GS.CreateMeshRenderer("Objects/duck/duck.obj", SR.GetShader("model_loading"), false));
-
+	EntityList.push_back(duck);
 	
 	Camera c = Camera();
 
+	//sets up procedure for the Graphics System
 	GS.Setup();
 
-	//Main loop flag
+	//used to exit the loop if needed
 	bool quit = false;
 
-	//Event handler
+	//used for polling the SDL events
 	SDL_Event e;
 
-	//Enable text input
-	SDL_StartTextInput();
-
-	//While application is running
+	// the main game loop of the program
 	while (!quit)
 	{
-		//Handle events on queue
-		//UPDATE INPUT SYSTEM
+		// for each event on SDL_queue
 		while (SDL_PollEvent(&e) != 0)
 		{
-			//User requests quit
+			// if the user closes the current window...
 			if (e.type == SDL_QUIT)
 			{
 				quit = true;
@@ -147,13 +133,18 @@ int The_TAIM_Engine::StartEngine() {
 		}
 
 
-		//RESET FRAME
+
+		//resets the graphical frame in the windows
 		GS.ResetGraphics();
 
+		// used for creating custom events
 		Event ev = Event();
-		IS.Update_Input();
-		//GAMEPLAY LOOP (events go here for now)
 
+		// updates the keystates using the results of the Window
+		IS.Update_Input();
+
+		//GAMEPLAY LOOP (events go here for now)
+		//these four if statements are used to test the power of the events and event queues.
 		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
 			ev.type = EventType::MoveUp;
 			ev.SystemList[(int)Systems::Graphics] = true;
@@ -180,32 +171,37 @@ int The_TAIM_Engine::StartEngine() {
 		}
 
 		// ENGINE LOOP
-
-
-
-		//Render quad
+		// in the future, the camera will be within a camera system for better control
 		c.UpdateCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
 		
+		// these will set the matrix from the camera into a specific shader. CREATE OPTIONAL WARNINGS IF VALUES DON'T EXIST OR USE A GROUPING SYSTEM THAT DOES NEED IT
 		SR.GetShader("model_loading")->SetMat4("Proj", c.GetProj());
 		SR.GetShader("model_loading")->SetMat4("View", c.GetView());
 		
+
+		//finds out the total events in the queue.
 		std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
+		
+		// SYSTEM EVENT QUEUE CHECKUP
+		// each system must have access to the current event queue and do it's own polling to apply the correct results.
 		GS.Update(&Event_Queue);
 
+		// removes events that are not needed anymore
 		Event_Queue.RemoveEmptyEvents();
 
+
+		// used for the simple showing of the event system
 		glm::mat4 model = glm::translate(glm::mat4(1.0), duck.pos);
 		SR.GetShader("model_loading")->SetMat4("model", model);
+
+		// the graphics system now begins drawing the meshes
 		GS.Draw();
 
-		//Update screen
+		//updates the window by double buffering.
 		SDL_GL_SwapWindow(gWindow);
 	}
-		//Disable text input
-	SDL_StopTextInput();
-	
 
-	//Free resources and close SDL
+	// the program has ended, begin shutting down the engine
 	close();
 
 	return 0;

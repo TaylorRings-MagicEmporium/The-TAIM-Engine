@@ -4,6 +4,9 @@
 #include <map>
 #include <vector>
 #include <string>
+
+//the shader registry is a resource manager for shaders. it can be quickly used to get a specific shader,
+// create a shader and possibly do all-shader operations (updating the view and proj)
 class ShaderRegistry
 {
 protected:
@@ -19,8 +22,6 @@ public:
 	Shader* GetShader(std::string name);
 
 	std::vector<Shader*> GetAllShaders();
-
-	//void 
 
 
 };

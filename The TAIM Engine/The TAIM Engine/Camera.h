@@ -4,45 +4,39 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
-//#include "stb_image.h"
-//#include "EngineModules.h"
 #include <vector>
 
 #include <iostream>
 
-// the camera creates an object that creates the matrices needed to view the world through it. this technically means that multiple cameras can be set up
-//if properly executed.
+// the camera class hold and calulates the matrices needed to view the world through it. this technically means that multiple cameras can be set up if properly executed.
 class Camera {
 private:
-	//glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 20.0f);
-	//glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	//glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-
 	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 proj;
-	glm::mat4 UIProj;
+	glm::mat4 proj = glm::mat4(1.0f);
+	glm::mat4 UIProj = glm::mat4(1.0f);
 
 	bool IsSet = false;
-	//Slots slot;
 public:
 
 	float zoom = 45.0f;
+	// initialises the camera
 	Camera();
-	//Camera(Slots slot);
 
+	//destroys the camera
 	~Camera();
 
+	// setups the camera
 	void Setup();
 
-	void Update();
-
-	//void SetViewMat(Shader *shader);
-	//void SetProjMat(Shader *shader);
-
+	//gets the current projection matrix 
 	glm::mat4 GetProj();
+
+	//gets the current view matrix
 	glm::mat4 GetView();
+
+	//gets the current UI projection matrix
 	glm::mat4 GetUIProj();
 
+	// generic update of the camera using the width and height from the engine
 	void UpdateCamera(int WIDTH, int HEIGHT);
 };
