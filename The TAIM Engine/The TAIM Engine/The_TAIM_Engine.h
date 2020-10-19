@@ -29,6 +29,7 @@
 #include "Event.h"
 #include "ShaderRegistry.h"
 #include "Graphics_System.h"
+#include "Physics_System.h"
 #include "Input_System.h"
 
 class The_TAIM_Engine {
@@ -44,6 +45,7 @@ class The_TAIM_Engine {
 	//CHANGE
 	ShaderRegistry SR = ShaderRegistry();
 	Graphics_System GS = Graphics_System(100);
+	Physics_System PS = Physics_System(100);
 	EventQueue Event_Queue = EventQueue();
 	Input_System IS;
 
@@ -71,5 +73,8 @@ public:
 
 	// the main function of the engine, the start engine will control the overall lifetime of the program
 	int StartEngine();
+
+	void MoveObjectAssign(Event* e);
+	void ResetAssign(Event* e);
 
 };

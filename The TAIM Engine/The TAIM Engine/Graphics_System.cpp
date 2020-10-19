@@ -19,8 +19,10 @@ Graphics_System::~Graphics_System() {
 void Graphics_System::Update(EventQueue* EQ) {
 
 	// this is a special procedure to create member function pointers into an array
-	typedef int (Graphics_System::*method_Function)(Event*);
-	method_Function method_pointer[4] = { &Graphics_System::MoveLeft, &Graphics_System::MoveRight, &Graphics_System::MoveUp, &Graphics_System::MoveDown };
+	typedef void (Graphics_System::*method_Function)(Event*);
+	method_Function method_pointer[4]; 
+	method_pointer[0] = &Graphics_System::Move;
+	method_pointer[1] = &Graphics_System::Reset;
 
 	// how it works:
 	// 1. goes through each event using PollEvents(). if it's null, then it will exit the while loop.
@@ -30,7 +32,7 @@ void Graphics_System::Update(EventQueue* EQ) {
 	
 	while (Event* e = EQ->PollEvents()) {
 		if (e->SystemList[(int)Systems::Graphics]) {
-			method_Function func = method_pointer[(int)e->type];
+			method_Function func = method_pointer[(int)e->GetType()];
 			(this->*func)(e);
 			e->SystemList[(int)Systems::Graphics] = false;
 		}
@@ -38,22 +40,23 @@ void Graphics_System::Update(EventQueue* EQ) {
 	}
 }
 
-int Graphics_System::MoveLeft(Event* e) {
-	e->ListOfEntities[0]->pos += glm::vec3(-0.1, 0, 0);
-	return 1;
+void Graphics_System::Move(Event* e) {
+	MoveObjectEv* moe = (MoveObjectEv*)(e);
+	if (moe->GetType() == EventType::MoveObject) {
+		for (int i = 0; i < e->ListOfEntities.size(); i++) {
+			moe->ListOfEntities[i]->PosChange += moe->PositionAdd;
+		}
+	}
+
 }
 
-int Graphics_System::MoveRight(Event* e) {
-	e->ListOfEntities[0]->pos += glm::vec3(0.1, 0, 0);
-	return 1;
-}
-int Graphics_System::MoveUp(Event* e) {
-	e->ListOfEntities[0]->pos += glm::vec3(0, 0.1, 0);
-	return 1;
-}
-int Graphics_System::MoveDown(Event* e) {
-	e->ListOfEntities[0]->pos += glm::vec3(0, -0.1, 0);
-	return 1;
+void Graphics_System::Reset(Event* e) {
+	ResetEv* re = (ResetEv*)(e);
+	if (re->GetType() == EventType::Reset) {
+		for (int i = 0; i < e->ListOfEntities.size(); i++) {
+			re->ListOfEntities[i]->PosChange = glm::vec3(0);
+		}
+	}
 }
 
 void Graphics_System::Draw() {

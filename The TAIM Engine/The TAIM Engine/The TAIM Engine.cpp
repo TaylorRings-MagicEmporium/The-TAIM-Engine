@@ -47,13 +47,6 @@ bool The_TAIM_Engine::init()
 			}
 			else
 			{
-				//Create OpenGL context
-				gContext = SDL_GL_CreateContext(gWindow);
-				if (gContext == NULL)
-				{
-					printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
-					success = false;
-				}
 
 				//initialise GLAD
 				if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
@@ -112,6 +105,7 @@ int The_TAIM_Engine::StartEngine() {
 
 	//sets up procedure for the Graphics System
 	GS.Setup();
+	PS.Setup();
 
 	//used to exit the loop if needed
 	bool quit = false;
@@ -137,38 +131,27 @@ int The_TAIM_Engine::StartEngine() {
 		//resets the graphical frame in the windows
 		GS.ResetGraphics();
 
-		// used for creating custom events
-		Event ev = Event();
-
 		// updates the keystates using the results of the Window
 		IS.Update_Input();
 
+
+
 		//GAMEPLAY LOOP (events go here for now)
 		//these four if statements are used to test the power of the events and event queues.
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
-			ev.type = EventType::MoveUp;
-			ev.SystemList[(int)Systems::Graphics] = true;
-			ev.ListOfEntities.push_back(&duck);
-			Event_Queue.AddEventToStack(ev);
+
+
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W) || IS.GetKeyPressed(KEYLETTERCODE::KEY_A) || IS.GetKeyPressed(KEYLETTERCODE::KEY_S) || IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
+			MoveObjectEv* ev = new MoveObjectEv();
+			MoveObjectAssign((Event*)ev);
+			Event_Queue.AddEventToStack((Event*)ev);
 		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
-			ev.type = EventType::MoveLeft;
-			ev.SystemList[(int)Systems::Graphics] = true;
-			ev.ListOfEntities.push_back(&duck);
-			Event_Queue.AddEventToStack(ev);
+
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_R)) {
+			ResetEv* re = new ResetEv();
+			ResetAssign((Event*)re);
+			Event_Queue.AddEventToStack((Event*)re);
 		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
-			ev.type = EventType::MoveDown;
-			ev.SystemList[(int)Systems::Graphics] = true;
-			ev.ListOfEntities.push_back(&duck);
-			Event_Queue.AddEventToStack(ev);
-		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
-			ev.type = EventType::MoveRight;
-			ev.SystemList[(int)Systems::Graphics] = true;
-			ev.ListOfEntities.push_back(&duck);
-			Event_Queue.AddEventToStack(ev);
-		}
+
 
 		// ENGINE LOOP
 		// in the future, the camera will be within a camera system for better control
@@ -180,10 +163,11 @@ int The_TAIM_Engine::StartEngine() {
 		
 
 		//finds out the total events in the queue.
-		std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
+		//std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
 		
 		// SYSTEM EVENT QUEUE CHECKUP
 		// each system must have access to the current event queue and do it's own polling to apply the correct results.
+		PS.Update(&Event_Queue);
 		GS.Update(&Event_Queue);
 
 		// removes events that are not needed anymore
@@ -191,7 +175,7 @@ int The_TAIM_Engine::StartEngine() {
 
 
 		// used for the simple showing of the event system
-		glm::mat4 model = glm::translate(glm::mat4(1.0), duck.pos);
+		glm::mat4 model = glm::translate(glm::mat4(1.0), EntityList[0].pos + EntityList[0].PosChange);
 		SR.GetShader("model_loading")->SetMat4("model", model);
 
 		// the graphics system now begins drawing the meshes
@@ -205,4 +189,46 @@ int The_TAIM_Engine::StartEngine() {
 	close();
 
 	return 0;
+}
+
+void The_TAIM_Engine::MoveObjectAssign(Event* e) {
+
+	MoveObjectEv* moe = (MoveObjectEv*)(e);
+
+	if (moe->GetType() == EventType::MoveObject) {
+
+		glm::vec3 AddPos = glm::vec3(0);
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
+			AddPos += glm::vec3(0, 0.1, 0);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
+			AddPos += glm::vec3(-0.1, 0, 0);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
+			AddPos += glm::vec3(0, -0.1, 0);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
+			AddPos += glm::vec3(0.1, 0, 0);
+		}
+		moe->ListOfEntities.push_back(&EntityList[0]);
+		moe->PositionAdd = AddPos;
+		moe->SystemList[(int)Systems::Graphics] = true;
+	}
+	else {
+		std::cout << "TYPE MISMATCH" << std::endl;
+	}
+}
+
+void The_TAIM_Engine::ResetAssign(Event* e) {
+	ResetEv* re = (ResetEv*)(e);
+
+	if (re->GetType() == EventType::Reset) {
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_R)) {
+			re->ListOfEntities.push_back(&EntityList[0]);
+			re->SystemList[(int)Systems::Graphics] = true;
+		}
+	}
+	else {
+		std::cout << "TYPE MISMATCH" << std::endl;
+	}
 }

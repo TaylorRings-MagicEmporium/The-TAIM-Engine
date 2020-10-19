@@ -8,7 +8,7 @@
 class EventQueue
 {
 private:
-	std::vector<Event> EventsList;
+	std::vector<Event*> EventsList;
 	// the EventCounter is useful for keeping the poll counter from a system
 	int EventCounter = 0;
 public:
@@ -16,7 +16,7 @@ public:
 	EventQueue();
 
 	// add an event to the queue
-	void AddEventToStack(Event e);
+	void AddEventToStack(Event* e);
 
 	// a special function which allows a system to poll through the events of the queue
 	// the return is either an event, or a nullptr, depicting that all events have been polled.

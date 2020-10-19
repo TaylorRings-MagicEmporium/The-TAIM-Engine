@@ -18,7 +18,7 @@ private:
 public:
 	// used for event testing.
 	glm::vec3 pos;
-	
+	glm::vec3 PosChange;
 	// initialisation of the entity class.
 	Entity();
 	

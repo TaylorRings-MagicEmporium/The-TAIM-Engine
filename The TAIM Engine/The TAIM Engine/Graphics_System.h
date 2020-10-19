@@ -37,10 +37,12 @@ public:
 
 	//specific event handlers for event testing
 
-	int MoveLeft(Event* e);
-	int MoveRight(Event* e);
-	int MoveUp(Event* e);
-	int MoveDown(Event* e);
+	//int MoveLeft(Event* e);
+	//int MoveRight(Event* e);
+	//int MoveUp(Event* e);
+	//int MoveDown(Event* e);
+	void Move(Event* e);
+	void Reset(Event* e);
 
 
 };
