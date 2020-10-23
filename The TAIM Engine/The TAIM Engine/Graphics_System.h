@@ -13,19 +13,11 @@ private:
 	// holds the vector of MeshRenderer components
 	std::vector<MeshRenderer> ListOfMeshRenderers;
 
-
-
-
-
-
 	//specific event handlers for event testing
 
-	//int MoveLeft(Event* e);
-	//int MoveRight(Event* e);
-	//int MoveUp(Event* e);
-	//int MoveDown(Event* e);
-	void Move(Event* e);
-	void Reset(Event* e);
+
+	//void Move(Event* e);
+	//void Reset(Event* e);
 public:
 	// Update will cause the graphics system to do its generic procedure and poll the events related to it.
 	void Update(EventQueue* EQ, Communication_Layer* CL);

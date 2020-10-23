@@ -9,6 +9,10 @@ KEY_Q,KEY_R,KEY_S,KEY_T,KEY_U,KEY_V,KEY_W,KEY_X,KEY_Y,KEY_Z};
 // KEYNUMBERCODE contains all of the numbers from 0 to 9
 enum class KEYNUMBERCODE {KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6,KEY_7,KEY_8,KEY_9,KEY_0};
 
+enum class KEYSPECIALCODE {KEY_RETURN,KEY_ESCAPE,KEY_BACKSPACE,KEY_TAB,KEY_SPACE,KEY_MINUS,KEY_EQUALS,
+KEY_LEFTBRACKET,KEY_RIGHTBRACKET,KEY_BACKSLASH,KEY_NONUSHASH,KEY_SEMICOLON,KEY_APOSTROPHE,KEY_GRAVE,
+KEY_COMMA,KEY_PERIOD,KEY_SLASH,KEY_CAPSLOCK};
+
 // the input system is responsible for how the user will interact with the world. it is also considered the first step in event building.
 // to keep the abstraction between the window's inputs and gameplay functionality, the input system has it's own keycode for the gameplay to use.
 class Input_System
@@ -20,6 +24,7 @@ private:
 	// an array holds the boolean state of the keypresses (is it pressed?)
 	bool KeyLetterState[26];
 	bool KeyNumberState[10];
+	bool KeySpecialState[18];
 public:
 	//used to initialise the Input system
 	Input_System();
@@ -37,5 +42,8 @@ public:
 
 	//returns the bool of the boolean at the index of KNC
 	bool GetKeyPressed(KEYNUMBERCODE KNC);
+
+	//returns the bool of the boolean at the index of KNC
+	bool GetKeyPressed(KEYSPECIALCODE KSC);
 };
 

@@ -21,11 +21,23 @@ void Input_System::Reset_Input() {
 void Input_System::Update_Input() {
 	Reset_Input();
 	const Uint8* state = SDL_GetKeyboardState(NULL);
-	for (int i = SDL_SCANCODE_A; i < SDL_SCANCODE_Z; i++) {
-		KeyLetterState[i - SDL_SCANCODE_A] = state[i];
+
+	int begin = SDL_SCANCODE_A;
+	int end = SDL_SCANCODE_Z;
+	for (int i = begin; i < end; i++) {
+		KeyLetterState[i - begin] = state[i];
 	}
-	for (int i = SDL_SCANCODE_1; i < SDL_SCANCODE_0; i++) {
-		KeyNumberState[i - SDL_SCANCODE_1] = state[i];
+
+	begin = SDL_SCANCODE_1;
+	end = SDL_SCANCODE_0;
+	for (int i = begin; i < end; i++) {
+		KeyNumberState[i - begin] = state[i];
+	}
+
+	begin = SDL_SCANCODE_RETURN;
+	end = SDL_SCANCODE_CAPSLOCK;
+	for (int i = begin; i < end; i++) {
+		KeySpecialState[i - begin] = state[i];
 	}
 }
 
@@ -35,5 +47,9 @@ bool Input_System::GetKeyPressed(KEYLETTERCODE KLC) {
 
 bool Input_System::GetKeyPressed(KEYNUMBERCODE KNC) {
 	return KeyNumberState[(int)KNC];
+}
+
+bool Input_System::GetKeyPressed(KEYSPECIALCODE KSC) {
+	return KeySpecialState[(int)KSC]; 
 }
 

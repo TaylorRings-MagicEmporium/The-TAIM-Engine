@@ -1,6 +1,9 @@
 #include "Entity.h"
 
-Entity::Entity(glm::vec3 StartingPosition) { pos = StartingPosition; };
+Entity::Entity(glm::vec3 StartingPosition) { 
+	pos = StartingPosition;
+	rot = glm::quat(1, 0, 0, 0);
+};
 
 Entity::Entity(glm::vec3 StartingPosition, glm::quat StartingRotation) {
 	pos = StartingPosition;

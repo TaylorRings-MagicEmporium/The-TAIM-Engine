@@ -76,7 +76,7 @@ public:
 	// the main function of the engine, the start engine will control the overall lifetime of the program
 	int StartEngine();
 
-	void MoveObjectAssign(Event* e);
-	void ResetAssign(Event* e);
+	//void MoveObjectAssign(Event* e);
+	//void ResetAssign(Event* e);
 
 };

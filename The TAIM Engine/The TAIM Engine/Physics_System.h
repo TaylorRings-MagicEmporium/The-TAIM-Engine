@@ -17,6 +17,13 @@ private:
 
 	std::vector<Rigidbody> ListOfRigidbodies;
 	std::vector<Collider> ListOfColliders;
+
+	//EVENT HANDLERS
+	void MoveForward(Event* e);
+	void MoveLeft(Event* e);
+	void MoveBackward(Event* e);
+	void MoveRight(Event* e);
+	void FJump(Event* e);
 public:
 	Physics_System(int ComponentSize);
 

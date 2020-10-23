@@ -96,19 +96,19 @@ int The_TAIM_Engine::StartEngine() {
 	SR.CreateShader("model_loading", "Shaders/model_loadingV.glsl", "Shaders/model_loadingF.glsl");
 
 	// creates a temp entity and adds it to the entity list.
-	Entity duck = Entity(glm::vec3(3,3,0));
+	Entity duck = Entity(glm::vec3(0,3,0),glm::angleAxis(glm::radians(45.0f), glm::vec3(1,1,0)));
 	//temp2->Use();
 	duck.SetComponent(GS.CreateMeshRenderer("Objects/duck/duck.obj", SR.GetShader("model_loading"), false));
-	//duck.SetComponent(PS.CreateRigidbody(glm::vec3(0, 0, 0), 1.0f));
-	//duck.SetComponent(PS.CreateCollider(glm::vec3(1.0, 1.0, 1.0)));
+	duck.SetComponent(PS.CreateRigidbody(glm::vec3(0, 0, 0), 1.0f));
+	duck.SetComponent(PS.CreateCollider(glm::vec3(1.0, 1.0, 1.0)));
 	EntityList.push_back(duck);
 	
 
 	Entity ground = Entity(glm::vec3(0, -3, 0));
 	//temp1->Use();
 	ground.SetComponent(GS.CreateMeshRenderer("Objects/Prim/cube.obj", SR.GetShader("basic"), false));
-	//ground.SetComponent(PS.CreateRigidbody(glm::vec3(0, 0, 0), 0.0f));
-	//ground.SetComponent(PS.CreateCollider(glm::vec3(1)));
+	ground.SetComponent(PS.CreateRigidbody(glm::vec3(0, 0, 0), 0.0f));
+	ground.SetComponent(PS.CreateCollider(glm::vec3(10,1,10)));
 	EntityList.push_back(ground);
 
 	Entity pie = Entity(glm::vec3(3, 0, 0));
@@ -127,7 +127,7 @@ int The_TAIM_Engine::StartEngine() {
 
 	//used for polling the SDL events
 	SDL_Event e;
-
+	Event* ev = new Event();
 	// the main game loop of the program
 	while (!quit)
 	{
@@ -143,9 +143,36 @@ int The_TAIM_Engine::StartEngine() {
 
 		//resets the graphical frame in the windows
 		GS.ResetGraphics();
-
+		CL.ResetBuffers();
 		// updates the keystates using the results of the Window
 		IS.Update_Input();
+
+		// GAME LOOP
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
+			ev = new MoveForward();
+			ev->ListOfEntities.push_back(&EntityList[0]);
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
+			ev = new MoveLeft();
+			ev->ListOfEntities.push_back(&EntityList[0]);
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
+			ev = new MoveBackward();
+			ev->ListOfEntities.push_back(&EntityList[0]);
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
+			ev = new MoveRight();
+			ev->ListOfEntities.push_back(&EntityList[0]);
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYSPECIALCODE::KEY_SPACE)) {
+			ev = new Jump();
+			ev->ListOfEntities.push_back(&EntityList[0]);
+			Event_Queue.AddEventToStack(ev);
+		}
 
 		// ENGINE LOOP
 		// in the future, the camera will be within a camera system for better control
@@ -164,9 +191,14 @@ int The_TAIM_Engine::StartEngine() {
 		
 		// SYSTEM EVENT QUEUE CHECKUP
 		// each system must have access to the current event queue and do it's own polling to apply the correct results.
+		float t1, t2, t3;
+		t1 = SDL_GetTicks();
 		PS.Update(&Event_Queue, &CL);
+		t2 = SDL_GetTicks();
 		GS.Update(&Event_Queue, &CL);
+		t3 = SDL_GetTicks();
 
+		std::cout << "PHYSICS: " << (t2 - t1) / 1000.0f << "Seconds. " << "GRAPHICS: " << (t3 - t2) / 1000.0f << "Seconds" << std::endl;
 		// removes events that are not needed anymore
 		Event_Queue.RemoveEmptyEvents();
 
@@ -180,48 +212,48 @@ int The_TAIM_Engine::StartEngine() {
 
 	// the program has ended, begin shutting down the engine
 	close();
-
+	//delete ev;
 	return 0;
 }
 
-void The_TAIM_Engine::MoveObjectAssign(Event* e) {
-
-	MoveObjectEv* moe = (MoveObjectEv*)(e);
-
-	if (moe->GetType() == EventType::MoveObject) {
-
-		glm::vec3 AddPos = glm::vec3(0);
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
-			AddPos += glm::vec3(0, 0.1, 0);
-		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
-			AddPos += glm::vec3(-0.1, 0, 0);
-		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
-			AddPos += glm::vec3(0, -0.1, 0);
-		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
-			AddPos += glm::vec3(0.1, 0, 0);
-		}
-		moe->ListOfEntities.push_back(&EntityList[0]);
-		moe->PositionAdd = AddPos;
-		moe->SystemList[(int)Systems::Graphics] = true;
-	}
-	else {
-		std::cout << "TYPE MISMATCH" << std::endl;
-	}
-}
-
-void The_TAIM_Engine::ResetAssign(Event* e) {
-	ResetEv* re = (ResetEv*)(e);
-
-	if (re->GetType() == EventType::Reset) {
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_R)) {
-			re->ListOfEntities.push_back(&EntityList[0]);
-			re->SystemList[(int)Systems::Graphics] = true;
-		}
-	}
-	else {
-		std::cout << "TYPE MISMATCH" << std::endl;
-	}
-}
+//void The_TAIM_Engine::MoveObjectAssign(Event* e) {
+//
+//	MoveObjectEv* moe = (MoveObjectEv*)(e);
+//
+//	if (moe->GetType() == EventType::MoveObject) {
+//
+//		glm::vec3 AddPos = glm::vec3(0);
+//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
+//			AddPos += glm::vec3(0, 0.1, 0);
+//		}
+//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
+//			AddPos += glm::vec3(-0.1, 0, 0);
+//		}
+//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
+//			AddPos += glm::vec3(0, -0.1, 0);
+//		}
+//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
+//			AddPos += glm::vec3(0.1, 0, 0);
+//		}
+//		moe->ListOfEntities.push_back(&EntityList[0]);
+//		moe->PositionAdd = AddPos;
+//		moe->SystemList[(int)Systems::Graphics] = true;
+//	}
+//	else {
+//		std::cout << "TYPE MISMATCH" << std::endl;
+//	}
+//}
+//
+//void The_TAIM_Engine::ResetAssign(Event* e) {
+//	ResetEv* re = (ResetEv*)(e);
+//
+//	if (re->GetType() == EventType::Reset) {
+//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_R)) {
+//			re->ListOfEntities.push_back(&EntityList[0]);
+//			re->SystemList[(int)Systems::Graphics] = true;
+//		}
+//	}
+//	else {
+//		std::cout << "TYPE MISMATCH" << std::endl;
+//	}
+//}
