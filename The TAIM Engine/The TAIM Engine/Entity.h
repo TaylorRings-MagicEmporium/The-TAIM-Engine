@@ -2,6 +2,7 @@
 #include <map>
 #include "Component.h"
 #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <string>
 
 class Component;
@@ -18,8 +19,11 @@ private:
 public:
 	// used for event testing.
 	glm::vec3 pos;
-	glm::vec3 PosChange;
+	glm::quat rot;
 	// initialisation of the entity class.
+	Entity(glm::vec3 StartingPosition);
+	Entity(glm::vec3 StartingPosition, glm::quat StartingRotation);
+	Entity(glm::quat StartingRotation);
 	Entity();
 	
 	// sets the component by it's component type into a map, for easier looking up.

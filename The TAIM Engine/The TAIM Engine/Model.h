@@ -21,9 +21,10 @@
 class Model
 {
 public:
-	Model(std::string path, bool FlipImage)
+	Model(std::string path, bool FlipImage, Shader* shader)
 	{
 		Flip = FlipImage;
+		this->shader = shader;
 		loadModel(path);
 	}
 
@@ -36,7 +37,9 @@ private:
 	Mesh RootMesh;
 	std::string directory;
 	std::vector<Texture> textures_loaded;
+	Shader* shader;
 	bool Flip;
+
 
 	void loadModel(std::string path);
 	void processNode(aiNode* node, const aiScene* scene);
@@ -44,9 +47,6 @@ private:
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 	unsigned int TextureFromFile(char* path, std::string& directory);
-
-
-
 
 };
 

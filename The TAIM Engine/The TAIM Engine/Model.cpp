@@ -81,6 +81,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	}
 
+	shader->Use();
 	return Mesh(vertices, indices, textures);
 }
 
@@ -119,7 +120,7 @@ unsigned int Model::TextureFromFile(char* path, std::string& directory) {
 	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
-	std::cout << "hopefully working?" << std::endl;
+	//std::cout << "hopefully working?" << std::endl;
 	stbi_set_flip_vertically_on_load(Flip);
 	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 	stbi_set_flip_vertically_on_load(false);

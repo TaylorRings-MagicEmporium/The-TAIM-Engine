@@ -31,6 +31,7 @@
 #include "Graphics_System.h"
 #include "Physics_System.h"
 #include "Input_System.h"
+#include "Communication_Layer.h"
 
 class The_TAIM_Engine {
 
@@ -48,6 +49,7 @@ class The_TAIM_Engine {
 	Physics_System PS = Physics_System(100);
 	EventQueue Event_Queue = EventQueue();
 	Input_System IS;
+	Communication_Layer CL = Communication_Layer();
 
 	std::vector<Entity> EntityList;
 

@@ -143,6 +143,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Communication_Layer.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Event.cpp" />
@@ -155,6 +157,7 @@
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Physics_System.cpp" />
+    <ClCompile Include="Rigidbody.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderRegistry.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -162,6 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collider.h" />
+    <ClInclude Include="Communication_Layer.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Event.h" />
@@ -172,6 +177,7 @@
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Physics_System.h" />
+    <ClInclude Include="Rigidbody.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderRegistry.h" />
     <ClInclude Include="stb_image.h" />

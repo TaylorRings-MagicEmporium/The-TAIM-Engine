@@ -12,11 +12,12 @@
 class MeshRenderer : public Component
 {
 private:
-	unsigned int VAO;
-	unsigned int VBO;
-	Shader* shader;
+
 	Mesh mesh;
+
 public:
+	glm::mat4 model = glm::mat4(1);
+	Shader* shader;
 	MeshRenderer(std::string path, Shader* shader, bool flip);
 	void Setup();
 	void Draw();

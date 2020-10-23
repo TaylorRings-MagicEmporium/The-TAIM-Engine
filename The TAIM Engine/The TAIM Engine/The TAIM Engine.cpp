@@ -91,16 +91,31 @@ int The_TAIM_Engine::SetupEngine() {
 int The_TAIM_Engine::StartEngine() {
 	glEnable(GL_DEPTH_TEST);
 
-
 	// (in file) "basic" is the engine's own shader in the case that no shader specified is found. MAKE INTO CODE INSTEAD
 	SR.CreateShader("basic", "Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl"); // ENGINE NEEDED
 	SR.CreateShader("model_loading", "Shaders/model_loadingV.glsl", "Shaders/model_loadingF.glsl");
 
 	// creates a temp entity and adds it to the entity list.
-	Entity duck = Entity();
+	Entity duck = Entity(glm::vec3(3,3,0));
+	//temp2->Use();
 	duck.SetComponent(GS.CreateMeshRenderer("Objects/duck/duck.obj", SR.GetShader("model_loading"), false));
+	//duck.SetComponent(PS.CreateRigidbody(glm::vec3(0, 0, 0), 1.0f));
+	//duck.SetComponent(PS.CreateCollider(glm::vec3(1.0, 1.0, 1.0)));
 	EntityList.push_back(duck);
 	
+
+	Entity ground = Entity(glm::vec3(0, -3, 0));
+	//temp1->Use();
+	ground.SetComponent(GS.CreateMeshRenderer("Objects/Prim/cube.obj", SR.GetShader("basic"), false));
+	//ground.SetComponent(PS.CreateRigidbody(glm::vec3(0, 0, 0), 0.0f));
+	//ground.SetComponent(PS.CreateCollider(glm::vec3(1)));
+	EntityList.push_back(ground);
+
+	Entity pie = Entity(glm::vec3(3, 0, 0));
+	pie.SetComponent(GS.CreateMeshRenderer("Objects/duck/duck.obj", SR.GetShader("model_loading"), false));
+	EntityList.push_back(pie);
+
+
 	Camera c = Camera();
 
 	//sets up procedure for the Graphics System
@@ -126,63 +141,41 @@ int The_TAIM_Engine::StartEngine() {
 			}
 		}
 
-
-
 		//resets the graphical frame in the windows
 		GS.ResetGraphics();
 
 		// updates the keystates using the results of the Window
 		IS.Update_Input();
 
-
-
-		//GAMEPLAY LOOP (events go here for now)
-		//these four if statements are used to test the power of the events and event queues.
-
-
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W) || IS.GetKeyPressed(KEYLETTERCODE::KEY_A) || IS.GetKeyPressed(KEYLETTERCODE::KEY_S) || IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
-			MoveObjectEv* ev = new MoveObjectEv();
-			MoveObjectAssign((Event*)ev);
-			Event_Queue.AddEventToStack((Event*)ev);
-		}
-
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_R)) {
-			ResetEv* re = new ResetEv();
-			ResetAssign((Event*)re);
-			Event_Queue.AddEventToStack((Event*)re);
-		}
-
-
 		// ENGINE LOOP
 		// in the future, the camera will be within a camera system for better control
 		c.UpdateCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
 		
 		// these will set the matrix from the camera into a specific shader. CREATE OPTIONAL WARNINGS IF VALUES DON'T EXIST OR USE A GROUPING SYSTEM THAT DOES NEED IT
+		SR.GetShader("model_loading")->Use();
 		SR.GetShader("model_loading")->SetMat4("Proj", c.GetProj());
 		SR.GetShader("model_loading")->SetMat4("View", c.GetView());
+		SR.GetShader("basic")->Use();
+		SR.GetShader("basic")->SetMat4("Proj", c.GetProj());
+		SR.GetShader("basic")->SetMat4("View", c.GetView());
 		
-
 		//finds out the total events in the queue.
 		//std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
 		
 		// SYSTEM EVENT QUEUE CHECKUP
 		// each system must have access to the current event queue and do it's own polling to apply the correct results.
-		PS.Update(&Event_Queue);
-		GS.Update(&Event_Queue);
+		PS.Update(&Event_Queue, &CL);
+		GS.Update(&Event_Queue, &CL);
 
 		// removes events that are not needed anymore
 		Event_Queue.RemoveEmptyEvents();
-
-
-		// used for the simple showing of the event system
-		glm::mat4 model = glm::translate(glm::mat4(1.0), EntityList[0].pos + EntityList[0].PosChange);
-		SR.GetShader("model_loading")->SetMat4("model", model);
 
 		// the graphics system now begins drawing the meshes
 		GS.Draw();
 
 		//updates the window by double buffering.
 		SDL_GL_SwapWindow(gWindow);
+		//SDL_GL_
 	}
 
 	// the program has ended, begin shutting down the engine

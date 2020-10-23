@@ -3,7 +3,7 @@
 
 class Entity;
 
-enum class ComponentType { MeshRenderer, Rigidbody };
+enum class ComponentType { MeshRenderer, Rigidbody, Collider };
 
 
 // the component class is used to marely state which objects are components.
@@ -13,5 +13,6 @@ class Component
 
 public:
 	ComponentType type;
+	Entity* GO;
 };
 
