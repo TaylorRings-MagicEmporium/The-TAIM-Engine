@@ -32,6 +32,7 @@
 #include "Physics_System.h"
 #include "Input_System.h"
 #include "Communication_Layer.h"
+#include "FileLoader_System.h"
 
 class The_TAIM_Engine {
 
@@ -40,18 +41,21 @@ class The_TAIM_Engine {
 	SDL_GLContext gContext;
 
 	// general values for the size of the screen
-	const int SCREEN_WIDTH = 640;
-	const int SCREEN_HEIGHT = 480;
+	int SCREEN_WIDTH = 640;
+	int SCREEN_HEIGHT = 480;
+	int ComponentSize = 100;
+	std::string ProgramName = "SDL tutorial";
 
 	//CHANGE
+	
 	ShaderRegistry SR = ShaderRegistry();
 	Graphics_System GS = Graphics_System(100);
 	Physics_System PS = Physics_System(100);
 	EventQueue Event_Queue = EventQueue();
 	Input_System IS;
 	Communication_Layer CL = Communication_Layer();
-
-	std::vector<Entity> EntityList;
+	FileLoader_System FLS = FileLoader_System();
+	std::vector<Entity*> EntityList;
 
 public:
 	// used for engine initialisation. 

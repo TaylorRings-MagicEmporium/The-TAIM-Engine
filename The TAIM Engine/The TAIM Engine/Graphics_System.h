@@ -22,6 +22,7 @@ public:
 	// Update will cause the graphics system to do its generic procedure and poll the events related to it.
 	void Update(EventQueue* EQ, Communication_Layer* CL);
 	// the initialisation of the Graphics system which needs to maximum number of components allowed.
+	
 	Graphics_System(int ComponentSize);
 
 	// destroys the system
