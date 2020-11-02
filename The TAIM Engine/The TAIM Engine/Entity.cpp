@@ -1,16 +1,8 @@
 #include "Entity.h"
 
-Entity::Entity(glm::vec3 StartingPosition) { 
-	pos = StartingPosition;
-	rot = glm::quat(1, 0, 0, 0);
-};
 
-Entity::Entity(glm::vec3 StartingPosition, glm::quat StartingRotation) {
+Entity::Entity(glm::vec3 StartingPosition, glm::quat StartingRotation, std::string tag) {
 	pos = StartingPosition;
-	rot = StartingRotation;
-}
-Entity::Entity(glm::quat StartingRotation) {
-	pos = glm::vec3(0);
 	rot = StartingRotation;
 }
 Entity::Entity() {

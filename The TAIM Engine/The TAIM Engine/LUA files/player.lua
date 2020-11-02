@@ -11,7 +11,8 @@ EntityList = {
 				axisX = 0.5,
 				axisY = 0.5,
 				axisZ = 0
-			}
+			},
+			Tag = "Player"
 		},
 		MeshRenderer = {
 			MeshPath = "Objects/duck/duck.obj",

@@ -1,14 +1,5 @@
 #include "The_TAIM_Engine.h"
 
-//extern "C" {
-//#include <Lua/lua.h>
-//#include <Lua/lauxlib.h>
-//#include <Lua/lualib.h>
-//}
-//
-//#include <LuaBridge/LuaBridge.h>
-//using namespace luabridge;
-
 The_TAIM_Engine::The_TAIM_Engine() {
 
 }
@@ -24,6 +15,7 @@ bool The_TAIM_Engine::init()
 	FLS.GS = &GS;
 	FLS.PS = &PS;
 	FLS.SR = &SR;
+	FLS.ES = &ES;
 	//Initialization flag
 	bool success = true;
 
@@ -94,10 +86,7 @@ void The_TAIM_Engine::close()
 
 	//Quit SDL subsystems
 	SDL_Quit();
-	for (int i = 0; i < EntityList.size(); i++) {
-		delete EntityList[i];
-	}
-	EntityList.clear();
+	ES.CloseEntitySystem();
 }
 
 int The_TAIM_Engine::SetupEngine() {
@@ -213,8 +202,17 @@ int The_TAIM_Engine::StartEngine() {
 	SR.CreateShader("basic", "Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl"); // ENGINE NEEDED
 	SR.CreateShader("model_loading", "Shaders/model_loadingV.glsl", "Shaders/model_loadingF.glsl");
 
-	FLS.LoadEntities(EntityList);
-	
+	FLS.LoadEntities();
+
+	//std::vector<std::pair<char, EventType>> key_bindings;
+	//key_bindings.push_back(std::pair<char, EventType>('w', EventType::MoveForward));
+	//key_bindings.push_back(std::pair<char, EventType>('a', EventType::MoveLeft));
+	//key_bindings.push_back(std::pair<char, EventType>('s', EventType::MoveBackward));
+	//key_bindings.push_back(std::pair<char, EventType>('d', EventType::MoveRight));
+	//key_bindings.push_back(std::pair<char, EventType>(' ', EventType::Jump));
+	//
+
+
 	//// creates a temp entity and adds it to the entity list.
 	//Entity duck = Entity(glm::vec3(0,3,0),glm::angleAxis(glm::radians(45.0f), glm::vec3(1,1,0)));
 	////temp2->Use();
@@ -265,32 +263,34 @@ int The_TAIM_Engine::StartEngine() {
 		// updates the keystates using the results of the Window
 		IS.Update_Input();
 
-		// GAME LOOP
-		//if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
-		//	ev = new MoveForward();
-		//	ev->ListOfEntities.push_back(&EntityList[0]);
-		//	Event_Queue.AddEventToStack(ev);
-		//}
-		//if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
-		//	ev = new MoveLeft();
-		//	ev->ListOfEntities.push_back(&EntityList[0]);
-		//	Event_Queue.AddEventToStack(ev);
-		//}
-		//if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
-		//	ev = new MoveBackward();
-		//	ev->ListOfEntities.push_back(&EntityList[0]);
-		//	Event_Queue.AddEventToStack(ev);
-		//}
-		//if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
-		//	ev = new MoveRight();
-		//	ev->ListOfEntities.push_back(&EntityList[0]);
-		//	Event_Queue.AddEventToStack(ev);
-		//}
-		//if (IS.GetKeyPressed(KEYSPECIALCODE::KEY_SPACE)) {
-		//	ev = new Jump();
-		//	ev->ListOfEntities.push_back(&EntityList[0]);
-		//	Event_Queue.AddEventToStack(ev);
-		//}
+		//GAME LOOP
+		std::vector<Entity*> playerEntites = ES.GetEntitiesWithTag("Player");
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
+			ev = new MoveForward();
+			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+			//ev->ListOfEntities.push_back(&EntityList[0]);
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
+			ev = new MoveLeft();
+			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
+			ev = new MoveBackward();
+			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
+			ev = new MoveRight();
+			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+			Event_Queue.AddEventToStack(ev);
+		}
+		if (IS.GetKeyPressed(KEYSPECIALCODE::KEY_SPACE)) {
+			ev = new Jump();
+			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+			Event_Queue.AddEventToStack(ev);
+		}
 
 		// ENGINE LOOP
 		// in the future, the camera will be within a camera system for better control

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Entity.h"
+#include "Entity_System.h"
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <bullet3/btBulletDynamicsCommon.h>

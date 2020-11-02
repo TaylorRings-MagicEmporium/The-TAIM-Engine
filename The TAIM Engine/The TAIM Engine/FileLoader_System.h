@@ -1,12 +1,14 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <string>
+
 #include "Entity.h"
 #include "ShaderRegistry.h"
 
 #include "ShaderRegistry.h"
 #include "Graphics_System.h"
 #include "Physics_System.h"
+#include "Entity_System.h"
 
 #include <vector>
 
@@ -21,6 +23,7 @@ struct TempTransData {
 	glm::vec3 position = glm::vec3(0);
 	float degrees = 0.0f;
 	glm::vec3 rotateAxis = glm::vec3(1);
+	std::string tag = "undefined";
 };
 
 
@@ -36,10 +39,11 @@ public:
 	Graphics_System* GS;
 	Physics_System* PS;
 	ShaderRegistry* SR;
+	Entity_System* ES;
 
 	FileLoader_System();
 	void LoadShaders();
-	void LoadEntities(std::vector<Entity*>& EntityList);
+	void LoadEntities();
 	ConfigData LoadConfig();
 };
 

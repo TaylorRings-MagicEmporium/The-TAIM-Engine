@@ -25,7 +25,7 @@
 #include "Shader.h"
 #include "MeshRenderer.h"
 #include "Camera.h"
-#include "Entity.h"
+#include "Entity_System.h"
 #include "Event.h"
 #include "ShaderRegistry.h"
 #include "Graphics_System.h"
@@ -55,7 +55,7 @@ class The_TAIM_Engine {
 	Input_System IS;
 	Communication_Layer CL = Communication_Layer();
 	FileLoader_System FLS = FileLoader_System();
-	std::vector<Entity*> EntityList;
+	Entity_System ES = Entity_System();
 
 public:
 	// used for engine initialisation. 

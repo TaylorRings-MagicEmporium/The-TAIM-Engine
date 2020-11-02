@@ -19,7 +19,7 @@ void FileLoader_System::LoadShaders()
 
 }
 
-void FileLoader_System::LoadEntities(std::vector<Entity*>& EntityList)
+void FileLoader_System::LoadEntities()
 {
 
 	std::vector<std::string> elementList;
@@ -73,6 +73,7 @@ void FileLoader_System::LoadEntities(std::vector<Entity*>& EntityList)
 		if (!transform.isNil()) {
 			LuaRef Position = transform["Position"];
 			LuaRef Rotation = transform["Rotation"];
+			LuaRef tag = transform["Tag"];
 			if (!Position.isNil()) {
 				TTD.position.x = Position["x"].cast<float>();
 				TTD.position.y = Position["y"].cast<float>();
@@ -94,12 +95,15 @@ void FileLoader_System::LoadEntities(std::vector<Entity*>& EntityList)
 			else {
 				std::cout << "NO ROTATION" << std::endl;
 			}
+			if (!tag.isNil()) {
+				TTD.tag = tag.cast<std::string>();
+			}
 		}
 		else {
 			std::cout << "NO TRANSFORM" << std::endl;
 		}
 
-		Entity* object = new Entity(TTD.position, glm::angleAxis(glm::radians(TTD.degrees), glm::normalize(TTD.rotateAxis)));
+		Entity* object = ES->CreateEntity(TTD.position, glm::angleAxis(glm::radians(TTD.degrees), glm::normalize(TTD.rotateAxis)),TTD.tag);
 		//EntityList.push_back();
 
 		//MESH RENDEREER
@@ -128,9 +132,6 @@ void FileLoader_System::LoadEntities(std::vector<Entity*>& EntityList)
 			std::cout << Coll["sizeX"].cast<float>() << ", " << Coll["sizeY"].cast<float>() << ", " << Coll["sizeZ"].cast<float>() << std::endl;
 			object->SetComponent(PS->CreateCollider(glm::vec3(Coll["sizeX"].cast<float>(), Coll["sizeY"].cast<float>(), Coll["sizeZ"].cast<float>())));
 		}
-
-
-		EntityList.push_back(object);
 		std::cout << std::endl;
 	}
 	std::cout << "objects loaded correctly!" << std::endl;
