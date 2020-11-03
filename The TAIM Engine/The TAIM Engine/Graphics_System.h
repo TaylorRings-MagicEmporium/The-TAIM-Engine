@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "MeshRenderer.h"
-#include "Shader.h"
+#include "ShaderRegistry.h"
 
 #include "EventQueue.h"
 #include "Event.h"
@@ -13,14 +13,17 @@ private:
 	// holds the vector of MeshRenderer components
 	std::vector<MeshRenderer> ListOfMeshRenderers;
 
-	//specific event handlers for event testing
+	unsigned int DebugVAO;
+	unsigned int DebugVBO;
+	Shader* s;
 
 
-	//void Move(Event* e);
-	//void Reset(Event* e);
+
 public:
+	Communication_Layer* CL;
+	ShaderRegistry* SR;
 	// Update will cause the graphics system to do its generic procedure and poll the events related to it.
-	void Update(EventQueue* EQ, Communication_Layer* CL);
+	void Update(EventQueue* EQ);
 	// the initialisation of the Graphics system which needs to maximum number of components allowed.
 	
 	Graphics_System(int ComponentSize);
@@ -40,5 +43,8 @@ public:
 
 	// resets the frame so that it's cleared for the next iteration of draws
 	void ResetGraphics();
+
+	// draws speicifc debug visuals from multiple systems
+	void DebugDraw();
 
 };

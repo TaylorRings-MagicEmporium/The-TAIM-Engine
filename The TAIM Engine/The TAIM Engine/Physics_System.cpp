@@ -1,4 +1,5 @@
 #include "Physics_System.h"
+
 //#include "bullet3/CommonInterfaces/CommonRigidBodyBase.h"
 
 Physics_System::Physics_System(int ComponentSize)
@@ -17,14 +18,20 @@ void Physics_System::Setup()
 	dynamicWorld = new btDiscreteDynamicsWorld(dispacher, overlappingPairCache, solver, collisionConfiguration);
 
 	dynamicWorld->setGravity(btVector3(0, -10, 0));
+ 
+
 
 	for (int i = 0; i < ListOfRigidbodies.size(); i++) {
 		ListOfRigidbodies[i].Setup();
 		dynamicWorld->addRigidBody(ListOfRigidbodies[i].body);
 	}
+
+	BDD.CL = CL;
+	dynamicWorld->setDebugDrawer(&BDD);
+	dynamicWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 }
 
-void Physics_System::Update(EventQueue* EQ, Communication_Layer* CL)
+void Physics_System::Update(EventQueue* EQ)
 {
 
 	typedef void (Physics_System::* method_function)(Event*);
@@ -46,6 +53,7 @@ void Physics_System::Update(EventQueue* EQ, Communication_Layer* CL)
 
 	dynamicWorld->stepSimulation(1.0f / 60.0f, 10);
 
+	dynamicWorld->debugDrawWorld();
 	for (int j = 0; j < ListOfRigidbodies.size(); j++) {
 		btTransform trans;
 		if (ListOfRigidbodies[j].body && ListOfRigidbodies[j].body->getMotionState()) {

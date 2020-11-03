@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet_Debug_Drawer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Communication_Layer.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="The TAIM Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet_Debug_Drawer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Communication_Layer.h" />
@@ -191,6 +193,8 @@
   <ItemGroup>
     <None Include="Shaders\BasicFragment.glsl" />
     <None Include="Shaders\BasicVertex.glsl" />
+    <None Include="Shaders\DebugLineFragment.glsl" />
+    <None Include="Shaders\DebugLineVertex.glsl" />
     <None Include="Shaders\model_loadingF.glsl" />
     <None Include="Shaders\model_loadingV.glsl" />
   </ItemGroup>

@@ -4,6 +4,8 @@
 Graphics_System::Graphics_System(int ComponentSize) {
 	// if the list was not reserved, then this will cause a game breaking issue of pointers becoming null.
 	ListOfMeshRenderers.reserve(ComponentSize);
+
+
 }
 
 MeshRenderer* Graphics_System::CreateMeshRenderer(std::string path, Shader* shader, bool flip) {
@@ -16,7 +18,7 @@ Graphics_System::~Graphics_System() {
 	ListOfMeshRenderers.clear();
 }
 
-void Graphics_System::Update(EventQueue* EQ, Communication_Layer* CL) {
+void Graphics_System::Update(EventQueue* EQ) {
 
 	// this is a special procedure to create member function pointers into an array
 	//typedef void (Graphics_System::* method_Function)(Event*);
@@ -62,9 +64,45 @@ void Graphics_System::Setup() {
 	for (int i = 0; i < ListOfMeshRenderers.size(); i++) {
 		ListOfMeshRenderers[i].Setup();
 	}
+
+	s = SR->GetShader("DebugLine");
+	glGenVertexArrays(1, &DebugVAO);
+	glGenBuffers(1, &DebugVBO);
+
+	glBindVertexArray(DebugVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, DebugVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 500, CL->Debug_Line_Vertices, GL_STREAM_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(CL->Debug_Line_Vertices[0]), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void Graphics_System::ResetGraphics() {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Graphics_System::DebugDraw() {
+	if (CL->Debug_Line_Vertices_Counter > 0) {
+		glBindBuffer(GL_ARRAY_BUFFER, DebugVBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, CL->Debug_Line_Vertices_Counter * sizeof(glm::vec3), CL->Debug_Line_Vertices);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//float debugColor[4];
+		//debugColor[0] = m_currentLineColor.x();
+		//debugColor[1] = m_currentLineColor.y();
+		//debugColor[2] = m_currentLineColor.z();
+		//debugColor[3] = 1.f;
+
+		s->Use();
+		glBindVertexArray(DebugVAO);
+
+		glDrawArrays(GL_LINES, 0, CL->Debug_Line_Vertices_Counter);
+
+		std::fill_n(CL->Debug_Line_Vertices, CL->Debug_Line_Vertices_Counter, glm::vec3(0.0));
+		CL->Debug_Line_Vertices_Counter = 0;
+	}
 }

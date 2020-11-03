@@ -196,12 +196,11 @@ int The_TAIM_Engine::StartEngine() {
 
 	glEnable(GL_DEPTH_TEST);
 
-
-
 	// (in file) "basic" is the engine's own shader in the case that no shader specified is found. MAKE INTO CODE INSTEAD
 	SR.CreateShader("basic", "Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl"); // ENGINE NEEDED
 	SR.CreateShader("model_loading", "Shaders/model_loadingV.glsl", "Shaders/model_loadingF.glsl");
-
+	SR.CreateShader("DebugLine", "Shaders/DebugLineVertex.glsl", "Shaders/DebugLineFragment.glsl");
+	
 	FLS.LoadEntities();
 
 	//std::vector<std::pair<char, EventType>> key_bindings;
@@ -235,6 +234,9 @@ int The_TAIM_Engine::StartEngine() {
 	Camera c = Camera();
 
 	//sets up procedure for the Graphics System
+	GS.CL = &CL;
+	GS.SR = &SR;
+	PS.CL = &CL;
 	GS.Setup();
 	PS.Setup();
 
@@ -303,6 +305,9 @@ int The_TAIM_Engine::StartEngine() {
 		SR.GetShader("basic")->Use();
 		SR.GetShader("basic")->SetMat4("Proj", c.GetProj());
 		SR.GetShader("basic")->SetMat4("View", c.GetView());
+		SR.GetShader("DebugLine")->Use();
+		SR.GetShader("DebugLine")->SetMat4("Proj", c.GetProj());
+		SR.GetShader("DebugLine")->SetMat4("View", c.GetView());
 		
 		//finds out the total events in the queue.
 		//std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
@@ -311,9 +316,9 @@ int The_TAIM_Engine::StartEngine() {
 		// each system must have access to the current event queue and do it's own polling to apply the correct results.
 		float t1, t2, t3;
 		t1 = SDL_GetTicks();
-		PS.Update(&Event_Queue, &CL);
+		PS.Update(&Event_Queue);
 		t2 = SDL_GetTicks();
-		GS.Update(&Event_Queue, &CL);
+		GS.Update(&Event_Queue);
 		t3 = SDL_GetTicks();
 
 		//std::cout << "PHYSICS: " << (t2 - t1) / 1000.0f << "Seconds. " << "GRAPHICS: " << (t3 - t2) / 1000.0f << "Seconds" << std::endl;
@@ -323,7 +328,7 @@ int The_TAIM_Engine::StartEngine() {
 
 		// the graphics system now begins drawing the meshes
 		GS.Draw();
-
+		GS.DebugDraw();
 		//updates the window by double buffering.
 		SDL_GL_SwapWindow(gWindow);
 		//SDL_GL_
