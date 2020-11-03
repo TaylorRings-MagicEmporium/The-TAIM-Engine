@@ -73,6 +73,7 @@ void FileLoader_System::LoadEntities()
 		if (!transform.isNil()) {
 			LuaRef Position = transform["Position"];
 			LuaRef Rotation = transform["Rotation"];
+			LuaRef Scale = transform["Scale"];
 			LuaRef tag = transform["Tag"];
 			if (!Position.isNil()) {
 				TTD.position.x = Position["x"].cast<float>();
@@ -95,6 +96,15 @@ void FileLoader_System::LoadEntities()
 			else {
 				std::cout << "NO ROTATION" << std::endl;
 			}
+			if (!Scale.isNil()) {
+				TTD.scale.x = Scale["x"].cast<float>();
+				TTD.scale.y = Scale["y"].cast<float>();
+				TTD.scale.z = Scale["z"].cast<float>();
+			}
+			else {
+				std::cout << "NO SCALE" << std::endl;
+			}
+			
 			if (!tag.isNil()) {
 				TTD.tag = tag.cast<std::string>();
 			}
@@ -103,7 +113,7 @@ void FileLoader_System::LoadEntities()
 			std::cout << "NO TRANSFORM" << std::endl;
 		}
 
-		Entity* object = ES->CreateEntity(TTD.position, glm::angleAxis(glm::radians(TTD.degrees), glm::normalize(TTD.rotateAxis)),TTD.tag);
+		Entity* object = ES->CreateEntity(TTD.position, glm::angleAxis(glm::radians(TTD.degrees), glm::normalize(TTD.rotateAxis)),TTD.scale,TTD.tag);
 		//EntityList.push_back();
 
 		//MESH RENDEREER

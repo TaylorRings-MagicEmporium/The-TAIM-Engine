@@ -32,13 +32,12 @@ void Graphics_System::Update(EventQueue* EQ) {
 	// 3. if so, using the function pointers and the enum class in events, it would call the approproate event based on the index.
 	// 4. finally, cross the event's system reaction for this system to false, as this engine has done what it needed to do.
 
-	//while (Event* e = EQ->PollEvents()) {
-	//	if (e->SystemList[(int)Systems::Graphics]) {
-	//		method_Function func = method_pointer[(int)e->GetType()];
-	//		(this->*func)(e);
-	//		e->SystemList[(int)Systems::Graphics] = false;
-	//	}
-	//}
+	//TODO: single out iterations so that all mesh renderers would be updated once
+	for (int i = 0; i < ListOfMeshRenderers.size(); i++) {
+		ListOfMeshRenderers[i].model = glm::translate(glm::mat4(1.0), ListOfMeshRenderers[i].GO->pos);
+		ListOfMeshRenderers[i].model *= glm::toMat4(ListOfMeshRenderers[i].GO->rot);
+		ListOfMeshRenderers[i].model = glm::scale(ListOfMeshRenderers[i].model, ListOfMeshRenderers[i].GO->scale);
+	}
 
 	for (int i = 0; i < CL->GPBuffer.size(); i++) {
 		if (MeshRenderer* mr = (MeshRenderer*)CL->GPBuffer[i].entity->GetComponent(ComponentType::MeshRenderer)) {
@@ -46,9 +45,8 @@ void Graphics_System::Update(EventQueue* EQ) {
 			mr->model = glm::translate(glm::mat4(1.0), CL->GPBuffer[i].entity->pos);
 			CL->GPBuffer[i].entity->rot = CL->GPBuffer[i].Rotation;
 			mr->model *= glm::mat4(CL->GPBuffer[i].entity->rot);
+			mr->model = glm::scale(mr->model, CL->GPBuffer[i].entity->scale);
 		}
-		
-		//mr->model *= glm::toMat4(CL->GPBuffer[i].Rotation);
 	}
 }
 

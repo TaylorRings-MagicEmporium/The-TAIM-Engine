@@ -39,6 +39,11 @@ EntityList = {
 				x = 0,
 				y = -3,
 				z = 0
+			},
+			Scale = {
+				x = 10,
+				y = 1,
+				z = 10
 			}
 		},
 		MeshRenderer = {

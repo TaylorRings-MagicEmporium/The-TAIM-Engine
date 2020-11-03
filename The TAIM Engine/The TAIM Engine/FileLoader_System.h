@@ -23,6 +23,7 @@ struct TempTransData {
 	glm::vec3 position = glm::vec3(0);
 	float degrees = 0.0f;
 	glm::vec3 rotateAxis = glm::vec3(1);
+	glm::vec3 scale = glm::vec3(1);
 	std::string tag = "undefined";
 };
 

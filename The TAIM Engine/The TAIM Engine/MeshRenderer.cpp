@@ -11,8 +11,10 @@ MeshRenderer::MeshRenderer(std::string path, Shader* shader, bool flip) {
 }
 
 void MeshRenderer::Setup() {
-	//shader->Use();
+	
 	model = glm::translate(model, GO->pos);
+	model *= glm::toMat4(GO->rot);
+	model = glm::scale(model, GO->scale);
 	//glUseProgram(0);
 }
 

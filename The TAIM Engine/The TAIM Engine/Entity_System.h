@@ -11,7 +11,7 @@ private:
 
 public:
 	Entity_System();
-	Entity* CreateEntity(glm::vec3 Position, glm::quat Rotation, std::string tag);
+	Entity* CreateEntity(glm::vec3 Position, glm::quat Rotation,glm::vec3 Scale, std::string tag);
 	std::vector<Entity*> GetEntitiesWithTag(std::string tag);
 	void CloseEntitySystem();
 };

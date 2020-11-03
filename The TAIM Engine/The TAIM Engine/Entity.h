@@ -22,9 +22,10 @@ public:
 	// used for event testing.
 	glm::vec3 pos;
 	glm::quat rot;
+	glm::vec3 scale;
 
 	// initialisation of the entity class.
-	Entity(glm::vec3 StartingPosition, glm::quat StartingRotation, std::string tag);
+	Entity(glm::vec3 StartingPosition, glm::quat StartingRotation,glm::vec3 StartingScale, std::string tag);
 	Entity();
 	
 	// sets the component by it's component type into a map, for easier looking up.
