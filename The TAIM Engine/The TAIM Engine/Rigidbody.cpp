@@ -27,6 +27,8 @@ void Rigidbody::Setup() {
 		motionState = new btDefaultMotionState(RBTransform);
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, collider->shape, localInertia);
 		body = new btRigidBody(rbInfo);
+
+		//body->setAngularFactor(btVector3(0, 1, 0));
 	}
 	else {
 		//collider->shape = new btEmptyShape();

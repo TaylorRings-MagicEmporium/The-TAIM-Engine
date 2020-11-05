@@ -34,6 +34,10 @@
 #include "Communication_Layer.h"
 #include "FileLoader_System.h"
 
+#include <fmod_studio.hpp>
+#include <fmod.hpp>
+
+
 class The_TAIM_Engine {
 
 	//used for window setup
@@ -56,6 +60,9 @@ class The_TAIM_Engine {
 	Communication_Layer CL = Communication_Layer();
 	FileLoader_System FLS = FileLoader_System();
 	Entity_System ES = Entity_System();
+
+	FMOD::Studio::System* system = NULL;
+	FMOD::System* lowLevelSystem = NULL;
 
 public:
 	// used for engine initialisation. 

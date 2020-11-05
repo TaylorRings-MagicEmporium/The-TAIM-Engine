@@ -10,11 +10,18 @@ Input_System::Input_System(SDL_Window* newWindow) {
 }
 
 void Input_System::Reset_Input() {
+
 	for (int i = 0; i < 26; i++) {
+		PrevKeyLetterState[i] = KeyLetterState[i];
 		KeyLetterState[i] = false;
 	}
 	for (int i = 0; i < 10; i++) {
+		PrevKeyNumberState[i] = KeyNumberState[i];
 		KeyNumberState[i] = false;
+	}
+	for (int i = 0; i < 18; i++) {
+		PrevKeySpecialState[i] = KeySpecialState[i];
+		KeySpecialState[i] = false;
 	}
 }
 
@@ -51,5 +58,17 @@ bool Input_System::GetKeyPressed(KEYNUMBERCODE KNC) {
 
 bool Input_System::GetKeyPressed(KEYSPECIALCODE KSC) {
 	return KeySpecialState[(int)KSC]; 
+}
+
+bool Input_System::GetPrevKeyPressed(KEYLETTERCODE KLC) {
+	return PrevKeyLetterState[(int)KLC];
+}
+
+bool Input_System::GetPrevKeyPressed(KEYNUMBERCODE KNC) {
+	return PrevKeyNumberState[(int)KNC];
+}
+
+bool Input_System::GetPrevKeyPressed(KEYSPECIALCODE KSC) {
+	return PrevKeySpecialState[(int)KSC];
 }
 

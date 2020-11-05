@@ -120,7 +120,7 @@ Camera::~Camera() {
 
 void Camera::UpdateCamera(int WIDTH, int HEIGHT) {
     glm::vec3 pos = glm::vec3(0,0,10);
-    view = glm::lookAt(pos, pos + glm::vec3(0,0,-1), glm::vec3(0,1,0));
+    view = glm::lookAt(pos + glm::vec3(0,10,10), pos + glm::vec3(0,0,-1), glm::vec3(0,1,0));
     proj = glm::perspective(glm::radians(zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
     UIProj = glm::ortho(0.0f, (float)WIDTH, 0.0f, (float)HEIGHT, -1000.0f, 1000.0f);
 }

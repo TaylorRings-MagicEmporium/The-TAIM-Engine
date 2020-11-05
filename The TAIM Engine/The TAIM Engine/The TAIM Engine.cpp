@@ -161,37 +161,32 @@ int The_TAIM_Engine::SetupEngine() {
 
 int The_TAIM_Engine::StartEngine() {
 
-	//std::vector<std::string> elementList;
-	//std::vector<std::string> entityList;
+	FMOD::Studio::System::create(&system);
+	if (system) {
+		std::cout << "high-level (fmod studio) audio system created." << "\n";
+	}
 
-	//lua_State* F = luaL_newstate();
-	//luaL_dofile(F, "elements.lua");
-	//luaL_openlibs(F);
-	//lua_pcall(F, 0, 0, 0);
+	FMOD::System* lowLevelSystem = NULL;
+	system->getCoreSystem(&lowLevelSystem);
 
-	//elementList = getElements("elementList", F);
-	//LuaRef elementsRef = getGlobal(F, "elementList");
-	//int checker;
+	if (lowLevelSystem) {
+		std::cout << "Low-level (fmod) audio System created." << "\n";
+	}
 
-	//for (int i = 0; i < elementList.size(); i++)
-	//{
-	//	LuaRef entityCheck = elementsRef[elementList.at(i)];
-	//	checker = entityCheck["e_type"].cast<int>();
+	lowLevelSystem->setSoftwareFormat(0, FMOD_SPEAKERMODE_STEREO, 0);
+	system->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, NULL);
 
-	//	/* We loop through every element in elementList, and check whether or
-	//	not it's an entity. If it is, we push the "val" property of that entity
-	//	onto the entityList. */
+	FMOD::Sound* test = NULL;
+	lowLevelSystem->createSound("gun-shot.wav", FMOD_LOOP_OFF, NULL, &test);
 
-	//	if (checker > 0)
-	//	{
-	//		entityList.push_back(entityCheck["val"].cast<std::string>());
-	//	}
-	//}
+	if (test) {
+		std::cout << "Sound loaded." << "\n";
+	}
 
-	//for (int i = 0; i < entityList.size(); i++)
-	//{
-	//	std::cout << (std::string)entityList.at(i) << "\n";
-	//}
+	test->setDefaults(44100, 0);
+
+	FMOD::Channel* testChannel = NULL;
+
 
 
 	glEnable(GL_DEPTH_TEST);
@@ -249,6 +244,7 @@ int The_TAIM_Engine::StartEngine() {
 	// the main game loop of the program
 	while (!quit)
 	{
+
 		// for each event on SDL_queue
 		while (SDL_PollEvent(&e) != 0)
 		{
@@ -293,7 +289,13 @@ int The_TAIM_Engine::StartEngine() {
 			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 			Event_Queue.AddEventToStack(ev);
 		}
+		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_N) && !IS.GetPrevKeyPressed(KEYLETTERCODE::KEY_N)) {
+			lowLevelSystem->playSound(test, NULL, false, &testChannel);
+		}
 
+
+
+		system->update();
 		// ENGINE LOOP
 		// in the future, the camera will be within a camera system for better control
 		c.UpdateCamera(SCREEN_WIDTH, SCREEN_HEIGHT);

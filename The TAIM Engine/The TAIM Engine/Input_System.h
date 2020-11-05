@@ -25,6 +25,16 @@ private:
 	bool KeyLetterState[26];
 	bool KeyNumberState[10];
 	bool KeySpecialState[18];
+
+	bool PrevKeyLetterState[26];
+	bool PrevKeyNumberState[10];
+	bool PrevKeySpecialState[18];
+
+	// the decision to split all keys into three sections is that it's impossible to create a fixed
+	//system. for example GLFW's SPACE key is 32, while SDL2's SPACE key is on 44. in the future, EACH key could
+	//be manually tested, meaning that just one enum is needed, and simplify some processes (event-key binding)
+
+
 public:
 	//used to initialise the Input system
 	Input_System();
@@ -37,13 +47,14 @@ public:
 	// resets the input back to false (no input detected)
 	void Reset_Input();
 
-	// returns the bool of the boolean at the index of KLC
+	// returns the bool of the state at the current frame
 	bool GetKeyPressed(KEYLETTERCODE KLC);
-
-	//returns the bool of the boolean at the index of KNC
 	bool GetKeyPressed(KEYNUMBERCODE KNC);
-
-	//returns the bool of the boolean at the index of KNC
 	bool GetKeyPressed(KEYSPECIALCODE KSC);
+
+	// returns the bool of the state at the previous frame
+	bool GetPrevKeyPressed(KEYLETTERCODE KLC);
+	bool GetPrevKeyPressed(KEYNUMBERCODE KNC);
+	bool GetPrevKeyPressed(KEYSPECIALCODE KSC);
 };
 
