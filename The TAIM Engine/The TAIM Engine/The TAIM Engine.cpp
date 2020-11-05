@@ -16,6 +16,7 @@ bool The_TAIM_Engine::init()
 	FLS.PS = &PS;
 	FLS.SR = &SR;
 	FLS.ES = &ES;
+	FLS.AS = &AS;
 	//Initialization flag
 	bool success = true;
 
@@ -161,33 +162,6 @@ int The_TAIM_Engine::SetupEngine() {
 
 int The_TAIM_Engine::StartEngine() {
 
-	FMOD::Studio::System::create(&system);
-	if (system) {
-		std::cout << "high-level (fmod studio) audio system created." << "\n";
-	}
-
-	FMOD::System* lowLevelSystem = NULL;
-	system->getCoreSystem(&lowLevelSystem);
-
-	if (lowLevelSystem) {
-		std::cout << "Low-level (fmod) audio System created." << "\n";
-	}
-
-	lowLevelSystem->setSoftwareFormat(0, FMOD_SPEAKERMODE_STEREO, 0);
-	system->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, NULL);
-
-	FMOD::Sound* test = NULL;
-	lowLevelSystem->createSound("gun-shot.wav", FMOD_LOOP_OFF, NULL, &test);
-
-	if (test) {
-		std::cout << "Sound loaded." << "\n";
-	}
-	//test->setDefaults(44100, 0); // sets speed of sound
-
-	FMOD::Channel* testChannel = NULL;
-
-
-
 	glEnable(GL_DEPTH_TEST);
 
 	// (in file) "basic" is the engine's own shader in the case that no shader specified is found. MAKE INTO CODE INSTEAD
@@ -204,7 +178,6 @@ int The_TAIM_Engine::StartEngine() {
 	//key_bindings.push_back(std::pair<char, EventType>('d', EventType::MoveRight));
 	//key_bindings.push_back(std::pair<char, EventType>(' ', EventType::Jump));
 	//
-
 
 	//// creates a temp entity and adds it to the entity list.
 	//Entity duck = Entity(glm::vec3(0,3,0),glm::angleAxis(glm::radians(45.0f), glm::vec3(1,1,0)));
@@ -227,12 +200,17 @@ int The_TAIM_Engine::StartEngine() {
 
 	Camera c = Camera();
 
+	std::vector<Entity*> playerEntites = ES.GetEntitiesWithTag("Player");
+
 	//sets up procedure for the Graphics System
 	GS.CL = &CL;
 	GS.SR = &SR;
 	PS.CL = &CL;
 	GS.Setup();
 	PS.Setup();
+	AS.Setup();
+
+
 
 	//used to exit the loop if needed
 	bool quit = false;
@@ -241,6 +219,10 @@ int The_TAIM_Engine::StartEngine() {
 	SDL_Event e;
 	Event* ev = new Event();
 	// the main game loop of the program
+
+
+
+
 	while (!quit)
 	{
 
@@ -261,7 +243,7 @@ int The_TAIM_Engine::StartEngine() {
 		IS.Update_Input();
 
 		//GAME LOOP
-		std::vector<Entity*> playerEntites = ES.GetEntitiesWithTag("Player");
+
 		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
 			ev = new MoveForward();
 			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
@@ -289,12 +271,11 @@ int The_TAIM_Engine::StartEngine() {
 			Event_Queue.AddEventToStack(ev);
 		}
 		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_N) && !IS.GetPrevKeyPressed(KEYLETTERCODE::KEY_N)) {
-			lowLevelSystem->playSound(test, NULL, false, &testChannel);
+			ev = new PlaySound();
+			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+			Event_Queue.AddEventToStack(ev);
 		}
 
-
-
-		system->update();
 		// ENGINE LOOP
 		// in the future, the camera will be within a camera system for better control
 		c.UpdateCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -315,12 +296,13 @@ int The_TAIM_Engine::StartEngine() {
 		
 		// SYSTEM EVENT QUEUE CHECKUP
 		// each system must have access to the current event queue and do it's own polling to apply the correct results.
-		float t1, t2, t3;
+		float t1, t2, t3, t4;
 		t1 = SDL_GetTicks();
 		PS.Update(&Event_Queue);
 		t2 = SDL_GetTicks();
 		GS.Update(&Event_Queue);
 		t3 = SDL_GetTicks();
+		AS.Update(&Event_Queue);
 
 		//std::cout << "PHYSICS: " << (t2 - t1) / 1000.0f << "Seconds. " << "GRAPHICS: " << (t3 - t2) / 1000.0f << "Seconds" << std::endl;
 		

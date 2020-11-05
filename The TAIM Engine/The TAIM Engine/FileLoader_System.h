@@ -9,6 +9,7 @@
 #include "Graphics_System.h"
 #include "Physics_System.h"
 #include "Entity_System.h"
+#include "Audio_System.h"
 
 #include <vector>
 
@@ -41,6 +42,7 @@ public:
 	Physics_System* PS;
 	ShaderRegistry* SR;
 	Entity_System* ES;
+	Audio_System* AS;
 
 	FileLoader_System();
 	void LoadShaders();

@@ -35,12 +35,12 @@ void Physics_System::Update(EventQueue* EQ)
 {
 
 	typedef void (Physics_System::* method_function)(Event*);
-	method_function method_pointer[5];
-	method_pointer[0] = &Physics_System::MoveForward;
-	method_pointer[1] = &Physics_System::MoveBackward;
-	method_pointer[2] = &Physics_System::MoveLeft;
-	method_pointer[3] = &Physics_System::MoveRight;
-	method_pointer[4] = &Physics_System::FJump;
+	method_function method_pointer[EVENT_TYPE_COUNT];
+	method_pointer[(int)EventType::MoveForward] = &Physics_System::MoveForward;
+	method_pointer[(int)EventType::MoveBackward] = &Physics_System::MoveBackward;
+	method_pointer[(int)EventType::MoveLeft] = &Physics_System::MoveLeft;
+	method_pointer[(int)EventType::MoveRight] = &Physics_System::MoveRight;
+	method_pointer[(int)EventType::Jump] = &Physics_System::FJump;
 
 
 	while (Event* e = EQ->PollEvents()) {

@@ -6,10 +6,14 @@
 // the event type explains what kind of event this is.
 enum class EventType {
 	//Physics_Engine
-	MoveForward,MoveBackward,MoveLeft,MoveRight,Jump};
+	MoveForward,MoveBackward,MoveLeft,MoveRight,Jump,PlaySound};
 
 // the system enum is used to indicate which system should react to this specific event.
 enum class Systems {Windows, Graphics, Physics, Audio};
+
+//for effective function pointing, the size of the EventType has to be recorded.
+const int EVENT_TYPE_COUNT = 6;
+
 
 // the Event is a special container that is essential for the communication of systems by storing information needed for systems to evaluate it.
 class Event
@@ -75,18 +79,11 @@ public:
 	glm::vec3 JumpAmount = glm::vec3(0, 30, 0);
 };
 
-//class MoveObject : public Event {
-//
-//public:
-//	MoveObject() { MyType = EventType::MoveObject; };
-//
-//	glm::vec3 PositionAdd = glm::vec3(0,0,0);
-//};
-//
-//class Reset : public Event {
-//
-//public:
-//	Reset() { MyType = EventType::Reset; };
-//
-//};
+class PlaySound : public Event {
+public:
+	PlaySound() {
+		MyType = EventType::PlaySound;
+		SystemList[(int)Systems::Audio] = true;
+	}
+};
 

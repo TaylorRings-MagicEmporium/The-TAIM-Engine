@@ -33,9 +33,7 @@
 #include "Input_System.h"
 #include "Communication_Layer.h"
 #include "FileLoader_System.h"
-
-#include <fmod_studio.hpp>
-#include <fmod.hpp>
+#include "Audio_System.h"
 
 
 class The_TAIM_Engine {
@@ -55,14 +53,14 @@ class The_TAIM_Engine {
 	ShaderRegistry SR = ShaderRegistry();
 	Graphics_System GS = Graphics_System(100);
 	Physics_System PS = Physics_System(100);
+	Audio_System AS = Audio_System(100);
 	EventQueue Event_Queue = EventQueue();
 	Input_System IS;
 	Communication_Layer CL = Communication_Layer();
 	FileLoader_System FLS = FileLoader_System();
 	Entity_System ES = Entity_System();
 
-	FMOD::Studio::System* system = NULL;
-	FMOD::System* lowLevelSystem = NULL;
+
 
 public:
 	// used for engine initialisation. 

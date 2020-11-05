@@ -144,6 +144,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioPlayer.cpp" />
+    <ClCompile Include="Audio_System.cpp" />
     <ClCompile Include="Bullet_Debug_Drawer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
@@ -169,6 +171,8 @@
     <ClCompile Include="The TAIM Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioPlayer.h" />
+    <ClInclude Include="Audio_System.h" />
     <ClInclude Include="Bullet_Debug_Drawer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />

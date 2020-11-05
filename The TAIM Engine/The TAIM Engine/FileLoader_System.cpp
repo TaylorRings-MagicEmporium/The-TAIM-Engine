@@ -143,6 +143,12 @@ void FileLoader_System::LoadEntities()
 			object->SetComponent(PS->CreateCollider(glm::vec3(Coll["sizeX"].cast<float>(), Coll["sizeY"].cast<float>(), Coll["sizeZ"].cast<float>())));
 		}
 		std::cout << std::endl;
+
+		//AUDIOPLAYER
+		LuaRef AudPla = ComponentView["AudioPlayer"];
+		if (!AudPla.isNil()) {
+			object->SetComponent(AS->CreateAudioPlayer(AudPla["AudioPath"].cast<std::string>().c_str()));
+		}
 	}
 	std::cout << "objects loaded correctly!" << std::endl;
 }
