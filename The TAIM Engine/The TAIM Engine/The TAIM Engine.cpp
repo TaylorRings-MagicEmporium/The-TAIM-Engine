@@ -182,8 +182,7 @@ int The_TAIM_Engine::StartEngine() {
 	if (test) {
 		std::cout << "Sound loaded." << "\n";
 	}
-
-	test->setDefaults(44100, 0);
+	//test->setDefaults(44100, 0); // sets speed of sound
 
 	FMOD::Channel* testChannel = NULL;
 
