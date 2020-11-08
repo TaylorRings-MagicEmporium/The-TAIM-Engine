@@ -244,33 +244,33 @@ int The_TAIM_Engine::StartEngine() {
 
 		//GAME LOOP
 
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
+		if (IS.GetKeyPressed(KeyCode::KEY_W)) {
 			ev = new MoveForward();
 			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 			//ev->ListOfEntities.push_back(&EntityList[0]);
 			Event_Queue.AddEventToStack(ev);
 		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
+		if (IS.GetKeyPressed(KeyCode::KEY_A)) {
 			ev = new MoveLeft();
 			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 			Event_Queue.AddEventToStack(ev);
 		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
+		if (IS.GetKeyPressed(KeyCode::KEY_S)) {
 			ev = new MoveBackward();
 			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 			Event_Queue.AddEventToStack(ev);
 		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
+		if (IS.GetKeyPressed(KeyCode::KEY_D)) {
 			ev = new MoveRight();
 			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 			Event_Queue.AddEventToStack(ev);
 		}
-		if (IS.GetKeyPressed(KEYSPECIALCODE::KEY_SPACE)) {
+		if (IS.GetKeyPressed(KeyCode::KEY_SPACE)) {
 			ev = new Jump();
 			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 			Event_Queue.AddEventToStack(ev);
 		}
-		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_N) && !IS.GetPrevKeyPressed(KEYLETTERCODE::KEY_N)) {
+		if (IS.GetKeyPressed(KeyCode::KEY_N) && !IS.GetPrevKeyPressed(KeyCode::KEY_N)) {
 			ev = new PlaySound();
 			ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 			Event_Queue.AddEventToStack(ev);
