@@ -25,12 +25,17 @@ EntityList = {
 				y = 0,
 				z = 0
 			},
-			mass = 1.0
+			mass = 1.0,
+			LockX = true,
+			LockZ = true
 		},
-		Collider = {
-			sizeX = 1,
-			sizeY = 1,
-			sizeZ = 1
+		--CubeCollider = {
+		--	sizeX = 1,
+		--	sizeY = 1,
+		--	sizeZ = 1
+		--},
+		SphereCollider = {
+			radius = 1.0
 		},
 		AudioPlayer = {
 			AudioPath = "gun-shot.wav"
@@ -62,7 +67,7 @@ EntityList = {
 			},
 			mass = 0.0
 		},
-		Collider = {
+		CubeCollider = {
 			sizeX = 10,
 			sizeY = 1,
 			sizeZ = 10
@@ -76,7 +81,7 @@ EntityList = {
 			z = 0
 			}
 		},
-
+	
 		MeshRenderer = {
 			MeshPath = "Objects/duck/duck.obj",
 			ShaderName = "model_loading",
@@ -115,7 +120,7 @@ EntityList = {
 			},
 			mass = 0.0
 		},
-		Collider = {
+		CubeCollider = {
 			sizeX = 10,
 			sizeY = 1,
 			sizeZ = 10

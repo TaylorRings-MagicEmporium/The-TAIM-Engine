@@ -133,14 +133,40 @@ void FileLoader_System::LoadEntities()
 			}
 			
 			std::cout << Rigid["mass"].cast<float>() << std::endl;
-			object->SetComponent(PS->CreateRigidbody(glm::vec3(offset["x"].cast<float>(), offset["y"].cast<float>(), offset["z"].cast<float>()), Rigid["mass"].cast<float>()));
+			Component* temp = PS->CreateRigidbody(glm::vec3(offset["x"].cast<float>(), offset["y"].cast<float>(), offset["z"].cast<float>()), Rigid["mass"].cast<float>());
+			object->SetComponent(temp);
+		
+			bool locks[3] = { false,false,false };
+			LuaRef lockX = Rigid["LockX"];
+			LuaRef lockY = Rigid["LockY"];
+			LuaRef lockZ = Rigid["LockZ"];
+			std::cout << Rigid["LockX"].cast<bool>() << std::endl;
+			if (!lockX.isNil()) {
+				locks[0] = lockX.cast<bool>();
+			}
+			if (!lockY.isNil()) {
+				locks[1] = lockY.cast<bool>();
+			}
+			if (!lockZ.isNil()) {
+				locks[2] = lockZ.cast<bool>();
+			}
+
+			static_cast<Rigidbody*>(temp)->ConstrictRotation(locks[0], locks[1], locks[2]);
 		}
 
-		//COLLIDER
-		LuaRef Coll = ComponentView["Collider"];
-		if (!Coll.isNil()) {
-			std::cout << Coll["sizeX"].cast<float>() << ", " << Coll["sizeY"].cast<float>() << ", " << Coll["sizeZ"].cast<float>() << std::endl;
-			object->SetComponent(PS->CreateCollider(glm::vec3(Coll["sizeX"].cast<float>(), Coll["sizeY"].cast<float>(), Coll["sizeZ"].cast<float>())));
+		//CUBECOLLIDER
+		LuaRef CuColl = ComponentView["CubeCollider"];
+		if (!CuColl.isNil()) {
+			std::cout << CuColl["sizeX"].cast<float>() << ", " << CuColl["sizeY"].cast<float>() << ", " << CuColl["sizeZ"].cast<float>() << std::endl;
+			object->SetComponent(PS->CreateCubeCollider(glm::vec3(CuColl["sizeX"].cast<float>(), CuColl["sizeY"].cast<float>(), CuColl["sizeZ"].cast<float>())));
+		}
+		std::cout << std::endl;
+
+		//SPHERECOLLIDER
+		LuaRef SphColl = ComponentView["SphereCollider"];
+		if (!SphColl.isNil()) {
+			std::cout << SphColl["radius"].cast<float>() << std::endl;
+			object->SetComponent(PS->CreateSphereCollider(SphColl["radius"].cast<float>()));
 		}
 		std::cout << std::endl;
 

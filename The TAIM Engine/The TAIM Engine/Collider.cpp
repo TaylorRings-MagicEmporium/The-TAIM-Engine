@@ -1,7 +1,6 @@
 #include "Collider.h"
 
-Collider::Collider(btVector3 AxisExtents)
+Collider::Collider()
 {
 	type = ComponentType::Collider;
-	shape = new btBoxShape(AxisExtents);
 }

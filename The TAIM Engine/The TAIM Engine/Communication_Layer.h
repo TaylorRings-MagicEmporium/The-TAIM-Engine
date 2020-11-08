@@ -18,7 +18,8 @@ private:
 
 public:
 	std::vector<GPWrapItem> GPBuffer;
-	glm::vec3 Debug_Line_Vertices[500];
+	glm::vec3 Debug_Line_Vertices[512];
+	//glm::vec3 Debug_
 	int Debug_Line_Vertices_Counter = 0;
 	Communication_Layer();
 	void GPWrap(btTransform trans, Entity* entity);

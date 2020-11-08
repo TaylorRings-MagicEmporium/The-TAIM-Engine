@@ -103,8 +103,20 @@ Component* Physics_System::CreateRigidbody(glm::vec3 position, float RBmass) {
 	return &ListOfRigidbodies.back();
 }
 
-Component* Physics_System::CreateCollider(glm::vec3 axisExtents) {
-	Collider c = Collider(btVector3(axisExtents.x, axisExtents.y, axisExtents.z));
+//Component* Physics_System::CreateCollider(glm::vec3 axisExtents) {
+//	Collider c = Collider(btVector3(axisExtents.x, axisExtents.y, axisExtents.z));
+//	ListOfColliders.push_back(c);
+//	return &ListOfColliders.back();
+//}
+
+Component* Physics_System::CreateCubeCollider(glm::vec3 axisExtents) {
+	Collider c = CubeCollider(btVector3(axisExtents.x, axisExtents.y, axisExtents.z));
+	ListOfColliders.push_back(c);
+	return &ListOfColliders.back();
+}
+
+Component* Physics_System::CreateSphereCollider(float radius) {
+	Collider c = SphereCollider(radius);
 	ListOfColliders.push_back(c);
 	return &ListOfColliders.back();
 }

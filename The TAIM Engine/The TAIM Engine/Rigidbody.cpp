@@ -29,6 +29,7 @@ void Rigidbody::Setup() {
 		body = new btRigidBody(rbInfo);
 
 		//body->setAngularFactor(btVector3(0, 1, 0));
+		body->setAngularFactor(LockAxis);
 	}
 	else {
 		//collider->shape = new btEmptyShape();
@@ -39,4 +40,18 @@ void Rigidbody::Setup() {
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, new btEmptyShape(), localInertia);
 		body = new btRigidBody(rbInfo);
 	}
+}
+
+void Rigidbody::ConstrictRotation(bool lockX, bool lockY, bool lockZ) {
+	//btVector3 t = btVector3(1,1,1);
+	if (lockX) {
+		LockAxis.setX(0);
+	}
+	if (lockY) {
+		LockAxis.setY(0);
+	}
+	if (lockZ) {
+		LockAxis.setZ(0);
+	}
+
 }

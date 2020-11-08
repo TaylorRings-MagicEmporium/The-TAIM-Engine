@@ -2,10 +2,12 @@
 #include "EventQueue.h"
 #include "bullet3/btBulletDynamicsCommon.h"
 #include "Rigidbody.h"
-#include "Collider.h"
+//#include "Collider.h"
 #include <vector>
 #include "Communication_Layer.h"
 #include "Bullet_Debug_Drawer.h"
+#include "CubeCollider.h"
+#include "SphereCollider.h"
 class Physics_System
 {
 private:
@@ -36,8 +38,9 @@ public:
 	void Update(EventQueue* EQ);
 
 	Component* CreateRigidbody(glm::vec3 offset, float RBmass);
-	Component* CreateCollider(glm::vec3 axisExtents);
-
+	//Component* CreateCollider(glm::vec3 axisExtents);
+	Component* CreateCubeCollider(glm::vec3 axisExtents);
+	Component* CreateSphereCollider(float radius);
 	~Physics_System();
 };
 
