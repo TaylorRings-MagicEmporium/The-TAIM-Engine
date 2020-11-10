@@ -37,9 +37,29 @@
 
 #include <enet/enet.h>
 
-struct TransferPacket {
-	float x, y, z;
-	float qx, qy, qz, qw;
+//struct TransferPacket {
+//	float x, y, z;
+//	float qx, qy, qz, qw;
+//};
+
+struct Vector2 {
+	float x;
+	float y;
+};
+
+struct PhysicsData {
+	int packetType = 1;
+	Vector2 positions[2];
+};
+
+struct ClientData {
+	int packetType = 0;
+	int clientIndex;
+};
+
+struct ClientPacket {
+	int clientIndex;
+	Vector2 position;
 };
 
 class The_TAIM_Engine {
@@ -65,8 +85,6 @@ class The_TAIM_Engine {
 	Communication_Layer CL = Communication_Layer();
 	FileLoader_System FLS = FileLoader_System();
 	Entity_System ES = Entity_System();
-
-	//NETORKING
 
 public:
 	// used for engine initialisation. 

@@ -82,9 +82,7 @@ bool The_TAIM_Engine::init()
 		}
 	}
 
-	//if (enet_initialize() != 0) {
-	//	std::cout << "Enet failed to initialise" << std::endl;
-	//}
+
 
 	return success;
 }
@@ -168,6 +166,43 @@ int The_TAIM_Engine::StartEngine() {
 
 	// the main game loop of the program
 
+	if (enet_initialize() != 0) {
+		std::cout << "Enet failed to initialise" << std::endl;
+	}
+
+	ENetAddress address;
+	ENetHost* client;
+	ENetPeer* peer;
+	ENetEvent enetEvent;
+
+	client = enet_host_create(NULL, 1, 2, 0, 0);
+
+	if (client == NULL) {
+		std::cout << "Client failed to initialise!" << std::endl;
+	}
+
+	enet_address_set_host(&address, "localhost");
+	address.port = 1234;
+
+	peer = enet_host_connect(client, &address, 2, 0);
+
+	if (peer == NULL) {
+		std::cout << "No available peers for initializing an Enet connection." << std::endl;
+	}
+
+	PhysicsData* serverData = new PhysicsData;
+	ClientData* clientData = new ClientData;
+	int* packetType = new int;
+
+	*packetType = -1;
+
+	ClientPacket* clientPacket = new ClientPacket;
+	ENetPacket* dataPacket;
+
+	int clientIndex = -1;
+
+	std::vector<Entity*> ghostEntites = ES.GetEntitiesWithTag("Ghost");
+	int count = 0;
 	while (!quit)
 	{
 
@@ -179,6 +214,40 @@ int The_TAIM_Engine::StartEngine() {
 			{
 				quit = true;
 			}
+		}
+
+		while (enet_host_service(client, &enetEvent, 0) > 0) {
+			switch (enetEvent.type) {
+
+			case ENET_EVENT_TYPE_RECEIVE:
+
+				memcpy(packetType, enetEvent.packet->data, sizeof(int));
+				if (*packetType == 0) {
+					//this plays when a first connection is made
+					memcpy(clientData, enetEvent.packet->data, sizeof(ClientData));
+					std::cout << "connection Packet Recieved!" << std::endl;
+					std::cout << count << std::endl;
+					clientIndex = clientData->clientIndex;
+				}
+				else if (*packetType == 1) {
+					//std::cout << "update Packet Recieved!" << std::endl;
+					count++;
+					memcpy(serverData, enetEvent.packet->data, sizeof(PhysicsData));
+					for (int i = 0; i < 2; i++) {
+						if (i != clientIndex) {
+							//Event* ev = new Event();
+							//ev->ListOfEntities.insert(ev->ListOfEntities.end(), ghostEntites.begin(), ghostEntites.end());
+							//ev = new UpdateTransform();
+							//static_cast<UpdateTransform*>(ev)->pos = glm::vec3(serverData->transforms[i].x, serverData->transforms[i].y, serverData->transforms[i].z);
+							//static_cast<UpdateTransform*>(ev)->rot = glm::quat(serverData->transforms[i].qw, serverData->transforms[i].qx, serverData->transforms[i].qy, serverData->transforms[i].qz);
+							//Event_Queue.AddEventToStack(ev);
+						}
+					}
+				}
+
+				break;
+			}
+			
 		}
 
 		//resets the graphical frame in the windows
@@ -230,9 +299,32 @@ int The_TAIM_Engine::StartEngine() {
 		//updates the window by double buffering.
 		SDL_GL_SwapWindow(gWindow);
 		//SDL_GL_
+
+		std::vector<Entity*> playerEntites = ES.GetEntitiesWithTag("Player");
+
+		clientPacket->clientIndex = clientIndex;
+		clientPacket->position.x = 100.0f;
+		clientPacket->position.y = 300.0f;
+		//clientPacket->transform.x = playerEntites[0]->pos.x;
+		//clientPacket->transform.y = playerEntites[0]->pos.y;
+		//clientPacket->transform.z = playerEntites[0]->pos.z;
+		//clientPacket->transform.qw = playerEntites[0]->rot.w;
+		//clientPacket->transform.qx = playerEntites[0]->rot.x;
+		//clientPacket->transform.qy = playerEntites[0]->rot.y;
+		//clientPacket->transform.qz = playerEntites[0]->rot.z;
+
+		dataPacket = enet_packet_create(clientPacket, sizeof(ClientPacket), ENET_PACKET_FLAG_RELIABLE);
+		enet_peer_send(peer, 0, dataPacket);
+		
 	}
 
 	// the program has ended, begin shutting down the engine
+
+	enet_peer_disconnect_now(peer, 0);
+
+	enet_host_destroy(client);
+	atexit(enet_deinitialize);
+
 	close();
 	//delete ev;
 	return 0;

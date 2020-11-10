@@ -3,14 +3,18 @@
 #include <enet/enet.h>
 #include <SDL2\SDL.h>
 
-struct TransferPacket {
-	float x, y, z;
-	float qx, qy, qz, qw;
+struct Vector2 {
+	float x, y;
 };
+
+//struct TransferPacket {
+//	float x, y, z;
+//	float qx, qy, qz, qw;
+//};
 
 struct PhysicsData {
 	int packetType = 1;
-	TransferPacket transforms[2];
+	Vector2 positions[2];
 };
 
 struct ClientData {
@@ -20,7 +24,7 @@ struct ClientData {
 
 struct ClientPacket {
 	int clientIndex;
-	TransferPacket transform;
+	Vector2 position;
 };
 
 int main(int argc, char* args[]) {
@@ -66,32 +70,42 @@ int main(int argc, char* args[]) {
 	// while it recieves the default data of the other client.
 	PhysicsData* physicsData = new PhysicsData;
 
-	physicsData->transforms[0].x = 0;
-	physicsData->transforms[0].y = 3.0f;
-	physicsData->transforms[0].z = 0;
-	physicsData->transforms[0].qx = 0;
-	physicsData->transforms[0].qy = 0;
-	physicsData->transforms[0].qz = 0;
-	physicsData->transforms[0].qw = 1.0f;
+	physicsData->positions[0].x = 600.0f;
+	physicsData->positions[0].y = 300.0f;
+	physicsData->positions[1].x = 100.0f;
+	physicsData->positions[1].y = 300.0f;
 
-	physicsData->transforms[1].x = 0;
-	physicsData->transforms[1].y = 3.0f;
-	physicsData->transforms[1].z = 0;
-	physicsData->transforms[1].qx = 0;
-	physicsData->transforms[1].qy = 0;
-	physicsData->transforms[1].qz = 0;
-	physicsData->transforms[1].qw = 1.0f;
+	//physicsData->transforms[0].x = 0;
+	//physicsData->transforms[0].y = 3.0f;
+	//physicsData->transforms[0].z = 0;
+	//physicsData->transforms[0].qx = 0;
+	//physicsData->transforms[0].qy = 0;
+	//physicsData->transforms[0].qz = 0;
+	//physicsData->transforms[0].qw = 1.0f;
+
+	//physicsData->transforms[1].x = 0;
+	//physicsData->transforms[1].y = 3.0f;
+	//physicsData->transforms[1].z = 0;
+	//physicsData->transforms[1].qx = 0;
+	//physicsData->transforms[1].qy = 0;
+	//physicsData->transforms[1].qz = 0;
+	//physicsData->transforms[1].qw = 1.0f;
 
 	// used to store incoming data
 	ClientPacket* clientPacket = new ClientPacket;
+
 	clientPacket->clientIndex = 0;
-	clientPacket->transform.x = 0;
-	clientPacket->transform.y = 0;
-	clientPacket->transform.z = 0;
-	clientPacket->transform.qx = 0;
-	clientPacket->transform.qy = 0;
-	clientPacket->transform.qz = 0;
-	clientPacket->transform.qw = 1.0f;
+	clientPacket->position.x = 0.0f;
+	clientPacket->position.y = 0.0f;
+
+	//clientPacket->clientIndex = 0;
+	//clientPacket->transform.x = 0;
+	//clientPacket->transform.y = 0;
+	//clientPacket->transform.z = 0;
+	//clientPacket->transform.qx = 0;
+	//clientPacket->transform.qy = 0;
+	//clientPacket->transform.qz = 0;
+	//clientPacket->transform.qw = 1.0f;
 
 	ClientData* clientData = new ClientData;
 
@@ -113,7 +127,6 @@ int main(int argc, char* args[]) {
 
 				std::cout << "a client connected from address " << enetEvent.peer->address.host << ":" << enetEvent.peer->address.port << ".\n";
 				clientData->clientIndex = clientCount;
-
 				// we send a packet to the client that connected to say that connection is successful.
 				dataPacket = enet_packet_create(clientData, sizeof(ClientData), ENET_PACKET_FLAG_RELIABLE);
 				enet_peer_send(enetEvent.peer, 0, dataPacket);
@@ -134,7 +147,8 @@ int main(int argc, char* args[]) {
 				// we can access it with ease with clientPacket acting as our safe buffer.
 				memcpy(clientPacket, enetEvent.packet->data, enetEvent.packet->dataLength);
 				int currentClient = clientPacket->clientIndex;
-				physicsData->transforms[clientPacket->clientIndex] = clientPacket->transform;
+				//physicsData->transforms[clientPacket->clientIndex] = clientPacket->transform;
+				physicsData->positions[clientPacket->clientIndex] = clientPacket->position;
 
 				break;
 			}
@@ -147,6 +161,7 @@ int main(int argc, char* args[]) {
 
 
 	// delete it all!
+
 	delete physicsData;
 	delete clientData;
 	delete clientPacket;
