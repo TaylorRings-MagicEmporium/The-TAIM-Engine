@@ -35,6 +35,12 @@
 #include "FileLoader_System.h"
 #include "Audio_System.h"
 
+#include <enet/enet.h>
+
+struct TransferPacket {
+	float x, y, z;
+	float qx, qy, qz, qw;
+};
 
 class The_TAIM_Engine {
 
@@ -60,7 +66,7 @@ class The_TAIM_Engine {
 	FileLoader_System FLS = FileLoader_System();
 	Entity_System ES = Entity_System();
 
-
+	//NETORKING
 
 public:
 	// used for engine initialisation. 
@@ -85,6 +91,7 @@ public:
 	// the main function of the engine, the start engine will control the overall lifetime of the program
 	int StartEngine();
 
+	void GameLoop();
 	//void MoveObjectAssign(Event* e);
 	//void ResetAssign(Event* e);
 

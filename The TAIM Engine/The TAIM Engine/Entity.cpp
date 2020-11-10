@@ -5,12 +5,20 @@ Entity::Entity(glm::vec3 StartingPosition, glm::quat StartingRotation, glm::vec3
 	pos = StartingPosition;
 	rot = StartingRotation;
 	scale = StartingScale;
+
+	defaultPos = StartingPosition;
+	defaultRot = StartingRotation;
+	defaultScale = StartingScale;
 }
 Entity::Entity() {
 	pos = glm::vec3(0);
-	//w,x,y,z
 	rot = glm::quat(1,0,0,0);
 	scale = glm::vec3(1);
+
+	defaultPos = glm::vec3(0);
+	defaultRot = glm::quat(1, 0, 0, 0);
+	defaultScale = glm::vec3(1);
+
 }
 
 void Entity::SetComponent(Component* com) {

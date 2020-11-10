@@ -32,7 +32,19 @@ void Graphics_System::Update(EventQueue* EQ) {
 	// 3. if so, using the function pointers and the enum class in events, it would call the approproate event based on the index.
 	// 4. finally, cross the event's system reaction for this system to false, as this engine has done what it needed to do.
 
-	//TODO: single out iterations so that all mesh renderers would be updated once
+	typedef void (Graphics_System::* method_function)(Event*);
+	method_function method_pointer[EVENT_TYPE_COUNT];
+	method_pointer[(int)EventType::UpdateTransform] = &Graphics_System::UpdateTransformEv;
+
+	while (Event* e = EQ->PollEvents()) {
+		if (e->SystemList[(int)Systems::Graphics]) {
+			method_function func = method_pointer[(int)e->GetType()];
+			(this->*func)(e);
+			e->SystemList[(int)Systems::Graphics] = false;
+		}
+	}
+
+
 	for (int i = 0; i < ListOfMeshRenderers.size(); i++) {
 		ListOfMeshRenderers[i].model = glm::translate(glm::mat4(1.0), ListOfMeshRenderers[i].GO->pos);
 		ListOfMeshRenderers[i].model *= glm::toMat4(ListOfMeshRenderers[i].GO->rot);
@@ -103,4 +115,11 @@ void Graphics_System::DebugDraw() {
 		std::fill_n(CL->Debug_Line_Vertices, CL->Debug_Line_Vertices_Counter, glm::vec3(0.0));
 		CL->Debug_Line_Vertices_Counter = 0;
 	}
+}
+
+void Graphics_System::UpdateTransformEv(Event* e) {
+	UpdateTransform* m = (UpdateTransform*)(e);
+
+	m->ListOfEntities[0]->pos = m->pos;
+	m->ListOfEntities[0]->rot = m->rot;
 }

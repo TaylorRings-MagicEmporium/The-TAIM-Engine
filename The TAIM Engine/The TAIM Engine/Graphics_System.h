@@ -18,7 +18,7 @@ private:
 	Shader* s;
 
 
-
+	void UpdateTransformEv(Event* e);
 public:
 	Communication_Layer* CL;
 	ShaderRegistry* SR;

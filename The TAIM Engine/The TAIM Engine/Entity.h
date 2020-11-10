@@ -24,6 +24,10 @@ public:
 	glm::quat rot;
 	glm::vec3 scale;
 
+	glm::vec3 defaultPos;
+	glm::quat defaultRot;
+	glm::vec3 defaultScale;
+
 	// initialisation of the entity class.
 	Entity(glm::vec3 StartingPosition, glm::quat StartingRotation,glm::vec3 StartingScale, std::string tag);
 	Entity();

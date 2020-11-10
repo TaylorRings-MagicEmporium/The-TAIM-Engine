@@ -41,6 +41,7 @@ void Physics_System::Update(EventQueue* EQ)
 	method_pointer[(int)EventType::MoveLeft] = &Physics_System::MoveLeft;
 	method_pointer[(int)EventType::MoveRight] = &Physics_System::MoveRight;
 	method_pointer[(int)EventType::Jump] = &Physics_System::FJump;
+	method_pointer[(int)EventType::ResetTransform] = &Physics_System::ResetTransformEv;
 
 
 	while (Event* e = EQ->PollEvents()) {
@@ -164,5 +165,26 @@ void Physics_System::FJump(Event* e) {
 		Rigidbody* r = (Rigidbody*)m->ListOfEntities[i]->GetComponent(ComponentType::Rigidbody);
 		r->body->activate(true);
 		r->body->applyCentralForce(btVector3(m->JumpAmount.x, m->JumpAmount.y, m->JumpAmount.z));
+	}
+}
+
+void Physics_System::ResetTransformEv(Event* e) {
+	ResetTransform* m = (ResetTransform*)(e);
+	for (int i = 0; i < m->ListOfEntities.size(); i++) {
+		Rigidbody* r = (Rigidbody*)m->ListOfEntities[i]->GetComponent(ComponentType::Rigidbody);
+		r->body->activate(true);
+		btTransform t;
+		r->motionState->getWorldTransform(t);
+		t.setOrigin(btVector3(m->ListOfEntities[i]->defaultPos.x, m->ListOfEntities[i]->defaultPos.y, m->ListOfEntities[i]->defaultPos.z));
+		t.setRotation(btQuaternion(m->ListOfEntities[i]->defaultRot.w, m->ListOfEntities[i]->defaultRot.x, m->ListOfEntities[i]->defaultRot.y, m->ListOfEntities[i]->defaultRot.z));
+		r->body->clearForces();
+		
+		r->body->setAngularVelocity(btVector3(0,0,0));
+		r->body->setLinearVelocity(btVector3(0, 0, 0));
+		r->body->setPushVelocity(btVector3(0, 0, 0));
+		r->body->setTurnVelocity(btVector3(0, 0, 0));
+
+		r->body->setWorldTransform(t);
+		r->motionState->setWorldTransform(t);
 	}
 }

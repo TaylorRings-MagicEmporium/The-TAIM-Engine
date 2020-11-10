@@ -125,8 +125,20 @@ EntityList = {
 			sizeY = 1,
 			sizeZ = 10
 		}
+	},
+	ghost = {
+		Transform = {
+			Position = {
+			x = 1,
+			y = 1,
+			z = 1
+			},
+			Tag = "Ghost"
+		},
+		MeshRenderer = {
+			MeshPath = "Objects/ghost duck/duck.obj",
+			ShaderName = "model_loading",
+			flipImage = false
+		}
 	}
-
-	
-
 }

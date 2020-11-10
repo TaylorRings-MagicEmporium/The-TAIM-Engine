@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{b6325a03-e115-46b1-908d-03bf113a928d}</ProjectGuid>
-    <RootNamespace>TheTAIMEngine</RootNamespace>
+    <ProjectGuid>{065a6d82-4c12-40d1-8c45-72b079266d9d}</ProjectGuid>
+    <RootNamespace>TAIMServer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,14 +72,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\Packages\enet-1.3.13\include\enet;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\Packages\enet-1.3.13;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\Packages\FMOD\api\fsbank\inc;$(SolutionDir)..\Packages\FMOD\api\core\inc;$(SolutionDir)..\Packages\FMOD\api\studio\inc;$(SolutionDir)..\Packages\enet-1.3.13\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Packages\FMOD\api\fsbank\lib\x64;$(SolutionDir)..\Packages\FMOD\api\core\lib\x64;$(SolutionDir)..\Packages\FMOD\api\studio\lib\x64;$(SolutionDir)..\Packages\enet-1.3.13;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\Packages\enet-1.3.13\include;$(SolutionDir)..\Packages\Includes;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\Packages\enet-1.3.13;$(SolutionDir)..\Packages\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -118,13 +120,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Packages\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)../Packages/enet-1.3.13/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>lua54.lib;assimp-vc142-mtd.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib;fmodstudio_vc.lib;fmodstudioL_vc.lib;fsbank_vc.lib;fmod_vc.lib;fmodL_vc.lib;enet64.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Packages\Libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>enet64.lib;ws2_32.lib;winmm.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,69 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AudioPlayer.cpp" />
-    <ClCompile Include="Audio_System.cpp" />
-    <ClCompile Include="Bullet_Debug_Drawer.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="Communication_Layer.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="CubeCollider.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Entity_System.cpp" />
-    <ClCompile Include="Event.cpp" />
-    <ClCompile Include="EventQueue.cpp" />
-    <ClCompile Include="FileLoader_System.cpp" />
-    <ClCompile Include="glad.c" />
-    <ClCompile Include="Graphics_System.cpp" />
-    <ClCompile Include="Input_System.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshRenderer.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Physics_System.cpp" />
-    <ClCompile Include="Rigidbody.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="ShaderRegistry.cpp" />
-    <ClCompile Include="SphereCollider.cpp" />
-    <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="The TAIM Engine.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AudioPlayer.h" />
-    <ClInclude Include="Audio_System.h" />
-    <ClInclude Include="Bullet_Debug_Drawer.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Collider.h" />
-    <ClInclude Include="Communication_Layer.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="CubeCollider.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Entity_System.h" />
-    <ClInclude Include="Event.h" />
-    <ClInclude Include="EventQueue.h" />
-    <ClInclude Include="FileLoader_System.h" />
-    <ClInclude Include="Graphics_System.h" />
-    <ClInclude Include="Input_System.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshRenderer.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="Physics_System.h" />
-    <ClInclude Include="Rigidbody.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="ShaderRegistry.h" />
-    <ClInclude Include="SphereCollider.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="stb_image_write.h" />
-    <ClInclude Include="The_TAIM_Engine.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\BasicFragment.glsl" />
-    <None Include="Shaders\BasicVertex.glsl" />
-    <None Include="Shaders\DebugLineFragment.glsl" />
-    <None Include="Shaders\DebugLineVertex.glsl" />
-    <None Include="Shaders\model_loadingF.glsl" />
-    <None Include="Shaders\model_loadingV.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

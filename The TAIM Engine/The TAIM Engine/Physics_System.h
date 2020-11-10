@@ -29,6 +29,7 @@ private:
 	void MoveBackward(Event* e);
 	void MoveRight(Event* e);
 	void FJump(Event* e);
+	void ResetTransformEv(Event* e);
 public:
 	Communication_Layer* CL;
 	Physics_System(int ComponentSize);
