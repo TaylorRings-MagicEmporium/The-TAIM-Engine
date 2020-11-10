@@ -1,6 +1,6 @@
 #pragma once
-#include "bullet3/LinearMath/btIDebugDraw.h"
-#include "bullet3/btBulletDynamicsCommon.h"
+#include "bullet3-3.0.6/LinearMath/btIDebugDraw.h"
+#include "bullet3-3.0.6/btBulletDynamicsCommon.h"
 #include "Communication_Layer.h"
 
 #include <glm/glm.hpp>

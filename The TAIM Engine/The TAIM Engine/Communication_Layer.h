@@ -3,7 +3,7 @@
 #include "Entity_System.h"
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <bullet3/btBulletDynamicsCommon.h>
+#include <bullet3-3.0.6/btBulletDynamicsCommon.h>
 
 struct GPWrapItem {
 	glm::vec3 Position;

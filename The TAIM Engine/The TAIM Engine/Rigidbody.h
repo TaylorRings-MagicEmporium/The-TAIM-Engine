@@ -1,5 +1,5 @@
 #pragma once
-#include "bullet3/btBulletDynamicsCommon.h"
+#include "bullet3-3.0.6/btBulletDynamicsCommon.h"
 #include "Collider.h"
 #include "Component.h"
 class Rigidbody : public Component

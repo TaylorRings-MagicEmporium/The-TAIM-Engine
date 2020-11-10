@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <enet/enet.h>
-#include <SDL2\SDL.h>
+#include <SDL2/SDL.h>
 
 struct Vector2 {
 	float x, y;
@@ -168,6 +168,8 @@ int main(int argc, char* args[]) {
 
 	enet_host_destroy(server);
 	atexit(enet_deinitialize);
+
+	std::cout << "server closed successfully!" << std::endl;
 
 	return 0;
 }

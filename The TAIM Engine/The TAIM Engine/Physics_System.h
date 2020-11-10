@@ -1,6 +1,6 @@
 #pragma once
 #include "EventQueue.h"
-#include "bullet3/btBulletDynamicsCommon.h"
+#include "bullet3-3.0.6/btBulletDynamicsCommon.h"
 #include "Rigidbody.h"
 //#include "Collider.h"
 #include <vector>

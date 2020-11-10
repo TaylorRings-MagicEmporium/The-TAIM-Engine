@@ -1,5 +1,5 @@
 #pragma once
-#include "bullet3/btBulletDynamicsCommon.h"
+#include "bullet3-3.0.6/btBulletDynamicsCommon.h"
 #include "Component.h"
 
 enum class ColliderType { Cube,Sphere };

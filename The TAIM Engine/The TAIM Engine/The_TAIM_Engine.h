@@ -4,12 +4,13 @@
 // the engine should be able to control everything it needs to do itself.
 
 #pragma once
-// WINDOWS INCLUDES
-#include <SDL2\SDL.h>
-#include <SDL2\SDL_opengl.h>
 
 // GLAD (OpenGL Wrapper) INCLUDES
 #include <glad/glad.h>
+
+// WINDOWS INCLUDES
+#include <SDL2\SDL.h>
+#include <SDL2\SDL_opengl.h>
 
 // GLM INCLUDES
 #include <glm/glm.hpp>

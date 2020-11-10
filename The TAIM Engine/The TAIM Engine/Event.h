@@ -82,9 +82,9 @@ public:
 	glm::vec3 JumpAmount = glm::vec3(0, 30, 0);
 };
 
-class PlaySound : public Event {
+class PlaySoundEv : public Event {
 public:
-	PlaySound() {
+	PlaySoundEv() {
 		MyType = EventType::PlaySound;
 		SystemList[(int)Systems::Audio] = true;
 	}

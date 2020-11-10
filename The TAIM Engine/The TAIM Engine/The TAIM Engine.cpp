@@ -361,7 +361,7 @@ void The_TAIM_Engine::GameLoop() {
 		Event_Queue.AddEventToStack(ev);
 	}
 	if (IS.GetKeyPressed(KeyCode::KEY_N) && !IS.GetPrevKeyPressed(KeyCode::KEY_N)) {
-		ev = new PlaySound();
+		ev = new PlaySoundEv();
 		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 		Event_Queue.AddEventToStack(ev);
 	}
