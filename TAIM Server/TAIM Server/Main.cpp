@@ -7,11 +7,6 @@ struct Vector2 {
 	float x, y;
 };
 
-//struct TransferPacket {
-//	float x, y, z;
-//	float qx, qy, qz, qw;
-//};
-
 struct PhysicsData {
 	int packetType = 1;
 	Vector2 positions[2];
@@ -75,21 +70,7 @@ int main(int argc, char* args[]) {
 	physicsData->positions[1].x = 100.0f;
 	physicsData->positions[1].y = 300.0f;
 
-	//physicsData->transforms[0].x = 0;
-	//physicsData->transforms[0].y = 3.0f;
-	//physicsData->transforms[0].z = 0;
-	//physicsData->transforms[0].qx = 0;
-	//physicsData->transforms[0].qy = 0;
-	//physicsData->transforms[0].qz = 0;
-	//physicsData->transforms[0].qw = 1.0f;
 
-	//physicsData->transforms[1].x = 0;
-	//physicsData->transforms[1].y = 3.0f;
-	//physicsData->transforms[1].z = 0;
-	//physicsData->transforms[1].qx = 0;
-	//physicsData->transforms[1].qy = 0;
-	//physicsData->transforms[1].qz = 0;
-	//physicsData->transforms[1].qw = 1.0f;
 
 	// used to store incoming data
 	ClientPacket* clientPacket = new ClientPacket;
@@ -98,14 +79,7 @@ int main(int argc, char* args[]) {
 	clientPacket->position.x = 0.0f;
 	clientPacket->position.y = 0.0f;
 
-	//clientPacket->clientIndex = 0;
-	//clientPacket->transform.x = 0;
-	//clientPacket->transform.y = 0;
-	//clientPacket->transform.z = 0;
-	//clientPacket->transform.qx = 0;
-	//clientPacket->transform.qy = 0;
-	//clientPacket->transform.qz = 0;
-	//clientPacket->transform.qw = 1.0f;
+
 
 	ClientData* clientData = new ClientData;
 
@@ -131,7 +105,7 @@ int main(int argc, char* args[]) {
 				dataPacket = enet_packet_create(clientData, sizeof(ClientData), ENET_PACKET_FLAG_RELIABLE);
 				enet_peer_send(enetEvent.peer, 0, dataPacket);
 
-				enetEvent.peer->data = (void*)"This is a client";
+				//enetEvent.peer->data = (void*)"This is a client";
 				clientCount++;
 
 				break;
@@ -139,7 +113,7 @@ int main(int argc, char* args[]) {
 			case ENET_EVENT_TYPE_DISCONNECT:
 				std::cout << "the client from address " << enetEvent.peer->address.host << ":" << enetEvent.peer->address.port << " disconnected \n";
 				enetEvent.peer->data = NULL;
-
+				clientCount--;
 				break;
 				// when a client sends a packet and the server recieves it
 			case ENET_EVENT_TYPE_RECEIVE:
@@ -149,14 +123,17 @@ int main(int argc, char* args[]) {
 				int currentClient = clientPacket->clientIndex;
 				//physicsData->transforms[clientPacket->clientIndex] = clientPacket->transform;
 				physicsData->positions[clientPacket->clientIndex] = clientPacket->position;
-
-				break;
 			}
+			enet_packet_destroy(enetEvent.packet);
 
 		}
 		// this creates a packet that calls on all channels and contains ALL of the transforms. the client will then pick the transform that isn't their own.
-		dataPacket = enet_packet_create(physicsData, sizeof(PhysicsData), ENET_PACKET_FLAG_RELIABLE);
-		enet_host_broadcast(server, 0, dataPacket);
+
+		if (clientCount > 0) {
+			dataPacket = enet_packet_create(physicsData, sizeof(PhysicsData), ENET_PACKET_FLAG_RELIABLE);
+			enet_host_broadcast(server, 0, dataPacket);
+		}
+
 	}
 
 
@@ -173,3 +150,40 @@ int main(int argc, char* args[]) {
 
 	return 0;
 }
+
+
+
+
+
+
+//struct TransferPacket {
+//	float x, y, z;
+//	float qx, qy, qz, qw;
+//};
+
+
+	//physicsData->transforms[0].x = 0;
+	//physicsData->transforms[0].y = 3.0f;
+	//physicsData->transforms[0].z = 0;
+	//physicsData->transforms[0].qx = 0;
+	//physicsData->transforms[0].qy = 0;
+	//physicsData->transforms[0].qz = 0;
+	//physicsData->transforms[0].qw = 1.0f;
+
+	//physicsData->transforms[1].x = 0;
+	//physicsData->transforms[1].y = 3.0f;
+	//physicsData->transforms[1].z = 0;
+	//physicsData->transforms[1].qx = 0;
+	//physicsData->transforms[1].qy = 0;
+	//physicsData->transforms[1].qz = 0;
+	//physicsData->transforms[1].qw = 1.0f;
+
+
+	//clientPacket->clientIndex = 0;
+	//clientPacket->transform.x = 0;
+	//clientPacket->transform.y = 0;
+	//clientPacket->transform.z = 0;
+	//clientPacket->transform.qx = 0;
+	//clientPacket->transform.qy = 0;
+	//clientPacket->transform.qz = 0;
+	//clientPacket->transform.qw = 1.0f;

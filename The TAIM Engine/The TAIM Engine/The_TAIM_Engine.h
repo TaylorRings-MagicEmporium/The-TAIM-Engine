@@ -35,33 +35,7 @@
 #include "Communication_Layer.h"
 #include "FileLoader_System.h"
 #include "Audio_System.h"
-
-#include <enet/enet.h>
-
-//struct TransferPacket {
-//	float x, y, z;
-//	float qx, qy, qz, qw;
-//};
-
-struct Vector2 {
-	float x;
-	float y;
-};
-
-struct PhysicsData {
-	int packetType = 1;
-	Vector2 positions[2];
-};
-
-struct ClientData {
-	int packetType = 0;
-	int clientIndex;
-};
-
-struct ClientPacket {
-	int clientIndex;
-	Vector2 position;
-};
+#include "Network_System.h"
 
 class The_TAIM_Engine {
 
@@ -86,6 +60,7 @@ class The_TAIM_Engine {
 	Communication_Layer CL = Communication_Layer();
 	FileLoader_System FLS = FileLoader_System();
 	Entity_System ES = Entity_System();
+	Network_System NS = Network_System();
 
 public:
 	// used for engine initialisation. 
