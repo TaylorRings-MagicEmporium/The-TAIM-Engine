@@ -83,7 +83,8 @@ bool The_TAIM_Engine::init()
 	}
 
 	NS.Setup();
-
+	NS.Event_Queue = &Event_Queue;
+	NS.ES = &ES;
 	return success;
 }
 
@@ -213,7 +214,7 @@ int The_TAIM_Engine::StartEngine() {
 		SR.GetShader("DebugLine")->SetMat4("View", c.GetView());
 		
 		//finds out the total events in the queue.
-		//std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
+		std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
 		
 		// SYSTEM EVENT QUEUE CHECKUP
 		// each system must have access to the current event queue and do it's own polling to apply the correct results.

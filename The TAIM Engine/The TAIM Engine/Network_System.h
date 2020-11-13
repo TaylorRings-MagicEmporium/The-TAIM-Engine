@@ -2,19 +2,22 @@
 #include <enet/enet.h>
 #include <iostream>
 
-//struct TransferPacket {
-//	float x, y, z;
-//	float qx, qy, qz, qw;
-//};
+#include "EventQueue.h"
+#include "Entity_System.h"
 
-struct Vector2 {
-	float x;
-	float y;
+struct TransformPacket {
+	float x, y, z;
+	float qx, qy, qz, qw;
 };
+
+//struct Vector2 {
+//	float x;
+//	float y;
+//};
 
 struct PhysicsData {
 	int packetType = 1;
-	Vector2 positions[2];
+	TransformPacket transforms[2];
 };
 
 struct ClientData {
@@ -24,7 +27,7 @@ struct ClientData {
 
 struct ClientPacket {
 	int clientIndex;
-	Vector2 position;
+	TransformPacket transform;
 };
 
 class Network_System
@@ -34,7 +37,8 @@ public:
 	ENetHost* client;
 	ENetPeer* peer;
 	ENetEvent enetEvent;
-
+	EventQueue* Event_Queue;
+	Entity_System* ES;
 
 	PhysicsData* serverData = new PhysicsData;
 	ClientData* clientData = new ClientData;

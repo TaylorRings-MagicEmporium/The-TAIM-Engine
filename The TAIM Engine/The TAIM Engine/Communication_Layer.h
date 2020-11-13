@@ -23,7 +23,7 @@ public:
 	int Debug_Line_Vertices_Counter = 0;
 	Communication_Layer();
 	void GPWrap(btTransform trans, Entity* entity);
-
+	//void SetNetworkPlayerAndEnemy(std::string playTag, std::string EnemyTag)
 	void ResetBuffers();
 };
 
