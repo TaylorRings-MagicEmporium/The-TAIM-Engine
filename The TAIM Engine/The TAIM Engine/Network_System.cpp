@@ -1,22 +1,25 @@
 #include "Network_System.h"
 
+
+
+
 Network_System::Network_System() {
 
 }
 
 void Network_System::Setup() {
-	if (enet_initialize() != 0) {
+	if (enet_initialize() != 0) { // initialises the Enet middleware
 		std::cout << "Enet failed to initialise" << std::endl;
 	}
 
-	client = enet_host_create(NULL, 1, 2, 0, 0);
+	client = enet_host_create(NULL, 1, 2, 0, 0); // creates a host
 
 	if (client == NULL) {
 		std::cout << "Client failed to initialise!" << std::endl;
 	}
 
 	enet_address_set_host(&address, "localhost");
-	address.port = 1234;
+	address.port = 1234; // sets the network to look at (this is local)
 
 	peer = enet_host_connect(client, &address, 2, 0);
 
@@ -30,15 +33,16 @@ void Network_System::Setup() {
 
 void Network_System::Update() {
 	int count = 0;
-	bool PacketPass[2] = { false,false };
+	bool PacketPass[2] = { false,false }; // PacketPass ensures that only one packet can be recieved for each packet.
+	// if this didn't exist, then hundreds of events would be added, even when they do the same thing.
 	while (enet_host_service(client, &enetEvent, 0) > 0) {
 		switch (enetEvent.type) {
 
 		case ENET_EVENT_TYPE_RECEIVE:
 
-			memcpy(packetType, enetEvent.packet->data, sizeof(int));
+			memcpy(packetType, enetEvent.packet->data, sizeof(int)); // all pachets have int as their first value, this means the "type" of packet can be figured out before copying the rest.
 			if (*packetType == 0 && !PacketPass[0]) {
-				memcpy(clientData, enetEvent.packet->data, sizeof(ClientData));
+				memcpy(clientData, enetEvent.packet->data, sizeof(ClientData)); // memcpy copies actual data into memory, but it is a risky move to do.
 				std::cout << "connection Packet Recieved!" << std::endl;
 				clientIndex = clientData->clientIndex;
 				serverConnect = true;
@@ -54,6 +58,7 @@ void Network_System::Update() {
 				for (int i = 0; i < 2; i++) {
 					if (i != clientIndex) {
 
+						// the data from the packet it put into a "update transform" event with the ghost object target.
 						Event* ev = new UpdateTransform();
 						ev->ListOfEntities.insert(ev->ListOfEntities.end(), ghostEntities.begin(), ghostEntities.end());
 						static_cast<UpdateTransform*>(ev)->pos = glm::vec3(serverData->transforms[i].x, serverData->transforms[i].y, serverData->transforms[i].z);
@@ -74,7 +79,8 @@ void Network_System::Update() {
 }
 
 void Network_System::PostUpdate() {
-	if (serverConnect) {
+	// due to the nature of networking, a post update is needed to send a packet AFTER the client's transform is updated.
+	if (serverConnect) { 
 		clientPacket->clientIndex = clientIndex;
 		//clientPacket->position.x = 100.0f;
 		//clientPacket->position.y = 300.0f;
@@ -88,7 +94,7 @@ void Network_System::PostUpdate() {
 		clientPacket->transform.qz = playerEntities[0]->rot.z;
 
 		dataPacket = enet_packet_create(clientPacket, sizeof(ClientPacket), ENET_PACKET_FLAG_RELIABLE);
-		enet_peer_send(peer, 0, dataPacket);
+		enet_peer_send(peer, 0, dataPacket); // finally the packet is sent
 	}
 
 }
@@ -101,26 +107,3 @@ void Network_System::ShutDown() {
 	atexit(enet_deinitialize);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//clientPacket->transform.x = playerEntites[0]->pos.x;
-	//clientPacket->transform.y = playerEntites[0]->pos.y;
-	//clientPacket->transform.z = playerEntites[0]->pos.z;
-	//clientPacket->transform.qw = playerEntites[0]->rot.w;
-	//clientPacket->transform.qx = playerEntites[0]->rot.x;
-	//clientPacket->transform.qy = playerEntites[0]->rot.y;
-	//clientPacket->transform.qz = playerEntites[0]->rot.z;
