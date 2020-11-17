@@ -19,6 +19,11 @@ private:
 public:
 	std::vector<GPWrapItem> GPBuffer;
 	glm::vec3 Debug_Line_Vertices[512];
+
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 proj = glm::mat4(1.0f);
+	glm::mat4 UIProj = glm::mat4(1.0f);
+
 	//glm::vec3 Debug_
 	int Debug_Line_Vertices_Counter = 0;
 	Communication_Layer();

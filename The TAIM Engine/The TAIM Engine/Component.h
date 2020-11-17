@@ -3,7 +3,7 @@
 
 class Entity;
 
-enum class ComponentType { MeshRenderer, Rigidbody, Collider, AudioPlayer };
+enum class ComponentType { MeshRenderer, Rigidbody, Collider, AudioPlayer, Camera };
 
 
 // the component class is used to marely state which objects are components.

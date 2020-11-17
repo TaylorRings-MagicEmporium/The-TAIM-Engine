@@ -12,6 +12,7 @@ ShaderRegistry::~ShaderRegistry() {
 Shader* ShaderRegistry::CreateShader(std::string name, const char* vertexPath, const char* fragmentPath) {
 	shaderList[name] = Shader(vertexPath, fragmentPath);
 	list.push_back(&shaderList[name]);
+	shaderList[name].name = name;
 	return &shaderList[name];
 }
 

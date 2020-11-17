@@ -6,7 +6,7 @@
 #include <string>
 
 class Component;
-enum class ComponentType;
+enum class ComponentType; // circular dependency
 
 // An entity is a container that holds components related to it.
 // this allows systems to grab the component needed to use it.

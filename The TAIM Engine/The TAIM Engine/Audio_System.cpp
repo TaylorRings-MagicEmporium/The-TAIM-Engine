@@ -1,12 +1,17 @@
 #include "Audio_System.h"
 
-Audio_System::Audio_System(int ComponentSize) {
-	ListOfAudioPlayers.reserve(ComponentSize);
+Audio_System::Audio_System() {
 }
 Audio_System::~Audio_System() {
 
 }
-void Audio_System::Setup() {
+
+void Audio_System::SetComponentSize(int size) {
+	// if the list was not reserved, then this will cause a game breaking issue of pointers becoming null.
+	ListOfAudioPlayers.reserve(size);
+}
+void Audio_System::Startup()
+{
 	FMOD::Studio::System::create(&system);
 	if (system) {
 		std::cout << "high-level (fmod studio) audio system created." << "\n";
@@ -27,17 +32,18 @@ void Audio_System::Setup() {
 		ListOfAudioPlayers[i].Setup();
 	}
 }
-void Audio_System::Update(EventQueue* EQ) {
+
+void Audio_System::Update() {
 
 	typedef void (Audio_System::* method_function)(Event*);
 	method_function method_pointer[EVENT_TYPE_COUNT];
 	method_pointer[(int)EventType::PlaySound] = &Audio_System::EvPlaySound;
 
-	while (Event* e = EQ->PollEvents()) {
-		if (e->SystemList[(int)Systems::Audio]) {
+	while (Event* e = Event_Queue->PollEvents()) {
+		if (e->SystemList[(int)SubSystemType::Audio]) {
 			method_function func = method_pointer[(int)e->GetType()];
 			(this->*func)(e);
-			e->SystemList[(int)Systems::Audio] = false;
+			e->SystemList[(int)SubSystemType::Audio] = false;
 		}
 	}
 

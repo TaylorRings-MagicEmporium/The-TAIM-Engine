@@ -148,6 +148,7 @@
     <ClCompile Include="Audio_System.cpp" />
     <ClCompile Include="Bullet_Debug_Drawer.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Camera_System.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Communication_Layer.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -171,13 +172,16 @@
     <ClCompile Include="ShaderRegistry.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="SubSystem.cpp" />
     <ClCompile Include="The TAIM Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="Audio_System.h" />
+    <ClInclude Include="BulletContactResultCallback.h" />
     <ClInclude Include="Bullet_Debug_Drawer.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Camera_System.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Communication_Layer.h" />
     <ClInclude Include="Component.h" />
@@ -200,6 +204,7 @@
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stb_image_write.h" />
+    <ClInclude Include="SubSystem.h" />
     <ClInclude Include="The_TAIM_Engine.h" />
   </ItemGroup>
   <ItemGroup>

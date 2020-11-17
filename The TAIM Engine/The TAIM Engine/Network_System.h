@@ -1,9 +1,7 @@
 #pragma once
 #include <enet/enet.h>
 #include <iostream>
-
-#include "EventQueue.h"
-#include "Entity_System.h"
+#include "SubSystem.h"
 
 // a defined packet structure that holds the position and rotation value of an object
 struct TransformPacket {
@@ -31,14 +29,14 @@ struct ClientPacket {
 
 //The Network system is responsible with sending and recieving packages, and finally put them into
 //an event that the rest of the engine can use. The Network system will act similar to the Event system.
-class Network_System
+class Network_System : public SubSystem
 {
 public:
 	ENetAddress address;
 	ENetHost* client;
 	ENetPeer* peer;
 	ENetEvent enetEvent;
-	EventQueue* Event_Queue;
+
 	Entity_System* ES;
 
 	PhysicsData* serverData = new PhysicsData;
@@ -55,9 +53,11 @@ public:
 	bool serverConnect = false;
 
 	Network_System();
-	void Setup();
+	~Network_System();
+
+	void Startup();
 	void Update();
-	void PostUpdate();
+	void LateUpdate();
 	void ShutDown();
 
 

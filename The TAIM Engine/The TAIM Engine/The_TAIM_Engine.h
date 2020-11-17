@@ -25,7 +25,7 @@
 // CUSTOM INCLUDE
 #include "Shader.h"
 #include "MeshRenderer.h"
-#include "Camera.h"
+#include "Camera_System.h"
 #include "Entity_System.h"
 #include "Event.h"
 #include "ShaderRegistry.h"
@@ -36,6 +36,7 @@
 #include "FileLoader_System.h"
 #include "Audio_System.h"
 #include "Network_System.h"
+#include "SubSystem.h"
 
 class The_TAIM_Engine {
 
@@ -52,15 +53,18 @@ class The_TAIM_Engine {
 	//CHANGE
 	
 	ShaderRegistry SR = ShaderRegistry();
-	Graphics_System GS = Graphics_System(100);
-	Physics_System PS = Physics_System(100);
-	Audio_System AS = Audio_System(100);
+	Graphics_System GS = Graphics_System();
+	Physics_System PS = Physics_System();
+	Audio_System AS = Audio_System();
 	EventQueue Event_Queue = EventQueue();
-	Input_System IS;
+	Input_System IS = Input_System();
 	Communication_Layer CL = Communication_Layer();
 	FileLoader_System FLS = FileLoader_System();
 	Entity_System ES = Entity_System();
 	Network_System NS = Network_System();
+	Camera_System CS = Camera_System();
+
+	std::vector<SubSystem*> SubSystemsList;
 
 public:
 	// used for engine initialisation. 
@@ -76,8 +80,6 @@ public:
 
 	// the init function makes sure that each of the system's initialisation processes are running correctly and smoothly.
 	// this will also be the first call for action if any of the systems are not set up correctly.
-	bool init();
-
 
 	// the SetupEngine is a function that only the Main.cpp can call
 	int SetupEngine();

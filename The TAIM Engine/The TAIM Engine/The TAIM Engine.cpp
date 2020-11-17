@@ -9,18 +9,28 @@ The_TAIM_Engine::~The_TAIM_Engine() {
 
 }
 
-bool The_TAIM_Engine::init()
+void The_TAIM_Engine::close()
 {
+	//Destroy window	
+	SDL_DestroyWindow(gWindow);
+	gWindow = NULL;
 
-	FLS.GS = &GS;
-	FLS.PS = &PS;
-	FLS.SR = &SR;
-	FLS.ES = &ES;
-	FLS.AS = &AS;
+	for (int i = 0; i < SubSystemsList.size(); i++) {
+		SubSystemsList[i]->ShutDown();
+	}
 
-	GS.CL = &CL;
-	GS.SR = &SR;
-	PS.CL = &CL;
+	//Quit SDL subsystems
+	SDL_Quit();
+	ES.CloseEntitySystem();
+}
+
+int The_TAIM_Engine::SetupEngine() {
+	//Start up SDL and create window
+	bool Success = true;
+
+	SubSystemsList = std::vector<SubSystem*>{ &NS,&IS,&PS,&CS,&GS,&AS};
+
+
 	//Initialization flag
 	bool success = true;
 
@@ -70,6 +80,7 @@ bool The_TAIM_Engine::init()
 				//initialise GLAD
 				if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
 					std::cout << "Failed to initialize GLAD" << std::endl;
+					success = false;
 				}
 
 				//Use Vsync
@@ -82,29 +93,36 @@ bool The_TAIM_Engine::init()
 		}
 	}
 
-	NS.Setup();
-	NS.Event_Queue = &Event_Queue;
+	CS.SetWindowSize(CD.ScreenSize);
+
+	GS.SR = &SR;
 	NS.ES = &ES;
-	return success;
-}
+
+	FLS.GS = &GS;
+	FLS.PS = &PS;
+	FLS.SR = &SR;
+	FLS.ES = &ES;
+	FLS.AS = &AS;
+	FLS.CS = &CS;
 
 
-void The_TAIM_Engine::close()
-{
-	//Destroy window	
-	SDL_DestroyWindow(gWindow);
-	gWindow = NULL;
+	for (int i = 0; i < SubSystemsList.size(); i++) {
+		SubSystemsList[i]->SetComponentSize(100);
+	}
 
-	NS.ShutDown();
+	// (in file) "basic" is the engine's own shader in the case that no shader specified is found. MAKE INTO CODE INSTEAD
+	SR.CreateShader("basic", "Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl"); // ENGINE NEEDED
+	SR.CreateShader("model_loading", "Shaders/model_loadingV.glsl", "Shaders/model_loadingF.glsl");
+	SR.CreateShader("DebugLine", "Shaders/DebugLineVertex.glsl", "Shaders/DebugLineFragment.glsl");
 
-	//Quit SDL subsystems
-	SDL_Quit();
-	ES.CloseEntitySystem();
-}
+	FLS.LoadEntities();
 
-int The_TAIM_Engine::SetupEngine() {
-	//Start up SDL and create window
-	if (!init())
+	for (int i = 0; i < SubSystemsList.size(); i++) {
+		SubSystemsList[i]->AssignLayers(&Event_Queue, &CL);
+		SubSystemsList[i]->Startup();
+	}
+
+	if (!success)
 	{
 		printf("Failed to initialize!\n");
 	}
@@ -114,52 +132,7 @@ int The_TAIM_Engine::SetupEngine() {
 
 int The_TAIM_Engine::StartEngine() {
 
-	glEnable(GL_DEPTH_TEST);
-
-	// (in file) "basic" is the engine's own shader in the case that no shader specified is found. MAKE INTO CODE INSTEAD
-	SR.CreateShader("basic", "Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl"); // ENGINE NEEDED
-	SR.CreateShader("model_loading", "Shaders/model_loadingV.glsl", "Shaders/model_loadingF.glsl");
-	SR.CreateShader("DebugLine", "Shaders/DebugLineVertex.glsl", "Shaders/DebugLineFragment.glsl");
-	
-	FLS.LoadEntities();
-
-	// built-in code for creating specific objects
-	{
-		//std::vector<std::pair<char, EventType>> key_bindings;
-		//key_bindings.push_back(std::pair<char, EventType>('w', EventType::MoveForward));
-		//key_bindings.push_back(std::pair<char, EventType>('a', EventType::MoveLeft));
-		//key_bindings.push_back(std::pair<char, EventType>('s', EventType::MoveBackward));
-		//key_bindings.push_back(std::pair<char, EventType>('d', EventType::MoveRight));
-		//key_bindings.push_back(std::pair<char, EventType>(' ', EventType::Jump));
-		//
-
-		//// creates a temp entity and adds it to the entity list.
-		//Entity duck = Entity(glm::vec3(0,3,0),glm::angleAxis(glm::radians(45.0f), glm::vec3(1,1,0)));
-		////temp2->Use();
-		//duck.SetComponent(GS.CreateMeshRenderer("Objects/duck/duck.obj", SR.GetShader("model_loading"), false));
-		//duck.SetComponent(PS.CreateRigidbody(glm::vec3(0, 0, 0), 1.0f));
-		//duck.SetComponent(PS.CreateCollider(glm::vec3(1.0, 1.0, 1.0)));
-		//EntityList.push_back(duck);
-
-		//duck = Entity(glm::vec3(0, -3, 0));
-		////temp1->Use();
-		//duck.SetComponent(GS.CreateMeshRenderer("Objects/Prim/cube.obj", SR.GetShader("basic"), false));
-		//duck.SetComponent(PS.CreateRigidbody(glm::vec3(0, 0, 0), 0.0f));
-		//duck.SetComponent(PS.CreateCollider(glm::vec3(10,1,10)));
-		//EntityList.push_back(duck);
-
-		//duck = Entity(glm::vec3(3, 0, 0));
-		//duck.SetComponent(GS.CreateMeshRenderer("Objects/duck/duck.obj", SR.GetShader("model_loading"), false));
-		//EntityList.push_back(duck);
-	}
-
-	Camera c = Camera();
-
 	//sets up procedure for the Graphics System
-
-	GS.Setup();
-	PS.Setup();
-	AS.Setup();
 
 	//used to exit the loop if needed
 	bool quit = false;
@@ -169,9 +142,6 @@ int The_TAIM_Engine::StartEngine() {
 
 	// the main game loop of the program
 
-	
-
-	std::vector<Entity*> ghostEntites = ES.GetEntitiesWithTag("Ghost");
 	int count = 0;
 	while (!quit)
 	{
@@ -186,13 +156,21 @@ int The_TAIM_Engine::StartEngine() {
 			}
 		}
 
-		NS.Update();
+		CL.ResetBuffers();
 
-		//resets the graphical frame in the windows
-		GS.ResetGraphics();
-		CL.ResetBuffers();	
-		// updates the keystates using the results of the Window
-		IS.Update_Input();
+		SR.GetShader("model_loading")->Use();
+		SR.GetShader("model_loading")->SetMat4("Proj", CL.proj);
+		SR.GetShader("model_loading")->SetMat4("View", CL.view);
+		SR.GetShader("basic")->Use();
+		SR.GetShader("basic")->SetMat4("Proj", CL.proj);
+		SR.GetShader("basic")->SetMat4("View", CL.view);
+		SR.GetShader("DebugLine")->Use();
+		SR.GetShader("DebugLine")->SetMat4("Proj", CL.proj);
+		SR.GetShader("DebugLine")->SetMat4("View", CL.view);
+
+		for (int i = 0; i < SubSystemsList.size(); i++) {
+			SubSystemsList[i]->Update();
+		}
 
 		//GAME LOOP
 
@@ -200,31 +178,23 @@ int The_TAIM_Engine::StartEngine() {
 
 		// ENGINE LOOP
 		// in the future, the camera will be within a camera system for better control
-		c.UpdateCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-		
+
 		// these will set the matrix from the camera into a specific shader. CREATE OPTIONAL WARNINGS IF VALUES DON'T EXIST OR USE A GROUPING SYSTEM THAT DOES NEED IT
-		SR.GetShader("model_loading")->Use();
-		SR.GetShader("model_loading")->SetMat4("Proj", c.GetProj());
-		SR.GetShader("model_loading")->SetMat4("View", c.GetView());
-		SR.GetShader("basic")->Use();
-		SR.GetShader("basic")->SetMat4("Proj", c.GetProj());
-		SR.GetShader("basic")->SetMat4("View", c.GetView());
-		SR.GetShader("DebugLine")->Use();
-		SR.GetShader("DebugLine")->SetMat4("Proj", c.GetProj());
-		SR.GetShader("DebugLine")->SetMat4("View", c.GetView());
+
 		
 		//finds out the total events in the queue.
 		//std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
 		
 		// SYSTEM EVENT QUEUE CHECKUP
 		// each system must have access to the current event queue and do it's own polling to apply the correct results.
-		float t1, t2, t3, t4;
-		t1 = SDL_GetTicks();
-		PS.Update(&Event_Queue);
-		t2 = SDL_GetTicks();
-		GS.Update(&Event_Queue);
-		t3 = SDL_GetTicks();
-		AS.Update(&Event_Queue);
+		
+		//float t1, t2, t3, t4;
+		//t1 = SDL_GetTicks();
+		//PS.Update(&Event_Queue);
+		//t2 = SDL_GetTicks();
+		//GS.Update(&Event_Queue);
+		//t3 = SDL_GetTicks();
+		//AS.Update(&Event_Queue);
 
 		//std::cout << "PHYSICS: " << (t2 - t1) / 1000.0f << "Seconds. " << "GRAPHICS: " << (t3 - t2) / 1000.0f << "Seconds" << std::endl;
 		
@@ -232,15 +202,15 @@ int The_TAIM_Engine::StartEngine() {
 		Event_Queue.RemoveEmptyEvents();
 
 		// the graphics system now begins drawing the meshes
-		GS.Draw();
-		GS.DebugDraw();
+		//GS.Draw();
+		//GS.DebugDraw();
 		//updates the window by double buffering.
 		SDL_GL_SwapWindow(gWindow);
 		//SDL_GL_
 
-		std::vector<Entity*> playerEntites = ES.GetEntitiesWithTag("Player");
-
-		NS.PostUpdate();
+		for (int i = 0; i < SubSystemsList.size(); i++) {
+			SubSystemsList[i]->LateUpdate();
+		}
 		
 	}
 

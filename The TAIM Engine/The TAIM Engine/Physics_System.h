@@ -1,6 +1,6 @@
 #pragma once
-#include "EventQueue.h"
-#include "bullet3-3.0.6/btBulletDynamicsCommon.h"
+#include <bullet3-3.0.6/btBulletDynamicsCommon.h>
+#include "BulletContactResultCallback.h"
 #include "Rigidbody.h"
 //#include "Collider.h"
 #include <vector>
@@ -8,7 +8,8 @@
 #include "Bullet_Debug_Drawer.h"
 #include "CubeCollider.h"
 #include "SphereCollider.h"
-class Physics_System
+#include "SubSystem.h"
+class Physics_System : public SubSystem
 {
 private:
 	btDiscreteDynamicsWorld* dynamicWorld;
@@ -31,17 +32,18 @@ private:
 	void FJump(Event* e);
 	void ResetTransformEv(Event* e);
 public:
-	Communication_Layer* CL;
-	Physics_System(int ComponentSize);
+	Physics_System();
+	~Physics_System();
 
-	void Setup();
+	void Startup();
+	void ShutDown();
+	void Update();
+	void SetComponentSize(int size);
 
-	void Update(EventQueue* EQ);
+	void ColliderCallBack();
 
 	Component* CreateRigidbody(glm::vec3 offset, float RBmass);
-	//Component* CreateCollider(glm::vec3 axisExtents);
 	Component* CreateCubeCollider(glm::vec3 axisExtents);
 	Component* CreateSphereCollider(float radius);
-	~Physics_System();
 };
 

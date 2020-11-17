@@ -96,6 +96,11 @@ void Shader::SetVec3(const std::string& name, glm::vec3 value) const
 	if (IsPresent(name))
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1,glm::value_ptr(value));
 }
+void Shader::SetVec4(const std::string& name, glm::vec4 value) const
+{
+	if (IsPresent(name))
+		glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
+}
 void Shader::SetMat4(const std::string& name, glm::mat4 value) const 
 {
 	if(IsPresent(name))

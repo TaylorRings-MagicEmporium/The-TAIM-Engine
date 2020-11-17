@@ -13,7 +13,7 @@ void Rigidbody::Setup() {
 
 	RBTransform.setIdentity();
 	RBTransform.setOrigin(btVector3(GO->pos.x + offset.getX(), GO->pos.y + offset.getY(), GO->pos.z + offset.getZ()));
-	RBTransform.setRotation(btQuaternion(GO->rot.w,GO->rot.x, GO->rot.y, GO->rot.z));
+	RBTransform.setRotation(btQuaternion(GO->rot.x, GO->rot.y, GO->rot.z, GO->rot.w));
 
 	collider = (Collider*)GO->GetComponent(ComponentType::Collider);
 

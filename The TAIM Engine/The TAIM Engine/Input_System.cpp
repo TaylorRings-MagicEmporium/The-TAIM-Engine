@@ -4,9 +4,8 @@ Input_System::Input_System()
 {
 }
 
-Input_System::Input_System(SDL_Window* newWindow) {
+void Input_System::AssignWindows(SDL_Window* newWindow) {
 	Window = newWindow;
-	Reset_Input();
 }
 
 void Input_System::Reset_Input() {
@@ -17,7 +16,7 @@ void Input_System::Reset_Input() {
 	}
 }
 
-void Input_System::Update_Input() {
+void Input_System::Update() {
 	Reset_Input();
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 

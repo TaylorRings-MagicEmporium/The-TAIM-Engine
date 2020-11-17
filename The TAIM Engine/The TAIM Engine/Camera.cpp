@@ -9,7 +9,7 @@
 
 #include <iostream>
 Camera::Camera() {
-
+    type = ComponentType::Camera;
 }
 
 void Camera::Setup() {
@@ -17,6 +17,10 @@ void Camera::Setup() {
     //    EM->CC->SetMonitorCam(slot, this);
     //}
 
+}
+
+void Camera::SetValues(glm::vec3 tar) {
+    target = tar;
 }
 
 //void Camera::Update() {
@@ -82,28 +86,6 @@ void Camera::Setup() {
 //
 //}
 
-//void Camera::SetProjMat(Shader *shader) {
-//    unsigned int transformLoc = glGetUniformLocation(shader->ID, "Proj");
-//    if (transformLoc == -1) {
-//        std::cout << "Proj does not exist in shader!" << std::endl;
-//    }
-//    else {
-//        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(proj));
-//    }
-//
-//}
-//
-//void Camera::SetViewMat(Shader *shader) {
-//    unsigned int transformLoc = glGetUniformLocation(shader->ID, "View");
-//    if (transformLoc == -1) {
-//        std::cout << "View does not exist in shader!" << std::endl;
-//    }
-//    else {
-//        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(view));
-//    }
-//
-//}
-
 glm::mat4 Camera::GetProj() {
     return proj;
 }
@@ -118,9 +100,8 @@ Camera::~Camera() {
     std::cout << "camera has been deleted!" << std::endl;
 }
 
-void Camera::UpdateCamera(int WIDTH, int HEIGHT) {
-    glm::vec3 pos = glm::vec3(0,0,10);
-    view = glm::lookAt(pos + glm::vec3(0,10,10), pos + glm::vec3(0,0,-1), glm::vec3(0,1,0));
-    proj = glm::perspective(glm::radians(zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-    UIProj = glm::ortho(0.0f, (float)WIDTH, 0.0f, (float)HEIGHT, -1000.0f, 1000.0f);
+void Camera::UpdateCamera(glm::vec2 size) {
+    view = glm::lookAt(GO->pos, target, glm::vec3(0,1,0));
+    proj = glm::perspective(glm::radians(zoom), size.x / size.y, 0.1f, 100.0f);
+    UIProj = glm::ortho(0.0f, size.x, 0.0f, size.y, -1000.0f, 1000.0f);
 }

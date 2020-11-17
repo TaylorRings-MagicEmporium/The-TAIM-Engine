@@ -14,11 +14,12 @@ class MeshRenderer : public Component
 private:
 
 	Mesh mesh;
-
+	glm::vec4 Col;
 public:
 	glm::mat4 model = glm::mat4(1);
 	Shader* shader;
 	MeshRenderer(std::string path, Shader* shader, bool flip);
+	void SetCol(glm::vec4 colour);
 	void Setup();
 	void Draw();
 

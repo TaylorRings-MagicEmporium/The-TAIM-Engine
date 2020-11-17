@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL2\SDL.h>
-
+#include "SubSystem.h"
 // KEYLETTERCODE contains all of the letters of the alphabet
 enum class KEYLETTERCODE {KEY_A,KEY_B,KEY_C,KEY_D,KEY_E,KEY_F,KEY_G,
 KEY_H,KEY_I,KEY_J,KEY_K,KEY_L,KEY_M,KEY_N,KEY_O,KEY_P,
@@ -26,7 +26,7 @@ enum class KeyCode {
 };
 // the input system is responsible for how the user will interact with the world. it is also considered the first step in event building.
 // to keep the abstraction between the window's inputs and gameplay functionality, the input system has it's own keycode for the gameplay to use.
-class Input_System
+class Input_System : public SubSystem
 {
 
 private:
@@ -51,16 +51,16 @@ private:
 
 public:
 	//used to initialise the Input system
-	Input_System();
 	//used to initalise the input system with a given window state (for now)
-	Input_System(SDL_Window* newWindow);
+	Input_System();
 
 	// updates the boolean states of the input of both letters and numbers
-	void Update_Input();
+	void Update();
 
 	// resets the input back to false (no input detected)
 	void Reset_Input();
 
+	void AssignWindows(SDL_Window* newWindow);
 	// returns the bool of the state at the current frame
 
 	//bool GetKeyPressed(KEYLETTERCODE KLC);

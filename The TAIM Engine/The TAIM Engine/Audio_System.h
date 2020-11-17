@@ -6,9 +6,8 @@
 #include <vector>
 
 #include "AudioPlayer.h"
-#include "EventQueue.h"
-
-class Audio_System
+#include "SubSystem.h"
+class Audio_System : public SubSystem
 {
 private:
 	FMOD::Studio::System* system = NULL;
@@ -16,10 +15,11 @@ private:
 	FMOD::Channel* channel = NULL;
 	std::vector<AudioPlayer> ListOfAudioPlayers;
 public:
-	Audio_System(int ComponentSize);
+	Audio_System();
 	~Audio_System();
-	void Setup();
-	void Update(EventQueue* EQ);
+	void Update();
+	void Startup();
+	void SetComponentSize(int size);
 	Component* CreateAudioPlayer(std::string AudioPath);
 
 	void EvPlaySound(Event* e);

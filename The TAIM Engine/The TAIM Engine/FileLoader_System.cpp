@@ -119,8 +119,23 @@ void FileLoader_System::LoadEntities()
 		//MESH RENDEREER
 		LuaRef meshRend = ComponentView["MeshRenderer"];
 		if (!meshRend.isNil()) {
-			object->SetComponent(GS->CreateMeshRenderer(meshRend["MeshPath"].cast<std::string>(), SR->GetShader(meshRend["ShaderName"].cast<std::string>()), meshRend["flipImage"].cast<bool>()));
+			Component* temp = GS->CreateMeshRenderer(meshRend["MeshPath"].cast<std::string>(), SR->GetShader(meshRend["ShaderName"].cast<std::string>()), meshRend["flipImage"].cast<bool>());
+			object->SetComponent(temp);
 			//std::cout << meshRend["MeshPath"].cast<std::string>() << ", " << meshRend["ShaderName"].cast<std::string>() << ", " << meshRend["flipImage"].cast<bool>() << std::endl;
+			
+			if (meshRend["ShaderName"].cast<std::string>() == "basic") {
+				glm::vec4 col;
+				LuaRef colour = meshRend["Colour"];
+				if (!colour.isNil()) {
+					col = glm::vec4(colour["r"].cast<float>(), colour["g"].cast<float>(), colour["b"].cast<float>(), colour["a"].cast<float>());
+				}
+				else {
+					col = glm::vec4(1.0, 0, 1.0, 1.0);
+				}
+				static_cast<MeshRenderer*>(temp)->SetCol(col);
+			}
+
+
 		}
 
 		//RIGIDBODY
@@ -174,6 +189,13 @@ void FileLoader_System::LoadEntities()
 		LuaRef AudPla = ComponentView["AudioPlayer"];
 		if (!AudPla.isNil()) {
 			object->SetComponent(AS->CreateAudioPlayer(AudPla["AudioPath"].cast<std::string>().c_str()));
+		}
+
+		//CAMERA
+		LuaRef Cam = ComponentView["Camera"];
+		if (!Cam.isNil()) {
+			LuaRef targ = Cam["Target"];
+			object->SetComponent(CS->CreateStaticCamera(glm::vec3(targ["x"].cast<float>(), targ["y"].cast<float>(), targ["z"].cast<float>())));
 		}
 	}
 	std::cout << "objects loaded correctly!" << std::endl;

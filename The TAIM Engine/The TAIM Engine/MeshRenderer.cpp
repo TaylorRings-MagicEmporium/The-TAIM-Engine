@@ -21,7 +21,12 @@ void MeshRenderer::Setup() {
 void MeshRenderer::Draw() {
 	shader->Use();
 	shader->SetMat4("model", model);
+	if (shader->name == "basic") {
+		shader->SetVec4("ColourInput", Col);
+	}
 	mesh.Draw(shader);
+}
 
-
+void MeshRenderer::SetCol(glm::vec4 colour) {
+	Col = colour;
 }

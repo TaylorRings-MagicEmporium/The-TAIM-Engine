@@ -6,29 +6,8 @@
 Network_System::Network_System() {
 
 }
+Network_System::~Network_System() {
 
-void Network_System::Setup() {
-	if (enet_initialize() != 0) { // initialises the Enet middleware
-		std::cout << "Enet failed to initialise" << std::endl;
-	}
-
-	client = enet_host_create(NULL, 1, 2, 0, 0); // creates a host
-
-	if (client == NULL) {
-		std::cout << "Client failed to initialise!" << std::endl;
-	}
-
-	enet_address_set_host(&address, "localhost");
-	address.port = 1234; // sets the network to look at (this is local)
-
-	peer = enet_host_connect(client, &address, 2, 0);
-
-	if (peer == NULL) {
-		std::cout << "No available peers for initializing an Enet connection." << std::endl;
-	}
-
-
-	*packetType = -1;
 }
 
 void Network_System::Update() {
@@ -75,12 +54,45 @@ void Network_System::Update() {
 		enet_packet_destroy(enetEvent.packet);
 
 	}
-	std::cout << count << std::endl;
+	//std::cout << count << std::endl;
 }
 
-void Network_System::PostUpdate() {
+void Network_System::ShutDown() {
+
+	enet_peer_disconnect_now(peer, 0);
+
+	enet_host_destroy(client);
+	atexit(enet_deinitialize);
+
+}
+
+void Network_System::Startup() {
+	if (enet_initialize() != 0) { // initialises the Enet middleware
+		std::cout << "Enet failed to initialise" << std::endl;
+	}
+
+	client = enet_host_create(NULL, 1, 2, 0, 0); // creates a host
+
+	if (client == NULL) {
+		std::cout << "Client failed to initialise!" << std::endl;
+	}
+
+	enet_address_set_host(&address, "localhost");
+	address.port = 1234; // sets the network to look at (this is local)
+
+	peer = enet_host_connect(client, &address, 2, 0);
+
+	if (peer == NULL) {
+		std::cout << "No available peers for initializing an Enet connection." << std::endl;
+	}
+
+
+	*packetType = -1;
+}
+
+void Network_System::LateUpdate() {
 	// due to the nature of networking, a post update is needed to send a packet AFTER the client's transform is updated.
-	if (serverConnect) { 
+	if (serverConnect) {
 		clientPacket->clientIndex = clientIndex;
 		//clientPacket->position.x = 100.0f;
 		//clientPacket->position.y = 300.0f;
@@ -96,14 +108,4 @@ void Network_System::PostUpdate() {
 		dataPacket = enet_packet_create(clientPacket, sizeof(ClientPacket), ENET_PACKET_FLAG_RELIABLE);
 		enet_peer_send(peer, 0, dataPacket); // finally the packet is sent
 	}
-
-}
-
-void Network_System::ShutDown() {
-
-	enet_peer_disconnect_now(peer, 0);
-
-	enet_host_destroy(client);
-	atexit(enet_deinitialize);
-
 }

@@ -2,13 +2,9 @@
 #include <vector>
 #include "MeshRenderer.h"
 #include "ShaderRegistry.h"
-
-#include "EventQueue.h"
-#include "Event.h"
-#include "Communication_Layer.h"
-
+#include "SubSystem.h"
 // the graphics system is responsible for the handling and executing of components that give a display onto the screen
-class Graphics_System {
+class Graphics_System : public SubSystem {
 private:
 	// holds the vector of MeshRenderer components
 	std::vector<MeshRenderer> ListOfMeshRenderers;
@@ -20,29 +16,27 @@ private:
 
 	void UpdateTransformEv(Event* e);
 public:
-	Communication_Layer* CL;
 	ShaderRegistry* SR;
-	// Update will cause the graphics system to do its generic procedure and poll the events related to it.
-	void Update(EventQueue* EQ);
+
 	// the initialisation of the Graphics system which needs to maximum number of components allowed.
-	
-	Graphics_System(int ComponentSize);
+
+	Graphics_System();
 
 	// destroys the system
 	~Graphics_System();
+
+	// Update will cause the graphics system to do its generic procedure and poll the events related to it.
+	void Update();
+	void Startup();
+	void ShutDown();
+	void SetComponentSize(int size);
 
 	// creates a mesh renderer that is capable of displaying something on the screen.
 	// it returns the pointer of it the the entity that required it.
 	MeshRenderer* CreateMeshRenderer(std::string path, Shader* shader, bool flip);
 
-	// setups the graphics engine
-	void Setup();
-
 	// draws everything on to the screen.
 	void Draw();
-
-	// resets the frame so that it's cleared for the next iteration of draws
-	void ResetGraphics();
 
 	// draws speicifc debug visuals from multiple systems
 	void DebugDraw();

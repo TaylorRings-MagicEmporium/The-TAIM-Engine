@@ -12,7 +12,7 @@ enum class EventType {
 	PlaySound};
 
 // the system enum is used to indicate which system should react to this specific event.
-enum class Systems {Windows, Graphics, Physics, Audio};
+enum class SubSystemType {Windows, Graphics, Physics, Audio, Network, System, Camera};
 
 //for effective function pointing, the size of the EventType has to be recorded.
 const int EVENT_TYPE_COUNT = 8;
@@ -26,7 +26,7 @@ protected:
 public:
 	Event() {};
 	std::vector<Entity*> ListOfEntities;
-	bool SystemList[4];
+	bool SystemList[7];
 
 	EventType GetType(){ return MyType; };
 };
@@ -36,7 +36,7 @@ public:
 	glm::vec3 MoveAmount = glm::vec3(0);
 	Move() {
 		//std::cout << "I'm here!" << std::endl;
-		SystemList[(int)Systems::Physics] = true;
+		SystemList[(int)SubSystemType::Physics] = true;
 	}
 };
 
@@ -76,7 +76,7 @@ class Jump : public Event {
 public:
 	Jump() {
 		MyType = EventType::Jump;
-		SystemList[(int)Systems::Physics] = true;
+		SystemList[(int)SubSystemType::Physics] = true;
 	}
 
 	glm::vec3 JumpAmount = glm::vec3(0, 30, 0);
@@ -86,7 +86,7 @@ class PlaySoundEv : public Event {
 public:
 	PlaySoundEv() {
 		MyType = EventType::PlaySound;
-		SystemList[(int)Systems::Audio] = true;
+		SystemList[(int)SubSystemType::Audio] = true;
 	}
 };
 
@@ -94,7 +94,7 @@ class ResetTransform : public Event {
 public:
 	ResetTransform() {
 		MyType = EventType::ResetTransform;
-		SystemList[(int)Systems::Physics] = true;
+		SystemList[(int)SubSystemType::Physics] = true;
 	}
 };
 
@@ -102,7 +102,7 @@ class UpdateTransform : public Event {
 public:
 	UpdateTransform() {
 		MyType = EventType::UpdateTransform;
-		SystemList[(int)Systems::Graphics] = true;
+		SystemList[(int)SubSystemType::Graphics] = true;
 	}
 	glm::vec3 pos;
 	glm::quat rot;
