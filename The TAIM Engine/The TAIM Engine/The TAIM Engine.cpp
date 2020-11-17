@@ -37,8 +37,6 @@ int The_TAIM_Engine::SetupEngine() {
 	std::cout << "LOADING CONFIG FILE" << std::endl;
 	ConfigData CD = FLS.LoadConfig();
 
-
-
 	if (CD.FileLoaded) {
 		SCREEN_WIDTH = CD.ScreenSize.x;
 		SCREEN_HEIGHT = CD.ScreenSize.y;
@@ -96,7 +94,9 @@ int The_TAIM_Engine::SetupEngine() {
 	CS.SetWindowSize(CD.ScreenSize);
 
 	GS.SR = &SR;
+
 	NS.ES = &ES;
+	IS.ES = &ES;
 
 	FLS.GS = &GS;
 	FLS.PS = &PS;
@@ -168,42 +168,29 @@ int The_TAIM_Engine::StartEngine() {
 		SR.GetShader("DebugLine")->SetMat4("Proj", CL.proj);
 		SR.GetShader("DebugLine")->SetMat4("View", CL.view);
 
-		for (int i = 0; i < SubSystemsList.size(); i++) {
-			SubSystemsList[i]->Update();
-		}
-
-		//GAME LOOP
-
-		GameLoop();
-
 		// ENGINE LOOP
 		// in the future, the camera will be within a camera system for better control
 
-		// these will set the matrix from the camera into a specific shader. CREATE OPTIONAL WARNINGS IF VALUES DON'T EXIST OR USE A GROUPING SYSTEM THAT DOES NEED IT
+		std::vector<float> timeList;
 
-		
+		for (int i = 0; i < SubSystemsList.size(); i++) {
+			timeList.push_back(SDL_GetTicks());
+			SubSystemsList[i]->Update();
+		}
+
+		//std::cout << "PHYSICS: " << (t2 - t1) / 1000.0f << "Seconds. " << "GRAPHICS: " << (t3 - t2) / 1000.0f << "Seconds" << std::endl;
+
+
 		//finds out the total events in the queue.
 		//std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
 		
 		// SYSTEM EVENT QUEUE CHECKUP
 		// each system must have access to the current event queue and do it's own polling to apply the correct results.
 		
-		//float t1, t2, t3, t4;
-		//t1 = SDL_GetTicks();
-		//PS.Update(&Event_Queue);
-		//t2 = SDL_GetTicks();
-		//GS.Update(&Event_Queue);
-		//t3 = SDL_GetTicks();
-		//AS.Update(&Event_Queue);
-
-		//std::cout << "PHYSICS: " << (t2 - t1) / 1000.0f << "Seconds. " << "GRAPHICS: " << (t3 - t2) / 1000.0f << "Seconds" << std::endl;
 		
 		// removes events that are not needed anymore
 		Event_Queue.RemoveEmptyEvents();
 
-		// the graphics system now begins drawing the meshes
-		//GS.Draw();
-		//GS.DebugDraw();
 		//updates the window by double buffering.
 		SDL_GL_SwapWindow(gWindow);
 		//SDL_GL_
@@ -220,94 +207,3 @@ int The_TAIM_Engine::StartEngine() {
 	//delete ev;
 	return 0;
 }
-
-void The_TAIM_Engine::GameLoop() {
-	Event* ev = new Event();
-	std::vector<Entity*> playerEntites = ES.GetEntitiesWithTag("Player");
-	std::vector<Entity*> ghostEntites = ES.GetEntitiesWithTag("Ghost");
-	if (IS.GetKeyPressed(KeyCode::KEY_W)) {
-		ev = new MoveForward();
-		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
-		//ev->ListOfEntities.push_back(&EntityList[0]);
-		Event_Queue.AddEventToStack(ev);
-	}
-	if (IS.GetKeyPressed(KeyCode::KEY_A)) {
-		ev = new MoveLeft();
-		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
-		Event_Queue.AddEventToStack(ev);
-	}
-	if (IS.GetKeyPressed(KeyCode::KEY_S)) {
-		ev = new MoveBackward();
-		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
-		Event_Queue.AddEventToStack(ev);
-	}
-	if (IS.GetKeyPressed(KeyCode::KEY_D)) {
-		ev = new MoveRight();
-		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
-		Event_Queue.AddEventToStack(ev);
-	}
-	if (IS.GetKeyPressed(KeyCode::KEY_SPACE)) {
-		ev = new Jump();
-		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
-		Event_Queue.AddEventToStack(ev);
-	}
-	if (IS.GetKeyPressed(KeyCode::KEY_N) && !IS.GetPrevKeyPressed(KeyCode::KEY_N)) {
-		ev = new PlaySoundEv();
-		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
-		Event_Queue.AddEventToStack(ev);
-	}
-	if (IS.GetKeyPressed(KeyCode::KEY_TAB) && !IS.GetPrevKeyPressed(KeyCode::KEY_TAB)) {
-		ev = new ResetTransform();
-		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
-		Event_Queue.AddEventToStack(ev);
-	}
-	//if (IS.GetKeyPressed(KeyCode::KEY_Q) && !IS.GetPrevKeyPressed(KeyCode::KEY_Q)) {
-	//	ev = new UpdateTransform();
-	//	ev->ListOfEntities.insert(ev->ListOfEntities.end(), ghostEntites.begin(), ghostEntites.end());
-	//	static_cast<UpdateTransform*>(ev)->pos = ev->ListOfEntities[0]->pos + glm::vec3(1, 0, 0);
-	//	static_cast<UpdateTransform*>(ev)->rot = ev->ListOfEntities[0]->rot;
-	//	Event_Queue.AddEventToStack(ev);
-	//}
-}
-
-//void The_TAIM_Engine::MoveObjectAssign(Event* e) {
-//
-//	MoveObjectEv* moe = (MoveObjectEv*)(e);
-//
-//	if (moe->GetType() == EventType::MoveObject) {
-//
-//		glm::vec3 AddPos = glm::vec3(0);
-//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_W)) {
-//			AddPos += glm::vec3(0, 0.1, 0);
-//		}
-//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_A)) {
-//			AddPos += glm::vec3(-0.1, 0, 0);
-//		}
-//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_S)) {
-//			AddPos += glm::vec3(0, -0.1, 0);
-//		}
-//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_D)) {
-//			AddPos += glm::vec3(0.1, 0, 0);
-//		}
-//		moe->ListOfEntities.push_back(&EntityList[0]);
-//		moe->PositionAdd = AddPos;
-//		moe->SystemList[(int)Systems::Graphics] = true;
-//	}
-//	else {
-//		std::cout << "TYPE MISMATCH" << std::endl;
-//	}
-//}
-//
-//void The_TAIM_Engine::ResetAssign(Event* e) {
-//	ResetEv* re = (ResetEv*)(e);
-//
-//	if (re->GetType() == EventType::Reset) {
-//		if (IS.GetKeyPressed(KEYLETTERCODE::KEY_R)) {
-//			re->ListOfEntities.push_back(&EntityList[0]);
-//			re->SystemList[(int)Systems::Graphics] = true;
-//		}
-//	}
-//	else {
-//		std::cout << "TYPE MISMATCH" << std::endl;
-//	}
-//}

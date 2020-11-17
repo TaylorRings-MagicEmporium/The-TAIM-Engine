@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2\SDL.h>
 #include "SubSystem.h"
+#include "Entity_System.h"
 // KEYLETTERCODE contains all of the letters of the alphabet
 enum class KEYLETTERCODE {KEY_A,KEY_B,KEY_C,KEY_D,KEY_E,KEY_F,KEY_G,
 KEY_H,KEY_I,KEY_J,KEY_K,KEY_L,KEY_M,KEY_N,KEY_O,KEY_P,
@@ -50,6 +51,8 @@ private:
 
 
 public:
+	Entity_System* ES;
+
 	//used to initialise the Input system
 	//used to initalise the input system with a given window state (for now)
 	Input_System();
@@ -61,16 +64,8 @@ public:
 	void Reset_Input();
 
 	void AssignWindows(SDL_Window* newWindow);
+	void CreateEvents();
 	// returns the bool of the state at the current frame
-
-	//bool GetKeyPressed(KEYLETTERCODE KLC);
-	//bool GetKeyPressed(KEYNUMBERCODE KNC);
-	//bool GetKeyPressed(KEYSPECIALCODE KSC);
-
-	// returns the bool of the state at the previous frame
-	//bool GetPrevKeyPressed(KEYLETTERCODE KLC);
-	//bool GetPrevKeyPressed(KEYNUMBERCODE KNC);
-	//bool GetPrevKeyPressed(KEYSPECIALCODE KSC);
 
 	bool GetKeyPressed(KeyCode KC);
 	bool GetPrevKeyPressed(KeyCode KC);

@@ -56,48 +56,8 @@ void Input_System::Update() {
 	KeyCodeState[(int)KeyCode::KEY_CAPSLOCK] = state[SDL_SCANCODE_CAPSLOCK];
 
 
-	//int begin = SDL_SCANCODE_A;
-	//int end = SDL_SCANCODE_Z;
-	//for (int i = begin; i < end; i++) {
-	//	KeyLetterState[i - begin] = state[i];
-	//}
-
-	//begin = SDL_SCANCODE_1;
-	//end = SDL_SCANCODE_0;
-	//for (int i = begin; i < end; i++) {
-	//	KeyNumberState[i - begin] = state[i];
-	//}
-
-	//begin = SDL_SCANCODE_RETURN;
-	//end = SDL_SCANCODE_CAPSLOCK;
-	//for (int i = begin; i < end; i++) {
-	//	KeySpecialState[i - begin] = state[i];
-	//}
+	CreateEvents();
 }
-
-//bool Input_System::GetKeyPressed(KEYLETTERCODE KLC) {
-//	return KeyLetterState[(int)KLC];
-//}
-//
-//bool Input_System::GetKeyPressed(KEYNUMBERCODE KNC) {
-//	return KeyNumberState[(int)KNC];
-//}
-//
-//bool Input_System::GetKeyPressed(KEYSPECIALCODE KSC) {
-//	return KeySpecialState[(int)KSC]; 
-//}
-//
-//bool Input_System::GetPrevKeyPressed(KEYLETTERCODE KLC) {
-//	return PrevKeyLetterState[(int)KLC];
-//}
-//
-//bool Input_System::GetPrevKeyPressed(KEYNUMBERCODE KNC) {
-//	return PrevKeyNumberState[(int)KNC];
-//}
-//
-//bool Input_System::GetPrevKeyPressed(KEYSPECIALCODE KSC) {
-//	return PrevKeySpecialState[(int)KSC];
-//}
 
 bool Input_System::GetKeyPressed(KeyCode KC) {
 	return KeyCodeState[(int)KC];
@@ -105,4 +65,46 @@ bool Input_System::GetKeyPressed(KeyCode KC) {
 
 bool Input_System::GetPrevKeyPressed(KeyCode KC) {
 	return PrevKeyCodeState[(int)KC];
+}
+
+void Input_System::CreateEvents() {
+	Event* ev = new Event();
+	std::vector<Entity*> playerEntites = ES->GetEntitiesWithTag("Player");
+	std::vector<Entity*> ghostEntites = ES->GetEntitiesWithTag("Ghost");
+	if (GetKeyPressed(KeyCode::KEY_W)) {
+		ev = new MoveForward();
+		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+		//ev->ListOfEntities.push_back(&EntityList[0]);
+		Event_Queue->AddEventToStack(ev);
+	}
+	if (GetKeyPressed(KeyCode::KEY_A)) {
+		ev = new MoveLeft();
+		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+		Event_Queue->AddEventToStack(ev);
+	}
+	if (GetKeyPressed(KeyCode::KEY_S)) {
+		ev = new MoveBackward();
+		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+		Event_Queue->AddEventToStack(ev);
+	}
+	if (GetKeyPressed(KeyCode::KEY_D)) {
+		ev = new MoveRight();
+		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+		Event_Queue->AddEventToStack(ev);
+	}
+	if (GetKeyPressed(KeyCode::KEY_SPACE)) {
+		ev = new Jump();
+		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+		Event_Queue->AddEventToStack(ev);
+	}
+	if (GetKeyPressed(KeyCode::KEY_N) && !GetPrevKeyPressed(KeyCode::KEY_N)) {
+		ev = new PlaySoundEv();
+		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+		Event_Queue->AddEventToStack(ev);
+	}
+	if (GetKeyPressed(KeyCode::KEY_TAB) && !GetPrevKeyPressed(KeyCode::KEY_TAB)) {
+		ev = new ResetTransform();
+		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+		Event_Queue->AddEventToStack(ev);
+	}
 }
