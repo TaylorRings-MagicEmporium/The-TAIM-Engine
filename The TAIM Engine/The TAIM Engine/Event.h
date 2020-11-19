@@ -26,7 +26,7 @@ protected:
 public:
 	Event() {};
 	std::vector<Entity*> ListOfEntities;
-	bool SystemList[7];
+	std::vector<SubSystemType> SubSystemOrder;
 
 	EventType GetType(){ return MyType; };
 };
@@ -36,7 +36,7 @@ public:
 	glm::vec3 MoveAmount = glm::vec3(0);
 	Move() {
 		//std::cout << "I'm here!" << std::endl;
-		SystemList[(int)SubSystemType::Physics] = true;
+		SubSystemOrder.push_back(SubSystemType::Physics);
 	}
 };
 
@@ -76,7 +76,7 @@ class Jump : public Event {
 public:
 	Jump() {
 		MyType = EventType::Jump;
-		SystemList[(int)SubSystemType::Physics] = true;
+		SubSystemOrder.push_back(SubSystemType::Physics);
 	}
 
 	glm::vec3 JumpAmount = glm::vec3(0, 30, 0);
@@ -86,7 +86,7 @@ class PlaySoundEv : public Event {
 public:
 	PlaySoundEv() {
 		MyType = EventType::PlaySound;
-		SystemList[(int)SubSystemType::Audio] = true;
+		SubSystemOrder.push_back(SubSystemType::Audio);
 	}
 };
 
@@ -94,7 +94,7 @@ class ResetTransform : public Event {
 public:
 	ResetTransform() {
 		MyType = EventType::ResetTransform;
-		SystemList[(int)SubSystemType::Physics] = true;
+		SubSystemOrder.push_back(SubSystemType::Physics);
 	}
 };
 
@@ -102,7 +102,7 @@ class UpdateTransform : public Event {
 public:
 	UpdateTransform() {
 		MyType = EventType::UpdateTransform;
-		SystemList[(int)SubSystemType::Graphics] = true;
+		SubSystemOrder.push_back(SubSystemType::Graphics);
 	}
 	glm::vec3 pos;
 	glm::quat rot;

@@ -24,6 +24,9 @@ void Camera_System::Update() {
 }
 
 void Camera_System::ShutDown() {
+	for (int i = 0; i < CameraList.size(); i++) {
+		delete CameraList[i];
+	}
 	CameraList.clear();
 }
 
@@ -31,13 +34,21 @@ void Camera_System::SetWindowSize(glm::vec2 size) {
 	WindowSize = size;
 }
 Component* Camera_System::CreateStaticCamera(glm::vec3 target) {
-	Camera c = Camera();
-	c.SetValues(target);
+	StaticCamera* c = new StaticCamera();
+	c->SetValues(target);
 	CameraList.push_back(c);
-	ActiveCamera = &CameraList.back();
+	ActiveCamera = CameraList.back();
 	//Update();
-	return &CameraList.back();
+	return CameraList.back();
 }
 void Camera_System::SetActiveCamera(Camera* ActCamera) {
 	ActiveCamera = ActCamera;
+}
+
+Component* Camera_System::CreateFirstCamera(glm::vec3 offset) {
+	FirstCamera* c = new FirstCamera();
+	c->SetOffset(offset);
+	CameraList.push_back(c);
+	ActiveCamera = CameraList.back();
+	return CameraList.back();
 }

@@ -39,12 +39,9 @@ void Audio_System::Update() {
 	method_function method_pointer[EVENT_TYPE_COUNT];
 	method_pointer[(int)EventType::PlaySound] = &Audio_System::EvPlaySound;
 
-	while (Event* e = Event_Queue->PollEvents()) {
-		if (e->SystemList[(int)SubSystemType::Audio]) {
-			method_function func = method_pointer[(int)e->GetType()];
-			(this->*func)(e);
-			e->SystemList[(int)SubSystemType::Audio] = false;
-		}
+	while (Event* e = Event_Queue->PollEvents(SubSystemType::Audio)) {
+		method_function func = method_pointer[(int)e->GetType()];
+		(this->*func)(e);
 	}
 
 

@@ -29,6 +29,8 @@ void Physics_System::Startup() {
 
 	for (int i = 0; i < ListOfRigidbodies.size(); i++) {
 		ListOfRigidbodies[i].Setup();
+		ListOfRigidbodies[i].body->setRollingFriction(0.2);
+		ListOfRigidbodies[i].body->setSpinningFriction(0.1);
 		dynamicWorld->addRigidBody(ListOfRigidbodies[i].body);
 	}
 
@@ -75,12 +77,9 @@ void Physics_System::Update()
 	method_pointer[(int)EventType::ResetTransform] = &Physics_System::ResetTransformEv;
 
 
-	while (Event* e = Event_Queue->PollEvents()) {
-		if (e->SystemList[(int)SubSystemType::Physics]) {
-			method_function func = method_pointer[(int)e->GetType()];
-			(this->*func)(e);
-			e->SystemList[(int)SubSystemType::Physics] = false;
-		}
+	while (Event* e = Event_Queue->PollEvents(SubSystemType::Physics)) {
+		method_function func = method_pointer[(int)e->GetType()];
+		(this->*func)(e);
 	}
 
 	dynamicWorld->stepSimulation(1.0f / 60.0f, 10);
@@ -93,10 +92,10 @@ void Physics_System::Update()
 		if (ListOfRigidbodies[j].body && ListOfRigidbodies[j].body->getMotionState()) {
 			ListOfRigidbodies[j].body->getMotionState()->getWorldTransform(trans);
 			Comm_Layer->GPWrap(trans, ListOfRigidbodies[j].GO);
-			if (j == 0) {
-				//printf("world pos object %d = %f,%f,%f\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
+			//if (j == 0) {
+			//	//printf("world pos object %d = %f,%f,%f\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
 
-			}
+			//}
 		}
 	}
 }
@@ -138,6 +137,9 @@ void Physics_System::MoveLeft(Event* e) {
 	for (int i = 0; i < m->ListOfEntities.size(); i++) {
 		Rigidbody* r = (Rigidbody*)m->ListOfEntities[i]->GetComponent(ComponentType::Rigidbody);
 		r->body->activate(true);
+
+		//r->body->applyTorque(btVector3(m->MoveAmount.x, m->MoveAmount.y, m->MoveAmount.z));
+		//r->body->applyTorque(btVector3(0, 1.4, 0));
 		r->body->applyCentralForce(btVector3(m->MoveAmount.x, m->MoveAmount.y, m->MoveAmount.z));
 	}
 }
@@ -148,6 +150,7 @@ void Physics_System::MoveBackward(Event* e) {
 		r->body->activate(true);
 
 		r->body->applyCentralForce(btVector3(m->MoveAmount.x, m->MoveAmount.y, m->MoveAmount.z));
+
 	}
 }
 void Physics_System::MoveRight(Event* e) {

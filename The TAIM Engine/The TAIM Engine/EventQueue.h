@@ -20,7 +20,7 @@ public:
 
 	// a special function which allows a system to poll through the events of the queue
 	// the return is either an event, or a nullptr, depicting that all events have been polled.
-	Event* PollEvents();
+	Event* PollEvents(SubSystemType s);
 	
 	// this function updates the queue by removing events that no longer need a system reaction.
 	void RemoveEmptyEvents();

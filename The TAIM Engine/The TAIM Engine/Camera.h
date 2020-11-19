@@ -7,16 +7,18 @@
 #include "Component.h"
 #include <iostream>
 
+
+enum class CameraTypes { FIRST, THIRD, STATIC, FREEFORM };
+
 // the camera class hold and calulates the matrices needed to view the world through it. this technically means that multiple cameras can be set up if properly executed.
 class Camera : public Component {
-private:
+protected:
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 proj = glm::mat4(1.0f);
 	glm::mat4 UIProj = glm::mat4(1.0f);
 
 	bool IsSet = false;
-
-	glm::vec3 target;
+	CameraTypes CamType;
 public:
 
 	float zoom = 45.0f;
@@ -27,17 +29,19 @@ public:
 	~Camera();
 
 	// setups the camera
-	void Setup();
-	void SetValues(glm::vec3 tar);
+	virtual void Setup() = 0;
+	
+	// generic update of the camera using the width and height from the engine
+	virtual void UpdateCamera(glm::vec2 size) = 0;
+
 	//gets the current projection matrix 
-	glm::mat4 GetProj();
+	glm::mat4 GetProj() { return proj; };
 
 	//gets the current view matrix
-	glm::mat4 GetView();
+	glm::mat4 GetView() { return view; };
 
 	//gets the current UI projection matrix
-	glm::mat4 GetUIProj();
+	glm::mat4 GetUIProj() { return UIProj;};
 
-	// generic update of the camera using the width and height from the engine
-	void UpdateCamera(glm::vec2 size);
+
 };

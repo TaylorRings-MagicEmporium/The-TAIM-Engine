@@ -194,8 +194,18 @@ void FileLoader_System::LoadEntities()
 		//CAMERA
 		LuaRef Cam = ComponentView["Camera"];
 		if (!Cam.isNil()) {
-			LuaRef targ = Cam["Target"];
-			object->SetComponent(CS->CreateStaticCamera(glm::vec3(targ["x"].cast<float>(), targ["y"].cast<float>(), targ["z"].cast<float>())));
+			LuaRef type = Cam["Type"];
+			if (type.cast<std::string>() == "FIRST") {
+				LuaRef Off = Cam["Offset"];
+				object->SetComponent(CS->CreateFirstCamera(glm::vec3(Off["x"].cast<float>(), Off["y"].cast<float>(), Off["z"].cast<float>())));
+			} else if (type.cast<std::string>() == "STATIC") {
+				LuaRef targ = Cam["Target"];
+				object->SetComponent(CS->CreateStaticCamera(glm::vec3(targ["x"].cast<float>(), targ["y"].cast<float>(), targ["z"].cast<float>())));
+			}
+			else {
+				std::cout << "WARNING: no camera type was stated for tag " << TTD.tag << std::endl;
+			}
+
 		}
 	}
 	std::cout << "objects loaded correctly!" << std::endl;

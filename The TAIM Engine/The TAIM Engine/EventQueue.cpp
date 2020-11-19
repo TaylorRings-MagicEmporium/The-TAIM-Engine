@@ -9,11 +9,18 @@ void EventQueue::AddEventToStack(Event* e) {
 	EventsList.push_back(e);
 }
 
-Event* EventQueue::PollEvents() {
+Event* EventQueue::PollEvents(SubSystemType s) {
 	for (int a = EventCounter; a < EventsList.size(); a++) {
 		
-		EventCounter = a+1;
-		return EventsList[a];
+		if (EventsList[a]->SubSystemOrder.size() != 0) {
+			if (EventsList[a]->SubSystemOrder[0] == s) {
+				EventsList[a]->SubSystemOrder.erase(EventsList[a]->SubSystemOrder.begin());
+				EventCounter = a + 1;
+				return EventsList[a];
+			}
+		}
+
+		EventCounter = a + 1;
 		//return 1;
 	}
 	EventCounter = 0;
@@ -23,23 +30,10 @@ Event* EventQueue::PollEvents() {
 void EventQueue::RemoveEmptyEvents() {
 	std::vector<Event*> NewList;
 	for (std::vector<Event*>::iterator it = EventsList.begin(); it != EventsList.end(); it++) {
-		bool destroy = true;
-		for (int i = 0; i < 4; i++) {
-			if ((*it)->SystemList[i] == true) {
-				destroy = false;
-				break;
-			}
-		}
-		if (destroy) {
-			delete(*it);
-			continue;
-		}
-		else {
-			NewList.push_back(*it);
+		if ((*it)->SubSystemOrder.size() != 0) {
+			delete (*it);
+			it++;
 		}
 	}
-
-	EventsList.clear();
-	EventsList = NewList;
 
 }

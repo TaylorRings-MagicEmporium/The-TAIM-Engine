@@ -1,9 +1,10 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "Camera.h"
+#include "StaticCamera.h"
+#include "FirstCamera.h"
 #include "SubSystem.h"
-enum class CameraTypes{FIRST,THIRD,STATIC, FREEFORM};
+
 
 class Camera_System : public SubSystem
 {
@@ -19,8 +20,9 @@ public:
 	void SetWindowSize(glm::vec2 size);
 	Component* CreateStaticCamera(glm::vec3 target);
 	void SetActiveCamera(Camera* ActCamera);
+	Component* CreateFirstCamera(glm::vec3 offset);
 	Camera* ActiveCamera;
 
-	std::vector<Camera> CameraList;
+	std::vector<Camera*> CameraList;
 };
 

@@ -73,12 +73,9 @@ void Graphics_System::Update() {
 	method_function method_pointer[EVENT_TYPE_COUNT];
 	method_pointer[(int)EventType::UpdateTransform] = &Graphics_System::UpdateTransformEv;
 
-	while (Event* e = Event_Queue->PollEvents()) {
-		if (e->SystemList[(int)SubSystemType::Graphics]) {
-			method_function func = method_pointer[(int)e->GetType()];
-			(this->*func)(e);
-			e->SystemList[(int)SubSystemType::Graphics] = false;
-		}
+	while (Event* e = Event_Queue->PollEvents(SubSystemType::Graphics)) {
+		method_function func = method_pointer[(int)e->GetType()];
+		(this->*func)(e);
 	}
 
 

@@ -6,12 +6,12 @@ EntityList = {
 				y = 3,
 				z = 0
 			},
-			Rotation = {
-				degrees = 90.0,
-				axisX = 0.5,
-				axisY = 0.5,
-				axisZ = 0
-			},
+			--Rotation = {
+			--	degrees = 90.0,
+			--	axisX = 0.5,
+			--	axisY = 0.5,
+			--	axisZ = 0
+			--},
 			Tag = "Player"
 		},
 		MeshRenderer = {
@@ -29,16 +29,19 @@ EntityList = {
 			LockX = true,
 			LockZ = true
 		},
-		--CubeCollider = {
-		--	sizeX = 1,
-		--	sizeY = 1,
-		--	sizeZ = 1
-		--},
 		SphereCollider = {
 			radius = 1.0
 		},
 		AudioPlayer = {
 			AudioPath = "gun-shot.wav"
+		},
+		Camera = {
+			Type = "FIRST",
+			Offset = {
+				x = 0,
+				y = 1,
+				z = -1
+			}
 		}
 	},
 	ground = {
@@ -182,15 +185,15 @@ EntityList = {
 				y = 10,
 				z = 20
 			},
-			Tag = "Camera"
-		},
-		Camera = {
-			Type = "STATIC",
-			Target = {
-				x = 0,
-				y = 0,
-				z = 9
-			}
-		}	
+			Tag = "SceneCamera"
+		}
+		--Camera = {
+		--	Type = "STATIC",
+		--	Target = {
+		--		x = 0,
+		--		y = 0,
+		--		z = 9
+		--	}
+		--}	
 	}
 }

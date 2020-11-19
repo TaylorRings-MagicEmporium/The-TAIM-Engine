@@ -14,6 +14,9 @@ public:
 	Collider* collider;
 	btTransform RBTransform;
 	btVector3 offset;
+
+	btVector3 VelocityLimit = btVector3(100,100,100);
+	btVector3 RotationLimit = btVector3(100,100,100);
 	Rigidbody(btVector3 offset, float RBmass);
 
 	void Setup();
