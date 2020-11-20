@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 
-Entity::Entity(glm::vec3 StartingPosition, glm::quat StartingRotation, glm::vec3 StartingScale, std::string tag) {
+Entity::Entity(glm::vec3 StartingPosition, glm::quat StartingRotation, glm::vec3 StartingScale, std::string tag, std::string FileTag ) {
 	pos = StartingPosition;
 	rot = StartingRotation;
 	scale = StartingScale;
@@ -9,7 +9,9 @@ Entity::Entity(glm::vec3 StartingPosition, glm::quat StartingRotation, glm::vec3
 	defaultPos = StartingPosition;
 	defaultRot = StartingRotation;
 	defaultScale = StartingScale;
-	this->tag = tag;
+
+	this->Tag = tag;
+	this->FileTag = FileTag;
 }
 Entity::Entity() {
 	pos = glm::vec3(0);

@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include "Component.h"
+#include "Transform.h"
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <string>
@@ -16,7 +17,9 @@ private:
 	// holds the components related to this entity instance.
 	std::map<ComponentType, Component*> ComponentList;
 
-
+	//std::string name;
+	std::string Tag;
+	std::string FileTag;
 public:
 	// used for event testing.
 	glm::vec3 pos;
@@ -27,14 +30,12 @@ public:
 	glm::quat defaultRot;
 	glm::vec3 defaultScale;
 
-	//std::string name;
-	std::string tag;
-	std::string FileTag;
+
 
 	bool hideEntity = false;
 
 	// initialisation of the entity class.
-	Entity(glm::vec3 StartingPosition, glm::quat StartingRotation,glm::vec3 StartingScale, std::string tag);
+	Entity(glm::vec3 StartingPosition, glm::quat StartingRotation,glm::vec3 StartingScale, std::string tag, std::string FileTag);
 	Entity();
 	
 	// sets the component by it's component type into a map, for easier looking up.
@@ -42,6 +43,9 @@ public:
 
 	// grabs the component needed by the component type.
 	Component* GetComponent(ComponentType t);
+
+	std::string GetTag() { return Tag; };
+	std::string GetFileTag() { return FileTag; };
 	
 };
 

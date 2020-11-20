@@ -23,10 +23,12 @@ void FileLoader_System::LoadEntities()
 {
 
 	std::vector<std::string> elementList;
-	//std::vector<std::string> entitiyList;
+	std::string FileString = "LUA files/player.lua";
 
 	lua_State* F = luaL_newstate();
-	luaL_dofile(F, "LUA files/player.lua");
+	luaL_dofile(F, FileString.c_str());
+	int indx1 = FileString.find_last_of("/") + 1;
+	std::string FTag = FileString.substr(indx1, FileString.find_last_of(".") - indx1);
 	luaL_openlibs(F);
 	lua_pcall(F, 0, 0, 0);
 
@@ -69,6 +71,7 @@ void FileLoader_System::LoadEntities()
 
 		//TRANSFORM
 		TempTransData TTD;
+		TTD.FileTag = FTag;
 		LuaRef transform = ComponentView["Transform"];
 		if (!transform.isNil()) {
 			LuaRef Position = transform["Position"];
@@ -79,22 +82,18 @@ void FileLoader_System::LoadEntities()
 				TTD.position.x = Position["x"].cast<float>();
 				TTD.position.y = Position["y"].cast<float>();
 				TTD.position.z = Position["z"].cast<float>();
-				
-				//std::cout << Position["x"].cast<float>() << ", " << Position["y"].cast<float>() << ", " << Position["z"].cast<float>() << std::endl;
-
 			}
 			else {
-				std::cout << "NO POSITION" << std::endl;
+				//std::cout << "NO POSITION" << std::endl;
 			}
 			if (!Rotation.isNil()) {
 				TTD.degrees = Rotation["degrees"].cast<float>();
 				TTD.rotateAxis.x = Rotation["axisX"].cast<float>();
 				TTD.rotateAxis.y = Rotation["axisY"].cast<float>();
 				TTD.rotateAxis.z = Rotation["axisZ"].cast<float>();
-				//std::cout << Rotation["degrees"].cast<float>() << ", " << Rotation["axisX"].cast<float>() << ", " << Rotation["axisY"].cast<float>() << ", " << Rotation["axisZ"].cast<float>() << std::endl;
 			}
 			else {
-				std::cout << "NO ROTATION" << std::endl;
+				//std::cout << "NO ROTATION" << std::endl;
 			}
 			if (!Scale.isNil()) {
 				TTD.scale.x = Scale["x"].cast<float>();
@@ -102,7 +101,7 @@ void FileLoader_System::LoadEntities()
 				TTD.scale.z = Scale["z"].cast<float>();
 			}
 			else {
-				std::cout << "NO SCALE" << std::endl;
+				//std::cout << "NO SCALE" << std::endl;
 			}
 			
 			if (!tag.isNil()) {
@@ -110,11 +109,10 @@ void FileLoader_System::LoadEntities()
 			}
 		}
 		else {
-			std::cout << "NO TRANSFORM" << std::endl;
+			//std::cout << "NO TRANSFORM" << std::endl;
 		}
 
-		Entity* object = ES->CreateEntity(TTD.position, glm::angleAxis(glm::radians(TTD.degrees), glm::normalize(TTD.rotateAxis)),TTD.scale,TTD.tag);
-		//EntityList.push_back();
+		Entity* object = ES->CreateEntity(TTD.position, glm::angleAxis(glm::radians(TTD.degrees), glm::normalize(TTD.rotateAxis)),TTD.scale,TTD.tag, TTD.FileTag);
 
 		//MESH RENDEREER
 		LuaRef meshRend = ComponentView["MeshRenderer"];
@@ -144,7 +142,7 @@ void FileLoader_System::LoadEntities()
 		if (!Rigid.isNil()) {
 			LuaRef offset = Rigid["offset"];
 			if (!offset.isNil()) {
-				std::cout << offset["x"].cast<float>() << ", " << offset["y"].cast<float>() << ", " << offset["z"].cast<float>() << std::endl;
+
 			}
 			
 			std::cout << Rigid["mass"].cast<float>() << std::endl;
@@ -172,7 +170,6 @@ void FileLoader_System::LoadEntities()
 		//CUBECOLLIDER
 		LuaRef CuColl = ComponentView["CubeCollider"];
 		if (!CuColl.isNil()) {
-			std::cout << CuColl["sizeX"].cast<float>() << ", " << CuColl["sizeY"].cast<float>() << ", " << CuColl["sizeZ"].cast<float>() << std::endl;
 			object->SetComponent(PS->CreateCubeCollider(glm::vec3(CuColl["sizeX"].cast<float>(), CuColl["sizeY"].cast<float>(), CuColl["sizeZ"].cast<float>())));
 		}
 		std::cout << std::endl;
@@ -180,7 +177,6 @@ void FileLoader_System::LoadEntities()
 		//SPHERECOLLIDER
 		LuaRef SphColl = ComponentView["SphereCollider"];
 		if (!SphColl.isNil()) {
-			std::cout << SphColl["radius"].cast<float>() << std::endl;
 			object->SetComponent(PS->CreateSphereCollider(SphColl["radius"].cast<float>()));
 		}
 		std::cout << std::endl;

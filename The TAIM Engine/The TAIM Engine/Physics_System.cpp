@@ -209,7 +209,7 @@ void Physics_System::TestGunShot(Event* e) {
 	bool success = false;
 
 	for (int i = 0; i < ListOfRigidbodies.size(); i++) {
-		if (ListOfRigidbodies[i].GO->tag == g->tagToReact) {
+		if (ListOfRigidbodies[i].GO->GetTag() == g->tagToReact) {
 			if (ListOfRigidbodies[i].body == closestResults.m_collisionObject) {
 
 				g->ListOfEntities.push_back(ListOfRigidbodies[i].GO);

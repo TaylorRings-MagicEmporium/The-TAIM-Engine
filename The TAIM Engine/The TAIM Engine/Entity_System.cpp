@@ -5,8 +5,8 @@ Entity_System::Entity_System() {
 
 }
 
-Entity* Entity_System::CreateEntity(glm::vec3 Position, glm::quat Rotation, glm::vec3 Scale, std::string tag = "undefined") {
-	Entity* object = new Entity(Position, Rotation, Scale, tag);
+Entity* Entity_System::CreateEntity(glm::vec3 Position, glm::quat Rotation, glm::vec3 Scale, std::string tag = "undefined", std::string FileTag = "undefined") {
+	Entity* object = new Entity(Position, Rotation, Scale, tag, FileTag);
 	ALL_ENTITIES.push_back(object);
 	Tag_System[tag].push_back(object);
 	return object;
