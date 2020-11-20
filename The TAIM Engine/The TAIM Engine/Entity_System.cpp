@@ -31,3 +31,12 @@ void Entity_System::CloseEntitySystem() {
 	ALL_ENTITIES.clear();
 	Tag_System.clear();
 }
+
+void Entity_System::Update() {
+	for (int i = 0; i < ALL_ENTITIES.size(); i++) {
+		if (ALL_ENTITIES[i]->transform.Rotation != glm::quat(1, 0, 0, 0)) {
+			ALL_ENTITIES[i]->transform.forwardVector = glm::vec3(0, 0, -1) * ALL_ENTITIES[i]->transform.Rotation;
+			ALL_ENTITIES[i]->transform.RightVector = glm::vec3(1, 0, 0) * ALL_ENTITIES[i]->transform.Rotation;
+		}
+	}
+}

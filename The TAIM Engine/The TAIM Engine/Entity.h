@@ -22,15 +22,7 @@ private:
 	std::string FileTag;
 public:
 	// used for event testing.
-	glm::vec3 pos;
-	glm::quat rot;
-	glm::vec3 scale;
-
-	glm::vec3 defaultPos;
-	glm::quat defaultRot;
-	glm::vec3 defaultScale;
-
-
+	Transform transform;
 
 	bool hideEntity = false;
 

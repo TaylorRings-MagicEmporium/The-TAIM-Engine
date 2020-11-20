@@ -97,13 +97,13 @@ void Network_System::LateUpdate() {
 		//clientPacket->position.x = 100.0f;
 		//clientPacket->position.y = 300.0f;
 		std::vector<Entity*> playerEntities = ES->GetEntitiesWithTag("Player");
-		clientPacket->transform.x = playerEntities[0]->pos.x;
-		clientPacket->transform.y = playerEntities[0]->pos.y;
-		clientPacket->transform.z = playerEntities[0]->pos.z;
-		clientPacket->transform.qw = playerEntities[0]->rot.w;
-		clientPacket->transform.qx = playerEntities[0]->rot.x;
-		clientPacket->transform.qy = playerEntities[0]->rot.y;
-		clientPacket->transform.qz = playerEntities[0]->rot.z;
+		clientPacket->transform.x = playerEntities[0]->transform.position.x;
+		clientPacket->transform.y = playerEntities[0]->transform.position.y;
+		clientPacket->transform.z = playerEntities[0]->transform.position.z;
+		clientPacket->transform.qw = playerEntities[0]->transform.Rotation.w;
+		clientPacket->transform.qx = playerEntities[0]->transform.Rotation.x;
+		clientPacket->transform.qy = playerEntities[0]->transform.Rotation.y;
+		clientPacket->transform.qz = playerEntities[0]->transform.Rotation.z;
 
 		dataPacket = enet_packet_create(clientPacket, sizeof(ClientPacket), ENET_PACKET_FLAG_RELIABLE);
 		enet_peer_send(peer, 0, dataPacket); // finally the packet is sent

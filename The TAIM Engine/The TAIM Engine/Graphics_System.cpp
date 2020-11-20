@@ -80,18 +80,18 @@ void Graphics_System::Update() {
 
 
 	for (int i = 0; i < ListOfMeshRenderers.size(); i++) {
-		ListOfMeshRenderers[i].model = glm::translate(glm::mat4(1.0), ListOfMeshRenderers[i].GO->pos);
-		ListOfMeshRenderers[i].model *= glm::toMat4(ListOfMeshRenderers[i].GO->rot);
-		ListOfMeshRenderers[i].model = glm::scale(ListOfMeshRenderers[i].model, ListOfMeshRenderers[i].GO->scale);
+		ListOfMeshRenderers[i].model = glm::translate(glm::mat4(1.0), ListOfMeshRenderers[i].GO->transform.position);
+		ListOfMeshRenderers[i].model *= glm::toMat4(ListOfMeshRenderers[i].GO->transform.Rotation);
+		ListOfMeshRenderers[i].model = glm::scale(ListOfMeshRenderers[i].model, ListOfMeshRenderers[i].GO->transform.scale);
 	}
 
 	for (int i = 0; i < Comm_Layer->GPBuffer.size(); i++) {
 		if (MeshRenderer* mr = (MeshRenderer*)Comm_Layer->GPBuffer[i].entity->GetComponent(ComponentType::MeshRenderer)) {
-			Comm_Layer->GPBuffer[i].entity->pos = Comm_Layer->GPBuffer[i].Position;
-			mr->model = glm::translate(glm::mat4(1.0), Comm_Layer->GPBuffer[i].entity->pos);
-			Comm_Layer->GPBuffer[i].entity->rot = Comm_Layer->GPBuffer[i].Rotation;
-			mr->model *= glm::mat4(Comm_Layer->GPBuffer[i].entity->rot);
-			mr->model = glm::scale(mr->model, Comm_Layer->GPBuffer[i].entity->scale);
+			Comm_Layer->GPBuffer[i].entity->transform.position = Comm_Layer->GPBuffer[i].Position;
+			mr->model = glm::translate(glm::mat4(1.0), Comm_Layer->GPBuffer[i].entity->transform.position);
+			Comm_Layer->GPBuffer[i].entity->transform.Rotation = Comm_Layer->GPBuffer[i].Rotation;
+			mr->model *= glm::mat4(Comm_Layer->GPBuffer[i].entity->transform.Rotation);
+			mr->model = glm::scale(mr->model, Comm_Layer->GPBuffer[i].entity->transform.scale);
 		}
 	}
 
@@ -129,8 +129,8 @@ void Graphics_System::DebugDraw() {
 void Graphics_System::UpdateTransformEv(Event* e) {
 	UpdateTransform* m = (UpdateTransform*)(e);
 
-	m->ListOfEntities[0]->pos = m->pos;
-	m->ListOfEntities[0]->rot = m->rot;
+	m->ListOfEntities[0]->transform.position = m->pos;
+	m->ListOfEntities[0]->transform.Rotation = m->rot;
 }
 
 void Graphics_System::GunShotFeedback(Event* e) {

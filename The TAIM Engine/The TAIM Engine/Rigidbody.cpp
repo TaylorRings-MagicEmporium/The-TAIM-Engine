@@ -12,8 +12,8 @@ Rigidbody::Rigidbody(btVector3 offset, float RBmass)
 void Rigidbody::Setup() {
 
 	RBTransform.setIdentity();
-	RBTransform.setOrigin(btVector3(GO->pos.x + offset.getX(), GO->pos.y + offset.getY(), GO->pos.z + offset.getZ()));
-	RBTransform.setRotation(btQuaternion(GO->rot.x, GO->rot.y, GO->rot.z, GO->rot.w));
+	RBTransform.setOrigin(btVector3(GO->transform.position.x + offset.getX(), GO->transform.position.y + offset.getY(), GO->transform.position.z + offset.getZ()));
+	RBTransform.setRotation(btQuaternion(GO->transform.Rotation.x, GO->transform.Rotation.y, GO->transform.Rotation.z, GO->transform.Rotation.w));
 
 	collider = (Collider*)GO->GetComponent(ComponentType::Collider);
 

@@ -181,8 +181,8 @@ void Physics_System::ResetTransformEv(Event* e) {
 		r->body->activate(true);
 		btTransform t;
 		r->motionState->getWorldTransform(t);
-		t.setOrigin(btVector3(m->ListOfEntities[i]->defaultPos.x, m->ListOfEntities[i]->defaultPos.y, m->ListOfEntities[i]->defaultPos.z));
-		t.setRotation(btQuaternion(m->ListOfEntities[i]->defaultRot.w, m->ListOfEntities[i]->defaultRot.x, m->ListOfEntities[i]->defaultRot.y, m->ListOfEntities[i]->defaultRot.z));
+		t.setOrigin(btVector3(m->ListOfEntities[i]->transform.position.x, m->ListOfEntities[i]->transform.position.y, m->ListOfEntities[i]->transform.position.z));
+		t.setRotation(btQuaternion(m->ListOfEntities[i]->transform.Rotation.w, m->ListOfEntities[i]->transform.Rotation.x, m->ListOfEntities[i]->transform.Rotation.y, m->ListOfEntities[i]->transform.Rotation.z));
 		r->body->clearForces();
 		
 		r->body->setAngularVelocity(btVector3(0,0,0));
@@ -220,10 +220,6 @@ void Physics_System::TestGunShot(Event* e) {
 				break;
 			}
 		}
-		//if (ListOfRigidbodies[i].body == closestResults.m_collisionObject) {
-		//	std::cout << ListOfRigidbodies[i].GO->tag << std::endl;
-		//	break;
-		//}
 	}
 
 	if (!success) {

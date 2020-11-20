@@ -2,25 +2,25 @@
 
 
 Entity::Entity(glm::vec3 StartingPosition, glm::quat StartingRotation, glm::vec3 StartingScale, std::string tag, std::string FileTag ) {
-	pos = StartingPosition;
-	rot = StartingRotation;
-	scale = StartingScale;
+	transform.position = StartingPosition;
+	transform.Rotation = StartingRotation;
+	transform.scale = StartingScale;
 
-	defaultPos = StartingPosition;
-	defaultRot = StartingRotation;
-	defaultScale = StartingScale;
+	transform.defaultPosition = StartingPosition;
+	transform.defaultRotation = StartingRotation;
+	transform.defaultScale = StartingScale;
 
 	this->Tag = tag;
 	this->FileTag = FileTag;
 }
 Entity::Entity() {
-	pos = glm::vec3(0);
-	rot = glm::quat(1,0,0,0);
-	scale = glm::vec3(1);
+	transform.position = glm::vec3(0);
+	transform.Rotation = glm::quat(1,0,0,0);
+	transform.scale = glm::vec3(1);
 
-	defaultPos = glm::vec3(0);
-	defaultRot = glm::quat(1, 0, 0, 0);
-	defaultScale = glm::vec3(1);
+	transform.defaultPosition = glm::vec3(0);
+	transform.defaultRotation = glm::quat(1, 0, 0, 0);
+	transform.defaultScale = glm::vec3(1);
 
 }
 
