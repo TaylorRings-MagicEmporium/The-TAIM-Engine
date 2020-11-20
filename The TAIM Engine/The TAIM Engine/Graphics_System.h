@@ -15,6 +15,7 @@ private:
 
 
 	void UpdateTransformEv(Event* e);
+	void GunShotFeedback(Event* e);
 public:
 	ShaderRegistry* SR;
 
@@ -41,4 +42,5 @@ public:
 	// draws speicifc debug visuals from multiple systems
 	void DebugDraw();
 
+	void ToggleHidingComponent(ComponentType c, Entity* e);
 };

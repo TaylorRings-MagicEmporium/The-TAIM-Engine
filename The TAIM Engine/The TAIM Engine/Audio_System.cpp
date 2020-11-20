@@ -38,6 +38,7 @@ void Audio_System::Update() {
 	typedef void (Audio_System::* method_function)(Event*);
 	method_function method_pointer[EVENT_TYPE_COUNT];
 	method_pointer[(int)EventType::PlaySound] = &Audio_System::EvPlaySound;
+	method_pointer[(int)EventType::GunShot] = &Audio_System::PlayGunShotSound;
 
 	while (Event* e = Event_Queue->PollEvents(SubSystemType::Audio)) {
 		method_function func = method_pointer[(int)e->GetType()];
@@ -59,4 +60,10 @@ void Audio_System::EvPlaySound(Event* e) {
 		AudioPlayer* a = (AudioPlayer*)e->ListOfEntities[i]->GetComponent(ComponentType::AudioPlayer);
 		a->PlaySound();
 	}
+}
+
+void Audio_System::PlayGunShotSound(Event* e) {
+	Gunshot* g = (Gunshot*)(e);
+	AudioPlayer* a = (AudioPlayer*)g->startEntity->GetComponent(ComponentType::AudioPlayer);
+	a->PlaySound();
 }

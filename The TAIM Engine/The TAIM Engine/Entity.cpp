@@ -9,6 +9,7 @@ Entity::Entity(glm::vec3 StartingPosition, glm::quat StartingRotation, glm::vec3
 	defaultPos = StartingPosition;
 	defaultRot = StartingRotation;
 	defaultScale = StartingScale;
+	this->tag = tag;
 }
 Entity::Entity() {
 	pos = glm::vec3(0);

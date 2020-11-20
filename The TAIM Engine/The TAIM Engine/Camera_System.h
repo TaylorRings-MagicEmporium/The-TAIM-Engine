@@ -9,6 +9,11 @@
 class Camera_System : public SubSystem
 {
 	glm::vec2 WindowSize;
+	Camera* ActiveCamera;
+
+	std::vector<Camera*> CameraList;
+
+	void GunshotInfo(Event* e);
 public:
 	Camera_System();
 	~Camera_System();
@@ -21,8 +26,6 @@ public:
 	Component* CreateStaticCamera(glm::vec3 target);
 	void SetActiveCamera(Camera* ActCamera);
 	Component* CreateFirstCamera(glm::vec3 offset);
-	Camera* ActiveCamera;
 
-	std::vector<Camera*> CameraList;
 };
 

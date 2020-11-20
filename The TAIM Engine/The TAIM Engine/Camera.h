@@ -43,5 +43,6 @@ public:
 	//gets the current UI projection matrix
 	glm::mat4 GetUIProj() { return UIProj;};
 
+	CameraTypes GetCamType() { return CamType; };
 
 };

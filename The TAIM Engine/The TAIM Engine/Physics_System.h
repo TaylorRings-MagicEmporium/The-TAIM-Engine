@@ -1,6 +1,7 @@
 #pragma once
 #include <bullet3-3.0.6/btBulletDynamicsCommon.h>
 #include "BulletContactResultCallback.h"
+#include <Bullet3-3.0.6/BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>
 #include "Rigidbody.h"
 //#include "Collider.h"
 #include <vector>
@@ -31,6 +32,7 @@ private:
 	void MoveRight(Event* e);
 	void FJump(Event* e);
 	void ResetTransformEv(Event* e);
+	void TestGunShot(Event* e);
 public:
 	Physics_System();
 	~Physics_System();
@@ -45,5 +47,9 @@ public:
 	Component* CreateRigidbody(glm::vec3 offset, float RBmass);
 	Component* CreateCubeCollider(glm::vec3 axisExtents);
 	Component* CreateSphereCollider(float radius);
+
+	void ToggleHidingComponent(ComponentType c, Entity* e);
+	
+	void HideAdjust(ComponentType c, Entity* e);
 };
 

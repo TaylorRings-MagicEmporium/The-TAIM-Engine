@@ -72,7 +72,7 @@ void Graphics_System::Update() {
 	typedef void (Graphics_System::* method_function)(Event*);
 	method_function method_pointer[EVENT_TYPE_COUNT];
 	method_pointer[(int)EventType::UpdateTransform] = &Graphics_System::UpdateTransformEv;
-
+	method_pointer[(int)EventType::GunShot] = &Graphics_System::GunShotFeedback;
 	while (Event* e = Event_Queue->PollEvents(SubSystemType::Graphics)) {
 		method_function func = method_pointer[(int)e->GetType()];
 		(this->*func)(e);
@@ -102,7 +102,10 @@ void Graphics_System::Update() {
 void Graphics_System::Draw() {
 
 	for (int i = 0; i < ListOfMeshRenderers.size(); i++) {
-		ListOfMeshRenderers[i].Draw();
+		if (!ListOfMeshRenderers[i].hide) {
+			ListOfMeshRenderers[i].Draw();
+		}
+
 	}
 	//glUseProgram(NULL);
 }
@@ -128,4 +131,16 @@ void Graphics_System::UpdateTransformEv(Event* e) {
 
 	m->ListOfEntities[0]->pos = m->pos;
 	m->ListOfEntities[0]->rot = m->rot;
+}
+
+void Graphics_System::GunShotFeedback(Event* e) {
+	std::cout << "HIT!" << std::endl;
+	for (int i = 0; i < e->ListOfEntities.size(); i++) {
+		ToggleHidingComponent(ComponentType::MeshRenderer,e->ListOfEntities[i]);
+	}
+
+}
+
+void Graphics_System::ToggleHidingComponent(ComponentType c, Entity* e) {
+	e->GetComponent(c)->hide = !e->GetComponent(c)->hide;
 }

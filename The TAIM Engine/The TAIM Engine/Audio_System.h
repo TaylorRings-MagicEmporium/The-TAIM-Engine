@@ -23,5 +23,6 @@ public:
 	Component* CreateAudioPlayer(std::string AudioPath);
 
 	void EvPlaySound(Event* e);
+	void PlayGunShotSound(Event* e);
 };
 

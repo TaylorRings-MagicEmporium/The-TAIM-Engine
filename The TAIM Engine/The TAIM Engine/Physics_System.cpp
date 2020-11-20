@@ -64,6 +64,7 @@ void Physics_System::ShutDown(){
 	collisionShapes.clear();
 }
 
+
 void Physics_System::Update()
 {
 
@@ -75,12 +76,14 @@ void Physics_System::Update()
 	method_pointer[(int)EventType::MoveRight] = &Physics_System::MoveRight;
 	method_pointer[(int)EventType::Jump] = &Physics_System::FJump;
 	method_pointer[(int)EventType::ResetTransform] = &Physics_System::ResetTransformEv;
+	method_pointer[(int)EventType::GunShot] = &Physics_System::TestGunShot;
 
 
 	while (Event* e = Event_Queue->PollEvents(SubSystemType::Physics)) {
 		method_function func = method_pointer[(int)e->GetType()];
 		(this->*func)(e);
 	}
+
 
 	dynamicWorld->stepSimulation(1.0f / 60.0f, 10);
 
@@ -192,6 +195,43 @@ void Physics_System::ResetTransformEv(Event* e) {
 	}
 }
 
+void Physics_System::TestGunShot(Event* e) {
+	std::cout << "PHYSICS SYSTEM: RECIEVED" << std::endl;
+	Gunshot* g = (Gunshot*)(e);
+	btVector3 startPoint = btVector3(g->startingPoint.x, g->startingPoint.y, g->startingPoint.z);
+	btVector3 EndPoint = startPoint + g->length * btVector3(g->direction.x, g->direction.y, g->direction.z);
+
+
+	btCollisionWorld::ClosestRayResultCallback closestResults(startPoint, EndPoint);
+	closestResults.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	dynamicWorld->rayTest(startPoint, EndPoint, closestResults);
+
+	bool success = false;
+
+	for (int i = 0; i < ListOfRigidbodies.size(); i++) {
+		if (ListOfRigidbodies[i].GO->tag == g->tagToReact) {
+			if (ListOfRigidbodies[i].body == closestResults.m_collisionObject) {
+
+				g->ListOfEntities.push_back(ListOfRigidbodies[i].GO);
+				ToggleHidingComponent(ComponentType::Rigidbody, ListOfRigidbodies[i].GO);
+				g->SubSystemOrder.push_back(SubSystemType::Graphics);
+				g->SubSystemOrder.push_back(SubSystemType::Audio);
+				success = true;
+				break;
+			}
+		}
+		//if (ListOfRigidbodies[i].body == closestResults.m_collisionObject) {
+		//	std::cout << ListOfRigidbodies[i].GO->tag << std::endl;
+		//	break;
+		//}
+	}
+
+	if (!success) {
+		std::cout << "NO HIT" << std::endl;
+		g->SubSystemOrder.push_back(SubSystemType::Audio);
+	}
+}
+
 void Physics_System::ColliderCallBack() {
 	btRigidBody* temp1 = ListOfRigidbodies[0].body;
 	btRigidBody* temp2 = ListOfRigidbodies[1].body;
@@ -200,5 +240,31 @@ void Physics_System::ColliderCallBack() {
 
 	if (a.bCollision) {
 		std::cout << "HIT" << std::endl;
+	}
+}
+
+void Physics_System::ToggleHidingComponent(ComponentType c, Entity* e) {
+	e->GetComponent(c)->hide = !e->GetComponent(c)->hide;
+	
+	HideAdjust(c, e);
+
+}
+
+void Physics_System::HideAdjust(ComponentType c, Entity* e) {
+
+	if (c == ComponentType::Rigidbody) {
+		if (e->GetComponent(c)->hide) {
+			Rigidbody* r = (Rigidbody*)e->GetComponent(c);
+			r->body->setCollisionFlags(r->body->getCollisionFlags() | btRigidBody::CF_DISABLE_VISUALIZE_OBJECT);
+			//r->body->setActivationState(DISABLE_SIMULATION);
+			dynamicWorld->removeRigidBody(r->body);
+
+		}
+		else {
+			Rigidbody* r = (Rigidbody*)e->GetComponent(c);
+			r->body->setCollisionFlags(r->body->getCollisionFlags() & ~btRigidBody::CF_DISABLE_VISUALIZE_OBJECT);
+			dynamicWorld->addRigidBody(r->body);
+		}
+
 	}
 }

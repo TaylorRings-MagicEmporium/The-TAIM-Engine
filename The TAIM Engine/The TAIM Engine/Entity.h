@@ -15,8 +15,7 @@ class Entity
 private:
 	// holds the components related to this entity instance.
 	std::map<ComponentType, Component*> ComponentList;
-	std::string tag;
-	std::string name;
+
 
 public:
 	// used for event testing.
@@ -27,6 +26,12 @@ public:
 	glm::vec3 defaultPos;
 	glm::quat defaultRot;
 	glm::vec3 defaultScale;
+
+	//std::string name;
+	std::string tag;
+	std::string FileTag;
+
+	bool hideEntity = false;
 
 	// initialisation of the entity class.
 	Entity(glm::vec3 StartingPosition, glm::quat StartingRotation,glm::vec3 StartingScale, std::string tag);

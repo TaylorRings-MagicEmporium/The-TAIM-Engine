@@ -29,11 +29,21 @@ Event* EventQueue::PollEvents(SubSystemType s) {
 
 void EventQueue::RemoveEmptyEvents() {
 	std::vector<Event*> NewList;
+	std::vector<Event*>::iterator it = EventsList.begin();
 	for (std::vector<Event*>::iterator it = EventsList.begin(); it != EventsList.end(); it++) {
+		bool destroy = true;
 		if ((*it)->SubSystemOrder.size() != 0) {
-			delete (*it);
-			it++;
+			destroy = false;
+		}
+		if (destroy) {
+			delete(*it);
+			continue;
+		}
+		else {
+			NewList.push_back(*it);
 		}
 	}
 
+	EventsList.clear();
+	EventsList = NewList;
 }

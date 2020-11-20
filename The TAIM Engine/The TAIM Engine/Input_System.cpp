@@ -107,4 +107,13 @@ void Input_System::CreateEvents() {
 		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 		Event_Queue->AddEventToStack(ev);
 	}
+	if (GetKeyPressed(KeyCode::KEY_RETURN) && !GetPrevKeyPressed(KeyCode::KEY_RETURN)) {
+		std::cout << "INPUT SYSTEM: RECIEVED" <<std::endl;
+		ev = new Gunshot();
+		Gunshot* g = (Gunshot*)(ev);
+		g->startEntity = playerEntites[0];
+		g->tagToReact = "Target";
+
+		Event_Queue->AddEventToStack(ev);
+	}
 }

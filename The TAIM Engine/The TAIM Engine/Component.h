@@ -14,5 +14,6 @@ class Component
 public:
 	ComponentType type;
 	Entity* GO;
+	bool hide = false;
 };
 
