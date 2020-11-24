@@ -2,6 +2,7 @@
 #include <enet/enet.h>
 #include <iostream>
 #include "SubSystem.h"
+#include "Entity_System.h"
 
 // a defined packet structure that holds the position and rotation value of an object
 struct TransformPacket {

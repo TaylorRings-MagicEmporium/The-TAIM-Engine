@@ -1,7 +1,9 @@
 #pragma once
-#include "Entity_System.h"
 #include <iostream>
 #include <vector>
+#include "Entity.h"
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 // the event type explains what kind of event this is.
 enum class EventType {
@@ -12,7 +14,7 @@ enum class EventType {
 	PlaySound};
 
 // the system enum is used to indicate which system should react to this specific event.
-enum class SubSystemType {Windows, Graphics, Physics, Audio, Network, System, Camera};
+enum class SubSystemType {Windows, Graphics, Physics, Audio, Network, System, Camera, EntityS};
 
 //for effective function pointing, the size of the EventType has to be recorded.
 const int EVENT_TYPE_COUNT = 9;
@@ -112,7 +114,7 @@ class Gunshot : public Event {
 public:
 	Gunshot() {
 		MyType = EventType::GunShot;
-		SubSystemOrder.push_back(SubSystemType::Camera);
+		SubSystemOrder.push_back(SubSystemType::EntityS);
 		SubSystemOrder.push_back(SubSystemType::Physics);
 	}
 	Entity* startEntity;

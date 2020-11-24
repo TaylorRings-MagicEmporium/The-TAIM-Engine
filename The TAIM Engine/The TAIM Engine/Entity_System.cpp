@@ -1,6 +1,7 @@
 #include "Entity_System.h"
 
 
+
 Entity_System::Entity_System() {
 
 }
@@ -39,4 +40,21 @@ void Entity_System::Update() {
 			ALL_ENTITIES[i]->transform.RightVector = glm::vec3(1, 0, 0) * ALL_ENTITIES[i]->transform.Rotation;
 		}
 	}
+
+	typedef void (Entity_System::* method_function)(Event*);
+	method_function method_pointer[EVENT_TYPE_COUNT];
+	method_pointer[(int)EventType::GunShot] = &Entity_System::GunshotInfo;
+
+	while (Event* e = Event_Queue->PollEvents(SubSystemType::EntityS)) {
+		method_function func = method_pointer[(int)e->GetType()];
+		(this->*func)(e);
+	}
+}
+
+void Entity_System::GunshotInfo(Event* e)
+{
+	std::cout << "ENTITY SYSTEM: RECIEVED" << std::endl;
+	Gunshot* g = (Gunshot*)(e);
+	g->startingPoint = g->startEntity->transform.position + g->startEntity->transform.forwardVector + glm::vec3(0,0.6,0);
+	g->direction = g->startEntity->transform.forwardVector;
 }

@@ -13,7 +13,7 @@ class Camera_System : public SubSystem
 
 	std::vector<Camera*> CameraList;
 
-	void GunshotInfo(Event* e);
+	//void GunshotInfo(Event* e);
 public:
 	Camera_System();
 	~Camera_System();
