@@ -28,7 +28,7 @@ int The_TAIM_Engine::SetupEngine() {
 	//Start up SDL and create window
 	bool Success = true;
 
-	SubSystemsList = std::vector<SubSystem*>{ &NS,&IS,&PS,&ES,&CS,&GS,&AS};
+	SubSystemsList = std::vector<SubSystem*>{ &NS,&IS,&PS,&AnS,&ES,&CS,&GS,&AS};
 
 
 	//Initialization flag
@@ -104,6 +104,7 @@ int The_TAIM_Engine::SetupEngine() {
 	FLS.ES = &ES;
 	FLS.AS = &AS;
 	FLS.CS = &CS;
+	FLS.AnS = &AnS;
 
 
 	for (int i = 0; i < SubSystemsList.size(); i++) {

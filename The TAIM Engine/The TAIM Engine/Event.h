@@ -9,15 +9,15 @@
 enum class EventType {
 	//Physics_Engine
 	MoveForward,MoveBackward,MoveLeft,MoveRight,Jump, ResetTransform,
-	UpdateTransform, GunShot, ChangeCamera,
+	UpdateTransform, GunShot, ChangeCamera, AnimationBegin, AnimationEnd,
 	
 	PlaySound};
 
 // the system enum is used to indicate which system should react to this specific event.
-enum class SubSystemType {Windows, Graphics, Physics, Audio, Network, System, Camera, EntityS};
+enum class SubSystemType {Windows, Graphics, Physics, Audio, Network, System, Camera, EntityS, Animation};
 
 //for effective function pointing, the size of the EventType has to be recorded.
-const int EVENT_TYPE_COUNT = 10;
+const int EVENT_TYPE_COUNT = 12;
 
 
 // the Event is a special container that is essential for the communication of systems by storing information needed for systems to evaluate it.
@@ -114,13 +114,10 @@ class Gunshot : public Event {
 public:
 	Gunshot() {
 		MyType = EventType::GunShot;
-		SubSystemOrder.push_back(SubSystemType::EntityS);
-		SubSystemOrder.push_back(SubSystemType::Physics);
 	}
 	Entity* startEntity;
 	glm::vec3 startingPoint;
 	glm::vec3 direction;
-
 	float length = 100;
 	std::string tagToReact = "//";
 };
@@ -132,5 +129,20 @@ public:
 		SubSystemOrder.push_back(SubSystemType::Camera);
 	}
 
+};
+
+class Animation : public Event {
+public:
+	Animation() {};
+};
+
+class AnimationBegin : public Animation {
+public:
+	AnimationBegin() { MyType = EventType::AnimationBegin; };
+};
+
+class AnimationEnd : public Animation {
+public:
+	AnimationEnd() { MyType = EventType::AnimationEnd; };
 };
 

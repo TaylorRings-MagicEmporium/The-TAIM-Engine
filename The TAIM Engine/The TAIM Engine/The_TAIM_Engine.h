@@ -37,6 +37,7 @@
 #include "Audio_System.h"
 #include "Network_System.h"
 #include "SubSystem.h"
+#include "Animation_System.h"
 
 class The_TAIM_Engine {
 
@@ -63,6 +64,7 @@ class The_TAIM_Engine {
 	Entity_System ES = Entity_System();
 	Network_System NS = Network_System();
 	Camera_System CS = Camera_System();
+	Animation_System AnS = Animation_System();
 
 	std::vector<SubSystem*> SubSystemsList;
 

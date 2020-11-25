@@ -144,6 +144,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation_System.cpp" />
+    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="AudioPlayer.cpp" />
     <ClCompile Include="Audio_System.cpp" />
     <ClCompile Include="Bullet_Debug_Drawer.cpp" />
@@ -178,6 +180,8 @@
     <ClCompile Include="The TAIM Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation_System.h" />
+    <ClInclude Include="Animator.h" />
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="Audio_System.h" />
     <ClInclude Include="BulletContactResultCallback.h" />
@@ -195,6 +199,7 @@
     <ClInclude Include="FileLoader_System.h" />
     <ClInclude Include="FirstCamera.h" />
     <ClInclude Include="Graphics_System.h" />
+    <ClInclude Include="TMaths.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Input_System.h" />
     <ClInclude Include="Mesh.h" />

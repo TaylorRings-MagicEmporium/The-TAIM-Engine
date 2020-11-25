@@ -34,6 +34,11 @@ void Entity_System::CloseEntitySystem() {
 }
 
 void Entity_System::Update() {
+	for (int i = 0; i < Comm_Layer->GPBuffer.size(); i++) {
+		Comm_Layer->GPBuffer[i].entity->transform.position = Comm_Layer->GPBuffer[i].Position;
+		Comm_Layer->GPBuffer[i].entity->transform.Rotation = Comm_Layer->GPBuffer[i].Rotation;
+	}
+
 	for (int i = 0; i < ALL_ENTITIES.size(); i++) {
 		if (ALL_ENTITIES[i]->transform.Rotation != glm::quat(1, 0, 0, 0)) {
 			ALL_ENTITIES[i]->transform.forwardVector = glm::vec3(0, 0, -1) * ALL_ENTITIES[i]->transform.Rotation;

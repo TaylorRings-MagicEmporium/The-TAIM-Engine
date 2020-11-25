@@ -111,6 +111,8 @@ void Input_System::CreateEvents() {
 		std::cout << "INPUT SYSTEM: RECIEVED" <<std::endl;
 		ev = new Gunshot();
 		Gunshot* g = (Gunshot*)(ev);
+		g->SubSystemOrder.push_back(SubSystemType::EntityS);
+		g->SubSystemOrder.push_back(SubSystemType::Physics);
 		g->startEntity = playerEntites[0];
 		g->tagToReact = "Target";
 

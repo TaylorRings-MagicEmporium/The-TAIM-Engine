@@ -11,6 +11,7 @@
 #include "Entity_System.h"
 #include "Audio_System.h"
 #include "Camera_System.h"
+#include "Animation_System.h"
 
 #include <vector>
 
@@ -46,6 +47,7 @@ public:
 	Entity_System* ES;
 	Audio_System* AS;
 	Camera_System* CS;
+	Animation_System* AnS;
 
 	FileLoader_System();
 	void LoadShaders();

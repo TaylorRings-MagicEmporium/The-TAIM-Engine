@@ -72,7 +72,8 @@ void Graphics_System::Update() {
 	typedef void (Graphics_System::* method_function)(Event*);
 	method_function method_pointer[EVENT_TYPE_COUNT];
 	method_pointer[(int)EventType::UpdateTransform] = &Graphics_System::UpdateTransformEv;
-	method_pointer[(int)EventType::GunShot] = &Graphics_System::GunShotFeedback;
+	//method_pointer[(int)EventType::GunShot] = &Graphics_System::GunShotFeedback;
+	method_pointer[(int)EventType::AnimationEnd] = &Graphics_System::HideAnimatedComponent;
 	while (Event* e = Event_Queue->PollEvents(SubSystemType::Graphics)) {
 		method_function func = method_pointer[(int)e->GetType()];
 		(this->*func)(e);
@@ -87,9 +88,7 @@ void Graphics_System::Update() {
 
 	for (int i = 0; i < Comm_Layer->GPBuffer.size(); i++) {
 		if (MeshRenderer* mr = (MeshRenderer*)Comm_Layer->GPBuffer[i].entity->GetComponent(ComponentType::MeshRenderer)) {
-			Comm_Layer->GPBuffer[i].entity->transform.position = Comm_Layer->GPBuffer[i].Position;
 			mr->model = glm::translate(glm::mat4(1.0), Comm_Layer->GPBuffer[i].entity->transform.position);
-			Comm_Layer->GPBuffer[i].entity->transform.Rotation = Comm_Layer->GPBuffer[i].Rotation;
 			mr->model *= glm::mat4(Comm_Layer->GPBuffer[i].entity->transform.Rotation);
 			mr->model = glm::scale(mr->model, Comm_Layer->GPBuffer[i].entity->transform.scale);
 		}
@@ -133,14 +132,21 @@ void Graphics_System::UpdateTransformEv(Event* e) {
 	m->ListOfEntities[0]->transform.Rotation = m->rot;
 }
 
-void Graphics_System::GunShotFeedback(Event* e) {
-	std::cout << "HIT!" << std::endl;
-	for (int i = 0; i < e->ListOfEntities.size(); i++) {
-		ToggleHidingComponent(ComponentType::MeshRenderer,e->ListOfEntities[i]);
-	}
-
-}
+//void Graphics_System::GunShotFeedback(Event* e) {
+//	//std::cout << "HIT!" << std::endl;
+//	//for (int i = 0; i < e->ListOfEntities.size(); i++) {
+//	//	ToggleHidingComponent(ComponentType::MeshRenderer,e->ListOfEntities[i]);
+//	//}
+//
+//}
 
 void Graphics_System::ToggleHidingComponent(ComponentType c, Entity* e) {
 	e->GetComponent(c)->hide = !e->GetComponent(c)->hide;
+}
+
+void Graphics_System::HideAnimatedComponent(Event* e) {
+	for (int i = 0; i < e->ListOfEntities.size(); i++) {
+		ToggleHidingComponent(ComponentType::MeshRenderer, e->ListOfEntities[i]);
+	}
+
 }

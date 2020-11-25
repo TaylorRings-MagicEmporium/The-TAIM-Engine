@@ -24,6 +24,7 @@ Event* EventQueue::PollEvents(SubSystemType s) {
 		//return 1;
 	}
 	EventCounter = 0;
+
 	return nullptr;
 }
 

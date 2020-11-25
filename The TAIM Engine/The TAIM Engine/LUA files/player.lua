@@ -176,6 +176,11 @@ EntityList = {
 				z = 0
 			},
 			mass = 0.0
+		},
+		Animator = {
+			Type = "Bubble_shrink",
+			loop = false,
+			start = false
 		}
 	},
 	StatCamera = {

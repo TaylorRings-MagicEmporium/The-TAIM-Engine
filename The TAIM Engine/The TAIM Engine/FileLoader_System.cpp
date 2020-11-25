@@ -203,6 +203,13 @@ void FileLoader_System::LoadEntities()
 			}
 
 		}
+
+		//ANIMATOR
+		LuaRef ani = ComponentView["Animator"];
+		if (!ani.isNil()) {
+			bool temp = ani["start"].cast<bool>();
+			object->SetComponent(AnS->CreateAnimator(ani["Type"].cast<std::string>(), ani["loop"].cast<bool>(), ani["start"].cast<bool>()));
+		}
 	}
 	std::cout << "objects loaded correctly!" << std::endl;
 }

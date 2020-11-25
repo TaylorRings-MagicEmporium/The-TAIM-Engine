@@ -15,7 +15,8 @@ private:
 
 
 	void UpdateTransformEv(Event* e);
-	void GunShotFeedback(Event* e);
+	//void GunShotFeedback(Event* e);
+	void HideAnimatedComponent(Event* e);
 public:
 	ShaderRegistry* SR;
 

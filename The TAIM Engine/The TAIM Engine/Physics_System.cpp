@@ -214,8 +214,9 @@ void Physics_System::TestGunShot(Event* e) {
 
 				g->ListOfEntities.push_back(ListOfRigidbodies[i].GO);
 				ToggleHidingComponent(ComponentType::Rigidbody, ListOfRigidbodies[i].GO);
-				g->SubSystemOrder.push_back(SubSystemType::Graphics);
+				g->SubSystemOrder.push_back(SubSystemType::Animation);
 				g->SubSystemOrder.push_back(SubSystemType::Audio);
+
 				success = true;
 				break;
 			}
