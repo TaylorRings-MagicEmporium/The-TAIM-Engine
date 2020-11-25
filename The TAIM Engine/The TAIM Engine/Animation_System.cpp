@@ -76,4 +76,6 @@ void Animation_System::BeginAnimation(Event* e) {
 	}
 }
 
-
+void Animation_System::ResetSystem() {
+	ListOfAnimators.clear();
+}

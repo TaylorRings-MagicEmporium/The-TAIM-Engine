@@ -32,7 +32,7 @@ public:
 	void Startup();
 	void ShutDown();
 	void SetComponentSize(int size);
-
+	void ResetSystem();
 	// creates a mesh renderer that is capable of displaying something on the screen.
 	// it returns the pointer of it the the entity that required it.
 	MeshRenderer* CreateMeshRenderer(std::string path, Shader* shader, bool flip);

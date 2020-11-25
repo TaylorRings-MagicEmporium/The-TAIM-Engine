@@ -41,6 +41,7 @@ public:
 	void ShutDown();
 	void Update();
 	void SetComponentSize(int size);
+	void ResetSystem();
 
 	void ColliderCallBack();
 

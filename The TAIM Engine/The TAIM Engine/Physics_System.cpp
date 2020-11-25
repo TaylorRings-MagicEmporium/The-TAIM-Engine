@@ -253,7 +253,6 @@ void Physics_System::HideAdjust(ComponentType c, Entity* e) {
 		if (e->GetComponent(c)->hide) {
 			Rigidbody* r = (Rigidbody*)e->GetComponent(c);
 			r->body->setCollisionFlags(r->body->getCollisionFlags() | btRigidBody::CF_DISABLE_VISUALIZE_OBJECT);
-			//r->body->setActivationState(DISABLE_SIMULATION);
 			dynamicWorld->removeRigidBody(r->body);
 
 		}
@@ -262,6 +261,14 @@ void Physics_System::HideAdjust(ComponentType c, Entity* e) {
 			r->body->setCollisionFlags(r->body->getCollisionFlags() & ~btRigidBody::CF_DISABLE_VISUALIZE_OBJECT);
 			dynamicWorld->addRigidBody(r->body);
 		}
-
 	}
+}
+
+void Physics_System::ResetSystem() {
+	for (int i = 0; i < ListOfRigidbodies.size(); i++) {
+		dynamicWorld->removeRigidBody(ListOfRigidbodies[i].body);
+	}
+	ListOfRigidbodies.clear();
+	ListOfColliders.clear();
+
 }

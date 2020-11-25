@@ -11,7 +11,8 @@ public:
 	virtual void LateUpdate() {};
 	virtual void SetComponentSize(int Comsize) {};
 	virtual void ToggleHidingComponent(ComponentType c, Entity* e) {};
-	
+	virtual void ResetSystem() {};
+
 	void AssignLayers(EventQueue* EQ, Communication_Layer* CL) {
 		Event_Queue = EQ;
 		Comm_Layer = CL;

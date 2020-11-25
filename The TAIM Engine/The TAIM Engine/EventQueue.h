@@ -27,5 +27,7 @@ public:
 
 	// this just returns the number of events in the queue.
 	inline int GetTotalEvents() { return EventsList.size(); };
+
+	void ResetQueue();
 };
 

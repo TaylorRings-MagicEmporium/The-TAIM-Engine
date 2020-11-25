@@ -67,3 +67,7 @@ void Audio_System::PlayGunShotSound(Event* e) {
 	AudioPlayer* a = (AudioPlayer*)g->startEntity->GetComponent(ComponentType::AudioPlayer);
 	a->PlaySound();
 }
+
+void Audio_System::ResetSystem() {
+	ListOfAudioPlayers.clear();
+}

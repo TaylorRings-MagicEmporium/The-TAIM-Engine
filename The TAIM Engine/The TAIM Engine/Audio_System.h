@@ -21,6 +21,7 @@ public:
 	void Startup();
 	void SetComponentSize(int size);
 	Component* CreateAudioPlayer(std::string AudioPath);
+	void ResetSystem();
 
 	void EvPlaySound(Event* e);
 	void PlayGunShotSound(Event* e);

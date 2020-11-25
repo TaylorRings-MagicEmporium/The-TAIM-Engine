@@ -148,5 +148,9 @@ void Graphics_System::HideAnimatedComponent(Event* e) {
 	for (int i = 0; i < e->ListOfEntities.size(); i++) {
 		ToggleHidingComponent(ComponentType::MeshRenderer, e->ListOfEntities[i]);
 	}
-
 }
+
+void Graphics_System::ResetSystem() {
+	ListOfMeshRenderers.clear();
+}
+

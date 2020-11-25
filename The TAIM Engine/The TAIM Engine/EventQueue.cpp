@@ -48,3 +48,9 @@ void EventQueue::RemoveEmptyEvents() {
 	EventsList.clear();
 	EventsList = NewList;
 }
+
+void EventQueue::ResetQueue() {
+	for (int i = 0; i < EventsList.size(); i++) {
+		delete EventsList[i];
+	}
+}

@@ -23,6 +23,7 @@ public:
 	void Startup();
 	void ShutDown();
 	void Update();
+	void ResetSystem();
 	void SetComponentSize(int size);
 	void SetWindowSize(glm::vec2 size);
 	Component* CreateStaticCamera(glm::vec3 target);

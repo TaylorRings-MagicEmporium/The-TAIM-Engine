@@ -24,6 +24,7 @@ public:
 	void Shutdown();
 	void Update();
 	void SetComponentSize(int size);
+	void ResetSystem();
 	Animator* CreateAnimator(std::string type, bool IsLooping, bool StartOnLoad);
 
 };

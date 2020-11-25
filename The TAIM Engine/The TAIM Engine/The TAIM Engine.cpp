@@ -184,11 +184,16 @@ int The_TAIM_Engine::StartEngine() {
 
 		//finds out the total events in the queue.
 		//std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
-		
-		// SYSTEM EVENT QUEUE CHECKUP
-		// each system must have access to the current event queue and do it's own polling to apply the correct results.
-		
-		
+			
+		typedef void (The_TAIM_Engine::* method_function)(Event*);
+		method_function method_pointer[EVENT_TYPE_COUNT];
+		method_pointer[(int)EventType::ResetAllSystems] = &The_TAIM_Engine::ResetSystems;
+
+		while (Event* e = Event_Queue.PollEvents(SubSystemType::System)) {
+			method_function func = method_pointer[(int)e->GetType()];
+			(this->*func)(e);
+		}
+
 		// removes events that are not needed anymore
 		Event_Queue.RemoveEmptyEvents();
 
@@ -208,3 +213,12 @@ int The_TAIM_Engine::StartEngine() {
 	//delete ev;
 	return 0;
 }
+
+
+void The_TAIM_Engine::ResetSystems(Event* e)
+{
+	for (int i = 0; i < SubSystemsList.size(); i++) {
+		SubSystemsList[i]->ResetSystem();
+	}
+}
+

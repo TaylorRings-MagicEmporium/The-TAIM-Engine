@@ -17,10 +17,13 @@ void Camera_System::SetComponentSize(int size) {
 }
 
 void Camera_System::Update() {
-	ActiveCamera->UpdateCamera(WindowSize);
-	Comm_Layer->proj = ActiveCamera->GetProj();
-	Comm_Layer->UIProj = ActiveCamera->GetUIProj();
-	Comm_Layer->view = ActiveCamera->GetView();
+	if (ActiveCamera != nullptr) {
+		ActiveCamera->UpdateCamera(WindowSize);
+		Comm_Layer->proj = ActiveCamera->GetProj();
+		Comm_Layer->UIProj = ActiveCamera->GetUIProj();
+		Comm_Layer->view = ActiveCamera->GetView();
+	}
+
 
 	typedef void (Camera_System::* method_function)(Event*);
 	method_function method_pointer[EVENT_TYPE_COUNT];
@@ -68,4 +71,13 @@ void Camera_System::SwapCamera(Event* e) {
 		cameraCounter = 0;
 	}
 	ActiveCamera = CameraList[cameraCounter];
+}
+
+void Camera_System::ResetSystem() {
+	for (int i = 0; i < CameraList.size(); i++) {
+		delete CameraList[i];
+	}
+	CameraList.clear();
+	ActiveCamera = nullptr;
+	cameraCounter = 0;
 }

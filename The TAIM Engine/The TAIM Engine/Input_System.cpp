@@ -122,4 +122,9 @@ void Input_System::CreateEvents() {
 		ev = new ChangeCamera();
 		Event_Queue->AddEventToStack(ev);
 	}
+	if (GetKeyPressed(KeyCode::KEY_0) && !GetPrevKeyPressed(KeyCode::KEY_0)) {
+		ev = new ResetAllSystems();
+		ev->SubSystemOrder.push_back(SubSystemType::System);
+		Event_Queue->AddEventToStack(ev);
+	}
 }

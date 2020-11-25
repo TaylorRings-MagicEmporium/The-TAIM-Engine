@@ -34,6 +34,7 @@ public:
 	// generic update of the camera using the width and height from the engine
 	virtual void UpdateCamera(glm::vec2 size) = 0;
 
+
 	//gets the current projection matrix 
 	glm::mat4 GetProj() { return proj; };
 
