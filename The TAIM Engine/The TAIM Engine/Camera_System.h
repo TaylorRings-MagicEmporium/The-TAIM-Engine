@@ -6,14 +6,16 @@
 #include "SubSystem.h"
 
 
+
 class Camera_System : public SubSystem
 {
 	glm::vec2 WindowSize;
 	Camera* ActiveCamera;
 
 	std::vector<Camera*> CameraList;
+	int cameraCounter = 0;
 
-	//void GunshotInfo(Event* e);
+	void SwapCamera(Event* e);
 public:
 	Camera_System();
 	~Camera_System();

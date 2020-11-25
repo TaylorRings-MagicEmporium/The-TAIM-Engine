@@ -1,8 +1,5 @@
 #include "Network_System.h"
 
-
-
-
 Network_System::Network_System() {
 
 }

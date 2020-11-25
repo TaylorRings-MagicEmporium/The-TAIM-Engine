@@ -22,14 +22,14 @@ void Camera_System::Update() {
 	Comm_Layer->UIProj = ActiveCamera->GetUIProj();
 	Comm_Layer->view = ActiveCamera->GetView();
 
-	//typedef void (Camera_System::* method_function)(Event*);
-	//method_function method_pointer[EVENT_TYPE_COUNT];
-	//method_pointer[(int)EventType::GunShot] = &Camera_System::GunshotInfo;
+	typedef void (Camera_System::* method_function)(Event*);
+	method_function method_pointer[EVENT_TYPE_COUNT];
+	method_pointer[(int)EventType::ChangeCamera] = &Camera_System::SwapCamera;
 
-	//while (Event* e = Event_Queue->PollEvents(SubSystemType::Camera)) {
-	//	method_function func = method_pointer[(int)e->GetType()];
-	//	(this->*func)(e);
-	//}
+	while (Event* e = Event_Queue->PollEvents(SubSystemType::Camera)) {
+		method_function func = method_pointer[(int)e->GetType()];
+		(this->*func)(e);
+	}
 }
 
 void Camera_System::ShutDown() {
@@ -62,16 +62,10 @@ Component* Camera_System::CreateFirstCamera(glm::vec3 offset) {
 	return CameraList.back();
 }
 
-//void Camera_System::GunshotInfo(Event* e) {
-//	std::cout << "CAMERA SYSTEM: RECIEVED" << std::endl;
-//	Gunshot* g = (Gunshot*)(e);
-//	if (ActiveCamera->GetCamType() == CameraTypes::FIRST) {
-//		FirstCamera* fc = (FirstCamera*)ActiveCamera;
-//		g->startingPoint = fc->EyePoint;
-//		g->direction = fc->CamDirection;
-//	}
-//	else if (ActiveCamera->GetCamType() == CameraTypes::STATIC) {
-//		//scream
-//	}
-//
-//}
+void Camera_System::SwapCamera(Event* e) {
+	cameraCounter++;
+	if (cameraCounter > CameraList.size() - 1) {
+		cameraCounter = 0;
+	}
+	ActiveCamera = CameraList[cameraCounter];
+}

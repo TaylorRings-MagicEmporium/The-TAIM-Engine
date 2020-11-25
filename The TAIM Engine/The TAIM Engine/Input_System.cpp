@@ -116,4 +116,8 @@ void Input_System::CreateEvents() {
 
 		Event_Queue->AddEventToStack(ev);
 	}
+	if (GetKeyPressed(KeyCode::KEY_P) && !GetPrevKeyPressed(KeyCode::KEY_P)) {
+		ev = new ChangeCamera();
+		Event_Queue->AddEventToStack(ev);
+	}
 }

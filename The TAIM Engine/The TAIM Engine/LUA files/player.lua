@@ -186,14 +186,14 @@ EntityList = {
 				z = 20
 			},
 			Tag = "SceneCamera"
-		}
-		--Camera = {
-		--	Type = "STATIC",
-		--	Target = {
-		--		x = 0,
-		--		y = 0,
-		--		z = 9
-		--	}
-		--}	
+		},
+		Camera = {
+			Type = "STATIC",
+			Target = {
+				x = 0,
+				y = 0,
+				z = 9
+			}
+		}	
 	}
 }

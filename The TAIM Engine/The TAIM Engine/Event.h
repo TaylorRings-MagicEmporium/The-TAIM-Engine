@@ -9,7 +9,7 @@
 enum class EventType {
 	//Physics_Engine
 	MoveForward,MoveBackward,MoveLeft,MoveRight,Jump, ResetTransform,
-	UpdateTransform, GunShot,
+	UpdateTransform, GunShot, ChangeCamera,
 	
 	PlaySound};
 
@@ -17,7 +17,7 @@ enum class EventType {
 enum class SubSystemType {Windows, Graphics, Physics, Audio, Network, System, Camera, EntityS};
 
 //for effective function pointing, the size of the EventType has to be recorded.
-const int EVENT_TYPE_COUNT = 9;
+const int EVENT_TYPE_COUNT = 10;
 
 
 // the Event is a special container that is essential for the communication of systems by storing information needed for systems to evaluate it.
@@ -123,5 +123,14 @@ public:
 
 	float length = 100;
 	std::string tagToReact = "//";
+};
+
+class ChangeCamera : public Event {
+public:
+	ChangeCamera() {
+		MyType = EventType::ChangeCamera;
+		SubSystemOrder.push_back(SubSystemType::Camera);
+	}
+
 };
 

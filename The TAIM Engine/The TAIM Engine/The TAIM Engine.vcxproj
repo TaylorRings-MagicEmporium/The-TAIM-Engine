@@ -123,7 +123,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>lua54.lib;assimp-vc142-mtd.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib;fmodstudio_vc.lib;fmodstudioL_vc.lib;fsbank_vc.lib;fmod_vc.lib;fmodL_vc.lib;enet64.lib;winmm.lib;ws2_32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lua54.lib;assimp-vc142-mtd.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib;fmodstudio_vc.lib;fmodstudioL_vc.lib;fsbank_vc.lib;fmod_vc.lib;fmodL_vc.lib;enet64.lib;ws2_32.lib;winmm.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
