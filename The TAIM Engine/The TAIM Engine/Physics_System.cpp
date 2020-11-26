@@ -206,11 +206,13 @@ void Physics_System::TestGunShot(Event* e) {
 	for (int i = 0; i < ListOfRigidbodies.size(); i++) {
 		if (ListOfRigidbodies[i].GO->GetTag() == g->tagToReact) {
 			if (ListOfRigidbodies[i].body == closestResults.m_collisionObject) {
-
+				std::cout << ListOfRigidbodies[i].GO->GetName() << std::endl;
 				g->ListOfEntities.push_back(ListOfRigidbodies[i].GO);
 				ToggleHidingComponent(ComponentType::Rigidbody, ListOfRigidbodies[i].GO);
+
 				g->SubSystemOrder.push_back(SubSystemType::Animation);
 				g->SubSystemOrder.push_back(SubSystemType::Audio);
+				g->SubSystemOrder.push_back(SubSystemType::Network);
 				Profiling_System::GetInstance()->IncrementPlayer1Hit();
 				success = true;
 				break;

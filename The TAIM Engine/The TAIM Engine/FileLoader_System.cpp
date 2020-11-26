@@ -74,6 +74,7 @@ void FileLoader_System::LoadEntities()
 
 		//TRANSFORM
 		TempTransData TTD;
+		TTD.name = entityStrings.at(a);
 		TTD.FileTag = FTag;
 		LuaRef transform = ComponentView["Transform"];
 		if (!transform.isNil()) {
@@ -115,7 +116,7 @@ void FileLoader_System::LoadEntities()
 			//std::cout << "NO TRANSFORM" << std::endl;
 		}
 
-		Entity* object = ES->CreateEntity(TTD.position, glm::angleAxis(glm::radians(TTD.degrees), glm::normalize(TTD.rotateAxis)),TTD.scale,TTD.tag, TTD.FileTag);
+		Entity* object = ES->CreateEntity(TTD.position, glm::angleAxis(glm::radians(TTD.degrees), glm::normalize(TTD.rotateAxis)),TTD.scale,TTD.tag, TTD.FileTag, TTD.name);
 
 		//MESH RENDEREER
 		LuaRef meshRend = ComponentView["MeshRenderer"];

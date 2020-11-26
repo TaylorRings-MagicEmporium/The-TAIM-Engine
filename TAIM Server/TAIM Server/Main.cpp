@@ -42,7 +42,7 @@ int main(int argc, char* args[]) {
 	}
 
 	int clientCount = 0;
-
+	int* packetType = new int;
 	if (enet_initialize() != 0) {
 		std::cout << "Enet failed to initialise!" << "\n\n";
 	}
@@ -139,6 +139,9 @@ int main(int argc, char* args[]) {
 				break;
 				// when a client sends a packet and the server recieves it
 			case ENET_EVENT_TYPE_RECEIVE:
+
+				//memcpy(packetType, enetEvent.packet->data, enetEvent.packet->dataLength);
+				//if(*packetType == 0)
 				// memcpy copies the actual data (1's and 0's) to a position pointer. as the data is the same length as "transform",
 				// we can access it with ease with clientPacket acting as our safe buffer.
 				memcpy(clientPacket, enetEvent.packet->data, enetEvent.packet->dataLength);

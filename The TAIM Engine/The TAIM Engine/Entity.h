@@ -20,6 +20,7 @@ private:
 	//std::string name;
 	std::string Tag;
 	std::string FileTag;
+	std::string name;
 public:
 	// used for event testing.
 	Transform transform;
@@ -27,7 +28,7 @@ public:
 	bool hideEntity = false;
 
 	// initialisation of the entity class.
-	Entity(glm::vec3 StartingPosition, glm::quat StartingRotation,glm::vec3 StartingScale, std::string tag, std::string FileTag);
+	Entity(glm::vec3 StartingPosition, glm::quat StartingRotation,glm::vec3 StartingScale, std::string tag, std::string FileTag, std::string name);
 	Entity();
 	
 	// sets the component by it's component type into a map, for easier looking up.
@@ -38,6 +39,7 @@ public:
 
 	std::string GetTag() { return Tag; };
 	std::string GetFileTag() { return FileTag; };
+	std::string GetName() { return name; };
 	
 };
 

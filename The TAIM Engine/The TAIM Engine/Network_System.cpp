@@ -1,5 +1,7 @@
 #include "Network_System.h"
 
+
+
 Network_System::Network_System() {
 
 }
@@ -9,7 +11,7 @@ Network_System::~Network_System() {
 
 void Network_System::Update() {
 	int count = 0;
-	bool PacketPass[2] = { false,false }; // PacketPass ensures that only one packet can be recieved for each packet.
+	bool PacketPass[3] = { false,false, false }; // PacketPass ensures that only one packet can be recieved for each packet.
 	// if this didn't exist, then hundreds of events would be added, even when they do the same thing.
 	while (enet_host_service(client, &enetEvent, 0) > 0) {
 		switch (enetEvent.type) {
@@ -27,7 +29,7 @@ void Network_System::Update() {
 			}
 			else if (*packetType == 1 && !PacketPass[1]) {
 				//std::cout << "update Packet Recieved!" << std::endl;
-				count++;
+				//count++;
 				memcpy(serverData, enetEvent.packet->data, sizeof(PhysicsData));
 
 				std::vector<Entity*> ghostEntities = ES->GetEntitiesWithTag("Ghost");
@@ -44,6 +46,9 @@ void Network_System::Update() {
 					}
 				}
 				PacketPass[1] = true;
+			}
+			else if (*packetType == 2 && !PacketPass[2]) {
+				//memcpy()
 			}
 
 			break;
@@ -84,26 +89,46 @@ void Network_System::Startup() {
 		std::cout << "No available peers for initializing an Enet connection." << std::endl;
 	}
 
-
 	*packetType = -1;
 }
 
 void Network_System::LateUpdate() {
 	// due to the nature of networking, a post update is needed to send a packet AFTER the client's transform is updated.
 	if (serverConnect) {
-		clientPacket->clientIndex = clientIndex;
-		//clientPacket->position.x = 100.0f;
-		//clientPacket->position.y = 300.0f;
-		std::vector<Entity*> playerEntities = ES->GetEntitiesWithTag("Player");
-		clientPacket->transform.x = playerEntities[0]->transform.position.x;
-		clientPacket->transform.y = playerEntities[0]->transform.position.y;
-		clientPacket->transform.z = playerEntities[0]->transform.position.z;
-		clientPacket->transform.qw = playerEntities[0]->transform.Rotation.w;
-		clientPacket->transform.qx = playerEntities[0]->transform.Rotation.x;
-		clientPacket->transform.qy = playerEntities[0]->transform.Rotation.y;
-		clientPacket->transform.qz = playerEntities[0]->transform.Rotation.z;
 
-		dataPacket = enet_packet_create(clientPacket, sizeof(ClientPacket), ENET_PACKET_FLAG_RELIABLE);
-		enet_peer_send(peer, 0, dataPacket); // finally the packet is sent
+		SendTranformPacket();
+
+		//typedef void (Network_System::* method_function)(Event*);
+		//method_function method_pointer[EVENT_TYPE_COUNT];
+		//method_pointer[(int)EventType::GunShot] = &Network_System::SendTargetPacket;
+
+
 	}
+}
+
+void Network_System::SendTranformPacket()
+{
+	clientPacket->clientIndex = clientIndex;
+	//clientPacket->position.x = 100.0f;
+	//clientPacket->position.y = 300.0f;
+	std::vector<Entity*> playerEntities = ES->GetEntitiesWithTag("Player");
+	clientPacket->transform.x = playerEntities[0]->transform.position.x;
+	clientPacket->transform.y = playerEntities[0]->transform.position.y;
+	clientPacket->transform.z = playerEntities[0]->transform.position.z;
+	clientPacket->transform.qw = playerEntities[0]->transform.Rotation.w;
+	clientPacket->transform.qx = playerEntities[0]->transform.Rotation.x;
+	clientPacket->transform.qy = playerEntities[0]->transform.Rotation.y;
+	clientPacket->transform.qz = playerEntities[0]->transform.Rotation.z;
+
+	dataPacket = enet_packet_create(clientPacket, sizeof(ClientPacket), ENET_PACKET_FLAG_RELIABLE);
+	enet_peer_send(peer, 0, dataPacket); // finally the packet is sent
+}
+
+void Network_System::SendTargetPacket(Event* e)
+{
+	//Gunshot* g = (Gunshot*)(e);
+	//targetPacket->TargetName = g->ListOfEntities[0]->GetName();
+	//targetPacket->clientIndex = clientIndex;
+	//dataPacket = enet_packet_create(targetPacket, sizeof(TargetHitPacket), ENET_PACKET_FLAG_RELIABLE);
+	//
 }

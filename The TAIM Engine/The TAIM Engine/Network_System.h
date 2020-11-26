@@ -29,23 +29,39 @@ struct ClientPacket {
 	TransformPacket transform;
 };
 
+//struct TargetHitPacket
+//{
+//	int packetType = 2;
+//	int clientIndex = -1;
+//	std::string TargetName;
+//};
+
 //The Network system is responsible with sending and recieving packages, and finally put them into
 //an event that the rest of the engine can use. The Network system will act similar to the Event system.
 class Network_System : public SubSystem
 {
-public:
+private:
 	ENetAddress address;
 	ENetHost* client;
 	ENetPeer* peer;
 	ENetEvent enetEvent;
 
-	Entity_System* ES;
-
 	PhysicsData* serverData = new PhysicsData;
 	ClientData* clientData = new ClientData;
+	ClientPacket* clientPacket = new ClientPacket;
+	//TargetHitPacket* targetPacket = new TargetHitPacket;
+
+	void SendTranformPacket();
+	void SendTargetPacket(Event* e);
+public:
+
+
+	Entity_System* ES;
+
+
 	int* packetType = new int;
 
-	ClientPacket* clientPacket = new ClientPacket;
+
 	ENetPacket* dataPacket;
 
 	int clientIndex = -1;

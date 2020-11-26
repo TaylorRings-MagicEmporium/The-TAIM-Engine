@@ -28,7 +28,8 @@ struct TempTransData {
 	glm::vec3 rotateAxis = glm::vec3(1);
 	glm::vec3 scale = glm::vec3(1);
 	std::string tag = "undefined";
-	std::string FileTag = "";
+	std::string FileTag = "undefined";
+	std::string name = "undefined";
 };
 
 
