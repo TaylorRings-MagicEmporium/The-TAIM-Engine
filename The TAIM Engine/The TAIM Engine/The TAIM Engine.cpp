@@ -18,7 +18,7 @@ void The_TAIM_Engine::close()
 	for (int i = 0; i < SubSystemsList.size(); i++) {
 		SubSystemsList[i]->ShutDown();
 	}
-
+	Profiling_System::GetInstance()->ShutDown();
 	//Quit SDL subsystems
 	SDL_Quit();
 	ES.CloseEntitySystem();
@@ -91,8 +91,9 @@ int The_TAIM_Engine::SetupEngine() {
 		}
 	}
 
-	CS.SetWindowSize(CD.ScreenSize);
 
+	CS.SetWindowSize(CD.ScreenSize);
+	Profiling_System::GetInstance()->ApplySDLContext(gWindow, gContext);
 	GS.SR = &SR;
 
 	NS.ES = &ES;
@@ -122,6 +123,7 @@ int The_TAIM_Engine::SetupEngine() {
 		SubSystemsList[i]->AssignLayers(&Event_Queue, &CL);
 		SubSystemsList[i]->Startup();
 	}
+	Profiling_System::GetInstance()->Startup();
 
 	if (!success)
 	{
@@ -133,7 +135,7 @@ int The_TAIM_Engine::SetupEngine() {
 
 int The_TAIM_Engine::StartEngine() {
 
-	//sets up procedure for the Graphics System
+
 
 	//used to exit the loop if needed
 	bool quit = false;
@@ -142,7 +144,6 @@ int The_TAIM_Engine::StartEngine() {
 	SDL_Event e;
 
 	// the main game loop of the program
-
 	int count = 0;
 	while (!quit)
 	{
@@ -178,6 +179,7 @@ int The_TAIM_Engine::StartEngine() {
 			timeList.push_back(SDL_GetTicks());
 			SubSystemsList[i]->Update();
 		}
+		Profiling_System::GetInstance()->Update();
 
 		//std::cout << "PHYSICS: " << (t2 - t1) / 1000.0f << "Seconds. " << "GRAPHICS: " << (t3 - t2) / 1000.0f << "Seconds" << std::endl;
 
@@ -198,16 +200,21 @@ int The_TAIM_Engine::StartEngine() {
 		Event_Queue.RemoveEmptyEvents();
 
 		//updates the window by double buffering.
-		SDL_GL_SwapWindow(gWindow);
+
 		//SDL_GL_
 
 		for (int i = 0; i < SubSystemsList.size(); i++) {
 			SubSystemsList[i]->LateUpdate();
 		}
+
+
 		
+
+		SDL_GL_SwapWindow(gWindow);
 	}
 
-	// the program has ended, begin shutting down the engine
+
+
 
 	close();
 	//delete ev;

@@ -31,12 +31,13 @@ void Network_System::Update() {
 				memcpy(serverData, enetEvent.packet->data, sizeof(PhysicsData));
 
 				std::vector<Entity*> ghostEntities = ES->GetEntitiesWithTag("Ghost");
+				
 				for (int i = 0; i < 2; i++) {
 					if (i != clientIndex) {
-
 						// the data from the packet it put into a "update transform" event with the ghost object target.
 						Event* ev = new UpdateTransform();
 						ev->ListOfEntities.insert(ev->ListOfEntities.end(), ghostEntities.begin(), ghostEntities.end());
+						std::cout << serverData->transforms[i].x << ", " << serverData->transforms[i].y << ", " << serverData->transforms[i].z << std::endl;
 						static_cast<UpdateTransform*>(ev)->pos = glm::vec3(serverData->transforms[i].x, serverData->transforms[i].y, serverData->transforms[i].z);
 						static_cast<UpdateTransform*>(ev)->rot = glm::quat(serverData->transforms[i].qw, serverData->transforms[i].qx, serverData->transforms[i].qy, serverData->transforms[i].qz);
 						Event_Queue->AddEventToStack(ev);

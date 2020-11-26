@@ -10,6 +10,8 @@
 #include "CubeCollider.h"
 #include "SphereCollider.h"
 #include "SubSystem.h"
+
+#include "Profiling_System.h"
 class Physics_System : public SubSystem
 {
 private:

@@ -31,6 +31,7 @@ void FileLoader_System::LoadEntities()
 	luaL_dofile(F, FileString.c_str());
 	int indx1 = FileString.find_last_of("/") + 1;
 	std::string FTag = FileString.substr(indx1, FileString.find_last_of(".") - indx1);
+	Profiling_System::GetInstance()->SetLevelName(FTag);
 	luaL_openlibs(F);
 	lua_pcall(F, 0, 0, 0);
 

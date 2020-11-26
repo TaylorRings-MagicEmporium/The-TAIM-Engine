@@ -86,13 +86,6 @@ int main(int argc, char* args[]) {
 	physicsData->transforms[1].qz = 0;
 	physicsData->transforms[1].qw = 1.0f;
 
-	//physicsData->positions[0].x = 600.0f;
-	//physicsData->positions[0].y = 300.0f;
-	//physicsData->positions[1].x = 100.0f;
-	//physicsData->positions[1].y = 300.0f;
-
-
-
 	// used to store incoming data
 	ClientPacket* clientPacket = new ClientPacket;
 

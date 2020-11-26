@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\DearIMGUI files">
+      <UniqueIdentifier>{3fd0e0d7-bd86-4c99-9d83-5f253df7c0b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="The TAIM Engine.cpp">
@@ -116,6 +119,27 @@
     </ClCompile>
     <ClCompile Include="Animator.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Profiling_System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Middleware\DearIMGUI\imgui.cpp">
+      <Filter>Source Files\DearIMGUI files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Middleware\DearIMGUI\imgui_demo.cpp">
+      <Filter>Source Files\DearIMGUI files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Middleware\DearIMGUI\imgui_draw.cpp">
+      <Filter>Source Files\DearIMGUI files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Middleware\DearIMGUI\imgui_widgets.cpp">
+      <Filter>Source Files\DearIMGUI files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Middleware\DearIMGUI\backends\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\DearIMGUI files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Middleware\DearIMGUI\backends\imgui_impl_sdl.cpp">
+      <Filter>Source Files\DearIMGUI files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -225,6 +249,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Animator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiling_System.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

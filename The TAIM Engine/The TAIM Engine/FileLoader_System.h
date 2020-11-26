@@ -12,7 +12,7 @@
 #include "Audio_System.h"
 #include "Camera_System.h"
 #include "Animation_System.h"
-
+#include "Profiling_System.h"
 #include <vector>
 
 struct ConfigData {

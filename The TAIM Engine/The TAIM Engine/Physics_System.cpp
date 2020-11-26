@@ -211,7 +211,7 @@ void Physics_System::TestGunShot(Event* e) {
 				ToggleHidingComponent(ComponentType::Rigidbody, ListOfRigidbodies[i].GO);
 				g->SubSystemOrder.push_back(SubSystemType::Animation);
 				g->SubSystemOrder.push_back(SubSystemType::Audio);
-
+				Profiling_System::GetInstance()->IncrementPlayer1Hit();
 				success = true;
 				break;
 			}

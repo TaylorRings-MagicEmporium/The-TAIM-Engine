@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\Middleware\FMOD\api\fsbank\inc;$(SolutionDir)..\Middleware\FMOD\api\core\inc;$(SolutionDir)..\Middleware\FMOD\api\studio\inc;$(SolutionDir)..\Middleware\enet-1.3.13\include;$(SolutionDir)..\Middleware;$(SolutionDir)..\Middleware\LUA;$(SolutionDir)..\Middleware\bullet3-3.0.6;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\Middleware\FMOD\api\fsbank\inc;$(SolutionDir)..\Middleware\FMOD\api\core\inc;$(SolutionDir)..\Middleware\FMOD\api\studio\inc;$(SolutionDir)..\Middleware\enet-1.3.13\include;$(SolutionDir)..\Middleware;$(SolutionDir)..\Middleware\LUA;$(SolutionDir)..\Middleware\bullet3-3.0.6;$(SolutionDir)..\Middleware\DearIMGUI;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\Middleware\FMOD\api\fsbank\lib\x64;$(SolutionDir)..\Middleware\FMOD\api\core\lib\x64;$(SolutionDir)..\Middleware\FMOD\api\studio\lib\x64;$(SolutionDir)..\Middleware\SDL2\Libs;$(SolutionDir)..\Middleware\Bullet3-3.0.6\Libs;$(SolutionDir)..\Middleware\assimp\Libs;$(SolutionDir)..\MIddleware\LUA;$(SolutionDir)..\MIddleware\enet-1.3.13;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,6 +144,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Middleware\DearIMGUI\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\..\Middleware\DearIMGUI\backends\imgui_impl_sdl.cpp" />
+    <ClCompile Include="..\..\Middleware\DearIMGUI\imgui.cpp" />
+    <ClCompile Include="..\..\Middleware\DearIMGUI\imgui_demo.cpp" />
+    <ClCompile Include="..\..\Middleware\DearIMGUI\imgui_draw.cpp" />
+    <ClCompile Include="..\..\Middleware\DearIMGUI\imgui_widgets.cpp" />
     <ClCompile Include="Animation_System.cpp" />
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="AudioPlayer.cpp" />
@@ -170,6 +176,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Network_System.cpp" />
     <ClCompile Include="Physics_System.cpp" />
+    <ClCompile Include="Profiling_System.cpp" />
     <ClCompile Include="Rigidbody.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderRegistry.cpp" />
@@ -199,6 +206,7 @@
     <ClInclude Include="FileLoader_System.h" />
     <ClInclude Include="FirstCamera.h" />
     <ClInclude Include="Graphics_System.h" />
+    <ClInclude Include="Profiling_System.h" />
     <ClInclude Include="TMaths.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Input_System.h" />

@@ -27,7 +27,7 @@ void Animator::UpdateAnimation(float deltaTime)
 		KeyFrame end = AnimationStructure[KeyFrameCounter + 1];
 
 		CurrentValues.scale = Vec3Lerp(start.scale, end.scale, keyTransitionTime / end.duration);
-		std::cout << CurrentValues.scale.x << ", " << CurrentValues.scale.y << ", " << CurrentValues.scale.z << std::endl;
+		//std::cout << CurrentValues.scale.x << ", " << CurrentValues.scale.y << ", " << CurrentValues.scale.z << std::endl;
 		keyTransitionTime += deltaTime;
 
 		GO->transform.scale = CurrentValues.scale;
