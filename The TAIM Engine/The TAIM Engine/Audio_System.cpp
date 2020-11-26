@@ -27,10 +27,7 @@ void Audio_System::Startup()
 	lowLevelSystem->setSoftwareFormat(0, FMOD_SPEAKERMODE_STEREO, 0);
 	system->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, NULL);
 
-	for (int i = 0; i < ListOfAudioPlayers.size(); i++) {
-		ListOfAudioPlayers[i].AddSystem(lowLevelSystem);
-		ListOfAudioPlayers[i].Setup();
-	}
+	SyncComponentsToSystem();
 }
 
 void Audio_System::Update() {
@@ -70,4 +67,11 @@ void Audio_System::PlayGunShotSound(Event* e) {
 
 void Audio_System::ResetSystem() {
 	ListOfAudioPlayers.clear();
+}
+
+void Audio_System::SyncComponentsToSystem() {
+	for (int i = 0; i < ListOfAudioPlayers.size(); i++) {
+		ListOfAudioPlayers[i].AddSystem(lowLevelSystem);
+		ListOfAudioPlayers[i].Setup();
+	}
 }

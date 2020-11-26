@@ -154,3 +154,9 @@ void Graphics_System::ResetSystem() {
 	ListOfMeshRenderers.clear();
 }
 
+void Graphics_System::SyncComponentsToSystem() {
+	for (int i = 0; i < ListOfMeshRenderers.size(); i++) {
+		ListOfMeshRenderers[i].Setup();
+	}
+}
+

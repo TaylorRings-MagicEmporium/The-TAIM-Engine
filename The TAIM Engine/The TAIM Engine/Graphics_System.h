@@ -44,4 +44,5 @@ public:
 	void DebugDraw();
 
 	void ToggleHidingComponent(ComponentType c, Entity* e);
+	void SyncComponentsToSystem();
 };

@@ -12,6 +12,8 @@ using namespace luabridge;
 
 FileLoader_System::FileLoader_System()
 {
+	LevelFiles.push_back("Lua files/player.lua");
+	LevelFiles.push_back("Lua files/level.lua");
 }
 
 void FileLoader_System::LoadShaders()
@@ -23,7 +25,7 @@ void FileLoader_System::LoadEntities()
 {
 
 	std::vector<std::string> elementList;
-	std::string FileString = "LUA files/player.lua";
+	std::string FileString = LevelFiles[fileCount];
 
 	lua_State* F = luaL_newstate();
 	luaL_dofile(F, FileString.c_str());
@@ -242,4 +244,11 @@ ConfigData FileLoader_System::LoadConfig()
 	ResourcePATH = RePath.cast<std::string>();
 	
 	return CD;
+}
+
+void FileLoader_System::SwapFile() {
+	fileCount++;
+	if (fileCount > LevelFiles.size() - 1) {
+		fileCount = 0;
+	}
 }

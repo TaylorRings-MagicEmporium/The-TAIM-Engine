@@ -220,5 +220,11 @@ void The_TAIM_Engine::ResetSystems(Event* e)
 	for (int i = 0; i < SubSystemsList.size(); i++) {
 		SubSystemsList[i]->ResetSystem();
 	}
+	FLS.SwapFile();
+	FLS.LoadEntities();
+
+	for (int i = 0; i < SubSystemsList.size(); i++) {
+		SubSystemsList[i]->SyncComponentsToSystem();
+	}
 }
 

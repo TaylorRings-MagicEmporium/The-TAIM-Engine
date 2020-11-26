@@ -25,5 +25,7 @@ public:
 
 	void EvPlaySound(Event* e);
 	void PlayGunShotSound(Event* e);
+
+	void SyncComponentsToSystem();
 };
 

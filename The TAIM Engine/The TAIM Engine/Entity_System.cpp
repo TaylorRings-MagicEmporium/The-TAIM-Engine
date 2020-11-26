@@ -63,3 +63,12 @@ void Entity_System::GunshotInfo(Event* e)
 	g->startingPoint = g->startEntity->transform.position + g->startEntity->transform.forwardVector + glm::vec3(0,0.6,0);
 	g->direction = g->startEntity->transform.forwardVector;
 }
+
+void Entity_System::ResetSystem() {
+	for (int i = 0; i < ALL_ENTITIES.size(); i++) {
+		delete ALL_ENTITIES[i];
+	}
+	ALL_ENTITIES.clear();
+	Tag_System.clear();
+
+}

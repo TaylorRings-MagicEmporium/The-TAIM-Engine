@@ -26,13 +26,8 @@ void Physics_System::Startup() {
 	dynamicWorld->setGravity(btVector3(0, -10, 0));
 
 
+	SetupRigidbodies();
 
-	for (int i = 0; i < ListOfRigidbodies.size(); i++) {
-		ListOfRigidbodies[i].Setup();
-		ListOfRigidbodies[i].body->setRollingFriction(0.2);
-		ListOfRigidbodies[i].body->setSpinningFriction(0.1);
-		dynamicWorld->addRigidBody(ListOfRigidbodies[i].body);
-	}
 
 	BDD.CL = Comm_Layer;
 	dynamicWorld->setDebugDrawer(&BDD);
@@ -271,4 +266,17 @@ void Physics_System::ResetSystem() {
 	ListOfRigidbodies.clear();
 	ListOfColliders.clear();
 
+}
+
+void Physics_System::SetupRigidbodies() {
+	for (int i = 0; i < ListOfRigidbodies.size(); i++) {
+		ListOfRigidbodies[i].Setup();
+		ListOfRigidbodies[i].body->setRollingFriction(0.2);
+		ListOfRigidbodies[i].body->setSpinningFriction(0.1);
+		dynamicWorld->addRigidBody(ListOfRigidbodies[i].body);
+	}
+}
+
+void Physics_System::SyncComponentsToSystem() {
+	SetupRigidbodies();
 }

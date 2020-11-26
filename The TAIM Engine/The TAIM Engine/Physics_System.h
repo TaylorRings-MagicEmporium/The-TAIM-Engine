@@ -42,6 +42,7 @@ public:
 	void Update();
 	void SetComponentSize(int size);
 	void ResetSystem();
+	void SyncComponentsToSystem();
 
 	void ColliderCallBack();
 
@@ -52,5 +53,6 @@ public:
 	void ToggleHidingComponent(ComponentType c, Entity* e);
 	
 	void HideAdjust(ComponentType c, Entity* e);
+	void SetupRigidbodies();
 };
 

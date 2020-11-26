@@ -39,7 +39,8 @@ class FileLoader_System
 	// that describes transform and hierarchies.
 private:
 	std::string ResourcePATH;
-
+	std::vector<std::string> LevelFiles;
+	int fileCount = 0;
 public:
 	Graphics_System* GS;
 	Physics_System* PS;
@@ -53,5 +54,6 @@ public:
 	void LoadShaders();
 	void LoadEntities();
 	ConfigData LoadConfig();
+	void SwapFile();
 };
 

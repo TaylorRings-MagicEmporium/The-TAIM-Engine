@@ -12,6 +12,7 @@ public:
 	virtual void SetComponentSize(int Comsize) {};
 	virtual void ToggleHidingComponent(ComponentType c, Entity* e) {};
 	virtual void ResetSystem() {};
+	virtual void SyncComponentsToSystem() {};
 
 	void AssignLayers(EventQueue* EQ, Communication_Layer* CL) {
 		Event_Queue = EQ;
