@@ -12,8 +12,8 @@ Graphics_System::~Graphics_System() {
 }
 
 MeshRenderer* Graphics_System::CreateMeshRenderer(std::string path, Shader* shader, bool flip) {
-	MeshRenderer MR = MeshRenderer(path, shader, flip);
-	ListOfMeshRenderers.push_back(MR);
+	MeshRenderer R = MeshRenderer(MR.SetModel(path, flip, shader),shader);
+	ListOfMeshRenderers.push_back(R);
 	return &ListOfMeshRenderers.back();
 }
 

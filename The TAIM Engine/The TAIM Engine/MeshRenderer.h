@@ -18,7 +18,7 @@ private:
 public:
 	glm::mat4 model = glm::mat4(1);
 	Shader* shader;
-	MeshRenderer(std::string path, Shader* shader, bool flip);
+	MeshRenderer(Model* t, Shader* shader);
 	void SetCol(glm::vec4 colour);
 	void Setup();
 	void Draw();

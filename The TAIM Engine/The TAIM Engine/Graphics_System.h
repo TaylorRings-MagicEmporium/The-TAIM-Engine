@@ -2,6 +2,7 @@
 #include <vector>
 #include "MeshRenderer.h"
 #include "ShaderRegistry.h"
+#include "Model_Registry.h"
 #include "SubSystem.h"
 // the graphics system is responsible for the handling and executing of components that give a display onto the screen
 class Graphics_System : public SubSystem {
@@ -19,7 +20,7 @@ private:
 	void HideAnimatedComponent(Event* e);
 public:
 	ShaderRegistry* SR;
-
+	Model_Registry MR = Model_Registry();
 	// the initialisation of the Graphics system which needs to maximum number of components allowed.
 
 	Graphics_System();

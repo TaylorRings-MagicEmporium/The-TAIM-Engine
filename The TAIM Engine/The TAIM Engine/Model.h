@@ -27,7 +27,7 @@ public:
 		this->shader = shader;
 		loadModel(path);
 	}
-
+	Model() {};
 	~Model();
 
 	std::string GetFileName();

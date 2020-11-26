@@ -141,6 +141,9 @@
     <ClCompile Include="..\..\Middleware\DearIMGUI\backends\imgui_impl_sdl.cpp">
       <Filter>Source Files\DearIMGUI files</Filter>
     </ClCompile>
+    <ClCompile Include="Model_Registry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -252,6 +255,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Profiling_System.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_Registry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
