@@ -3,8 +3,6 @@
 
 Graphics_System::Graphics_System() {
 
-
-
 }
 
 Graphics_System::~Graphics_System() {
@@ -26,11 +24,11 @@ void Graphics_System::Startup()
 {
 	glEnable(GL_DEPTH_TEST);
 
-
-	for (int i = 0; i < ListOfMeshRenderers.size(); i++) {
+	for (int i = 0; i < ListOfMeshRenderers.size(); i++) { // setup's all mesh renderers
 		ListOfMeshRenderers[i].Setup();
 	}
 
+	// setup's the debug object which contains all debug lines
 	s = SR->GetShader("DebugLine");
 	glGenVertexArrays(1, &DebugVAO);
 	glGenBuffers(1, &DebugVBO);

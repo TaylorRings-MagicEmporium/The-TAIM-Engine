@@ -5,8 +5,6 @@ Rigidbody::Rigidbody(btVector3 offset, float RBmass)
 	type = ComponentType::Rigidbody;
 	this->mass = RBmass;
 	this->offset = offset;
-	//RBTransform.setIdentity();
-	//RBTransform.setOrigin(btVector3(position.x, position.y, position.z));
 }
 
 void Rigidbody::Setup() {
@@ -17,8 +15,7 @@ void Rigidbody::Setup() {
 
 	collider = (Collider*)GO->GetComponent(ComponentType::Collider);
 
-	if (collider) {
-		//std::cout << "COLLIDER DETECTED" << std::endl;
+	if (collider) { // if collider exist, then use that collider, if not, use an empty shape.
 		IsDynamic = (mass != 0.f);
 		if (IsDynamic) {
 			collider->shape->calculateLocalInertia(mass, localInertia);
@@ -28,22 +25,19 @@ void Rigidbody::Setup() {
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, collider->shape, localInertia);
 		body = new btRigidBody(rbInfo);
 
-		//body->setAngularFactor(btVector3(0, 1, 0));
 		body->setAngularFactor(LockAxis);
 	}
 	else {
-		//collider->shape = new btEmptyShape();
 
 		std::cout << "WARNING::NO COLLIDER DETECTED! creating empty shape" << std::endl;
 
-		motionState = new btDefaultMotionState(RBTransform);
+		motionState = new btDefaultMotionState(RBTransform); // motion states are simple bullet packets
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, new btEmptyShape(), localInertia);
 		body = new btRigidBody(rbInfo);
 	}
 }
 
 void Rigidbody::ConstrictRotation(bool lockX, bool lockY, bool lockZ) {
-	//btVector3 t = btVector3(1,1,1);
 	if (lockX) {
 		LockAxis.setX(0);
 	}

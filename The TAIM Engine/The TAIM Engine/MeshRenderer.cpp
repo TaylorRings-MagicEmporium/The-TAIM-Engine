@@ -5,8 +5,6 @@
 MeshRenderer::MeshRenderer(Model* t, Shader* shader) {
 	type = ComponentType::MeshRenderer;
 	this->shader = shader;
-	//shader->Use();
-	// Model t = Model(path, flip, this->shader);
 	mesh = t->GetMesh();
 }
 
@@ -15,7 +13,6 @@ void MeshRenderer::Setup() {
 	model = glm::translate(model, GO->transform.position);
 	model *= glm::toMat4(GO->transform.Rotation);
 	model = glm::scale(model, GO->transform.scale);
-	//glUseProgram(0);
 }
 
 void MeshRenderer::Draw() {

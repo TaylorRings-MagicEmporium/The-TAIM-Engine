@@ -33,8 +33,8 @@ public:
 	~Mesh();
 
 private:
-	unsigned int VAO, VBO, EBO;
 
+	unsigned int VAO, VBO, EBO;
 	void setupMesh();
 
 };

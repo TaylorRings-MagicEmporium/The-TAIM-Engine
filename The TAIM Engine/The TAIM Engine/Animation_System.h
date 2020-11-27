@@ -2,19 +2,20 @@
 #include "SubSystem.h"
 #include "Animator.h"
 
+
+
 enum class AnimationType {Null, Bubble_shrink};
 
-
+// the animation system is responsible for playing animations. for now, the animations are hard-coded
+// but in the future, this can be read from a file.
 class Animation_System : public SubSystem
 {
 protected:
 	std::vector<Animator> ListOfAnimators;
 
-
 	std::vector<KeyFrame> Bubble_shrink_Animation;
-	//void TogglePlayAnimation(Event* e);
-	//void ResetAnimation(Event* e);
 	float deltaTime = 1.0f / 60.0f;
+
 
 	void BeginAnimation(Event* e);
 public:

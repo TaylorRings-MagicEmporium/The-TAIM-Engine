@@ -44,6 +44,7 @@ public:
 	// draws speicifc debug visuals from multiple systems
 	void DebugDraw();
 
+	// toggles the appearence of the mesh being displayed.
 	void ToggleHidingComponent(ComponentType c, Entity* e);
 	void SyncComponentsToSystem();
 };

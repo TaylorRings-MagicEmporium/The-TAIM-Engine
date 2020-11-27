@@ -1,5 +1,7 @@
 #pragma once
 #include "Camera.h"
+
+// FirstCamera is a child of Camera that moves with the player (with a given offset);
 class FirstCamera : public Camera
 {
 private:

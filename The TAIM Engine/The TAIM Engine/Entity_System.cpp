@@ -58,9 +58,8 @@ void Entity_System::Update() {
 	}
 }
 
-void Entity_System::GunshotInfo(Event* e)
+void Entity_System::GunshotInfo(Event* e) // as part of the GunShot Event, this gets that the start position and direction of the ray and where it goes.
 {
-	//std::cout << "ENTITY SYSTEM: RECIEVED" << std::endl;
 	Gunshot* g = (Gunshot*)(e);
 	g->startingPoint = g->startEntity->transform.position + g->startEntity->transform.forwardVector + glm::vec3(0,0.6,0);
 	g->direction = g->startEntity->transform.forwardVector;

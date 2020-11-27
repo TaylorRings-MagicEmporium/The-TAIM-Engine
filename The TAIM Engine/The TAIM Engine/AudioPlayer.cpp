@@ -27,3 +27,6 @@ void AudioPlayer::PlaySound() {
 void AudioPlayer::AddSystem(FMOD::System* system) {
 	this->system = system;
 }
+
+//AUDIO CREDIT
+//"Gun Shot.wav" by Bird_man on freesound.org

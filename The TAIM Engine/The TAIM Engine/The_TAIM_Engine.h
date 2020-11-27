@@ -5,9 +5,6 @@
 
 #pragma once
 
-
-
-
 // GLAD (OpenGL Wrapper) INCLUDES
 #include <glad/glad.h>
 
@@ -44,8 +41,6 @@
 #include "Animation_System.h"
 #include "Profiling_System.h"
 
-
-
 class The_TAIM_Engine {
 
 	//used for window setup
@@ -57,8 +52,6 @@ class The_TAIM_Engine {
 	int SCREEN_HEIGHT = 480;
 	int ComponentSize = 100;
 	std::string ProgramName = "SDL tutorial";
-
-	//CHANGE
 	
 	ShaderRegistry SR = ShaderRegistry();
 	Graphics_System GS = Graphics_System();
@@ -72,7 +65,6 @@ class The_TAIM_Engine {
 	Network_System NS = Network_System();
 	Camera_System CS = Camera_System();
 	Animation_System AnS = Animation_System();
-	//Profiling_System* Profile = Profiling_System::GetInstance();
 
 	std::vector<SubSystem*> SubSystemsList;
 

@@ -4,6 +4,7 @@
 
 enum class ColliderType { Cube,Sphere };
 
+// The Collider is an abstract class for different collider shapes. 
 class Collider : public Component
 {
 public:

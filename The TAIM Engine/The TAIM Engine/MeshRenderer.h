@@ -5,10 +5,7 @@
 #include "Component.h"
 #include <vector>
 
-//struct Vertex {
-//	glm::vec3 Position;
-//};
-
+// the MeshRenderer is a component that displays a model at the entity's transforms point.
 class MeshRenderer : public Component
 {
 private:

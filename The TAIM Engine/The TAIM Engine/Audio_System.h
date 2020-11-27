@@ -7,6 +7,8 @@
 
 #include "AudioPlayer.h"
 #include "SubSystem.h"
+
+// the Audio_System is responsible for playing audio that is attach to the Entity.
 class Audio_System : public SubSystem
 {
 private:
@@ -14,6 +16,7 @@ private:
 	FMOD::System* lowLevelSystem = NULL;
 	FMOD::Channel* channel = NULL;
 	std::vector<AudioPlayer> ListOfAudioPlayers;
+
 public:
 	Audio_System();
 	~Audio_System();

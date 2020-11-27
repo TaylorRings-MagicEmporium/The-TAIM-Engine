@@ -26,6 +26,8 @@ enum class KeyCode {
 	KEY_LEFTBRACKET, KEY_RIGHTBRACKET, KEY_BACKSLASH, KEY_NONUSHASH, KEY_SEMICOLON, KEY_APOSTROPHE, KEY_GRAVE,
 	KEY_COMMA, KEY_PERIOD, KEY_SLASH, KEY_CAPSLOCK
 };
+
+
 // the input system is responsible for how the user will interact with the world. it is also considered the first step in event building.
 // to keep the abstraction between the window's inputs and gameplay functionality, the input system has it's own keycode for the gameplay to use.
 class Input_System : public SubSystem

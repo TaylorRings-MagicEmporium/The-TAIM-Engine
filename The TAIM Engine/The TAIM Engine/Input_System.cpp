@@ -20,6 +20,9 @@ void Input_System::Update() {
 	Reset_Input();
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 
+
+	// using SDL state, it stores the boolean state from SDL into Input_Systems boolean state.
+	// this means that the input from the windows does not effect anything else.
 	int begin = SDL_SCANCODE_A;
 	int end = SDL_SCANCODE_Z;
 	for (int i = begin; i < end; i++) {
@@ -97,16 +100,16 @@ void Input_System::CreateEvents() {
 		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 		Event_Queue->AddEventToStack(ev);
 	}
-	if (GetKeyPressed(KeyCode::KEY_N) && !GetPrevKeyPressed(KeyCode::KEY_N)) {
-		ev = new PlaySoundEv();
-		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
-		Event_Queue->AddEventToStack(ev);
-	}
-	if (GetKeyPressed(KeyCode::KEY_TAB) && !GetPrevKeyPressed(KeyCode::KEY_TAB)) {
-		ev = new ResetTransform();
-		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
-		Event_Queue->AddEventToStack(ev);
-	}
+	//if (GetKeyPressed(KeyCode::KEY_N) && !GetPrevKeyPressed(KeyCode::KEY_N)) {
+	//	ev = new PlaySoundEv();
+	//	ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+	//	Event_Queue->AddEventToStack(ev);
+	//}
+	//if (GetKeyPressed(KeyCode::KEY_TAB) && !GetPrevKeyPressed(KeyCode::KEY_TAB)) {
+	//	ev = new ResetTransform();
+	//	ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
+	//	Event_Queue->AddEventToStack(ev);
+	//}
 	if (GetKeyPressed(KeyCode::KEY_RETURN) && !GetPrevKeyPressed(KeyCode::KEY_RETURN)) {
 		//std::cout << "INPUT SYSTEM: RECIEVED" <<std::endl;
 		ev = new Gunshot();
@@ -122,21 +125,4 @@ void Input_System::CreateEvents() {
 		ev = new ChangeCamera();
 		Event_Queue->AddEventToStack(ev);
 	}
-	//if (GetKeyPressed(KeyCode::KEY_0) && !GetPrevKeyPressed(KeyCode::KEY_0)) {
-	//	if (Comm_Layer->CanChangeLevel) {
-	//		count++;
-	//		if (count > 1) {
-	//			count = 0;
-	//		}
-	//		ev = new ChangeLevel();
-	//		ChangeLevel* l = (ChangeLevel*)(ev);
-	//		l->level = count;
-	//		ev->SubSystemOrder.push_back(SubSystemType::System);
-	//		ev->SubSystemOrder.push_back(SubSystemType::Network);
-	//		Event_Queue->AddEventToStack(ev);
-	//	}
-	//	else {
-	//		std::cout << "Sorry! only the first client can change levels" << std::endl;
-	//	}
-	//}
 }

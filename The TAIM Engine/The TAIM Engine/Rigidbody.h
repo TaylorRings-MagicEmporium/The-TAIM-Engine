@@ -2,6 +2,8 @@
 #include "bullet3-3.0.6/btBulletDynamicsCommon.h"
 #include "Collider.h"
 #include "Component.h"
+
+// the Rigidbody is a component that stores and computes data relating to physics and the world, including collisions and forces
 class Rigidbody : public Component
 {
 public:
@@ -20,6 +22,7 @@ public:
 	Rigidbody(btVector3 offset, float RBmass);
 
 	void Setup();
+	// constraints the rigidbodys' rotation to a specific set of locks.
 	void ConstrictRotation(bool lockX,bool lockY, bool lockZ);
 };
 

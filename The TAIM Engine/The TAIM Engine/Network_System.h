@@ -12,13 +12,13 @@ struct TransformPacket {
 	float qx, qy, qz, qw;
 };
 
-// a specific packet that (when recieved) contains all of the clients transforms
+// specific data that (when recieved) contains all of the clients transforms
 struct PhysicsData {
 	int packetType = 1;
 	TransformPacket transforms[2];
 };
 
-// a specific packet that (when recieved) tells the NS that it is connected to a server.
+// specific data that (when recieved) tells the NS that it is connected to a server.
 struct ClientData {
 	int packetType = 0;
 	int clientIndex;
@@ -32,7 +32,7 @@ struct ClientPacket {
 	int clientIndex = -1;
 	TransformPacket transform;
 };
-
+// a specific packet that is sent to the server that contains the target (by name) to apply actions.
 struct TargetHitPacket
 {
 	int packetType = 1;
@@ -40,6 +40,7 @@ struct TargetHitPacket
 	std::string TargetName;
 };
 
+// specific data that (when recieved) tells the NS which target got hit.
 struct TargetHitData
 {
 	int packetType = 2;
@@ -47,12 +48,14 @@ struct TargetHitData
 	std::string TargetName;
 };
 
+// a specific packet that is sent to the server that contains the level to change to from first client's permission.
 struct LevelChangePacket {
 	int packetType = 2;
 	int clientIndex;
 	int LevelSelect = 0;
 };
 
+// specific data that (when recieved) tells the NS and system to change levels to the current one.
 struct LevelChangeData {
 	int packetType = 3;
 	int clientIndex;
@@ -89,7 +92,6 @@ public:
 
 	Entity_System* ES;
 
-
 	int* packetType = new int;
 
 
@@ -98,7 +100,7 @@ public:
 	int clientIndex = -1;
 
 	//serverConnect is needed for safety. packets are only sent if there is a server connected.
-	// without this, errors including corruption  of data and backlog of events can occur
+	// without this, errors including corruption  of data and backlog of events can occur.
 	bool serverConnect = false;
 
 	Network_System();

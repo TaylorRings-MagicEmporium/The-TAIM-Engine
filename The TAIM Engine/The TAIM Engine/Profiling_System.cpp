@@ -1,6 +1,6 @@
 #include "Profiling_System.h"
 
-Profiling_System* Profiling_System::SingleInstance = 0;
+Profiling_System* Profiling_System::SingleInstance = 0; // used to ensure that only one instance exists
 
 Profiling_System::Profiling_System()
 {
@@ -30,25 +30,15 @@ void Profiling_System::Update()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(gWindow);
-	ImGui::NewFrame();
-
-	if (show_demo_window) {
-		ImGui::ShowDemoWindow(&show_demo_window);
-	}
+	ImGui::NewFrame(); // creates a new frame in the SDL2 context
 
 	{
-
-
 		ImGui::Begin("The TAIM Profiler");
 		ImGui::Text("useful level of the program:");
-		//ImGui::Checkbox("Demo Window", &show_demo_window);
 		ImGui::Checkbox("Instructions", &show_another_window);
 
-		//ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-		//ImGui::ColorEdit3("clear color", (float*)&clear_color);
-
-		if (Comm_layer->CanChangeLevel) {
-			if (ImGui::Button("Level 1")) {
+		if (Comm_layer->CanChangeLevel) {								// if the client allows itself to change level, the buttons will appear on that client.
+			if (ImGui::Button("Level 1")) {								// if any of the buttons are pessed, an event is created to supply system and network with which level to reload.
 				std::cout << "level 1 selected" << std::endl;
 				Event* ev = new ChangeLevel();
 				ChangeLevel* l = (ChangeLevel*)(ev);
@@ -69,11 +59,6 @@ void Profiling_System::Update()
 			}
 		}
 
-
-
-		//ImGui::SameLine();
-		//ImGui::Text("counter = %d", counter);
-
 		ImGui::Text("Level name: %s", levelName.c_str());
 
 		ImGui::Text("Player 1 Hits: %d", Player1Hit);
@@ -92,6 +77,7 @@ void Profiling_System::Update()
 		ImGui::Text("Enter: to shoot. WARNING: loud noise... sorry.");
 		ImGui::Text("buttons will be displayed to switch levels, but only in single player, or you are the first client to connect.");
 		ImGui::Text("to reset a level, just press the Level Button.");
+		ImGui::Text("to change cameras (if availible), press <p>.");
 		if (ImGui::Button("Close Me")) {
 			show_another_window = false;
 		}

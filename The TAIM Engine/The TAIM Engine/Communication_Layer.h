@@ -5,12 +5,14 @@
 #include <glm/gtx/quaternion.hpp>
 #include <bullet3-3.0.6/btBulletDynamicsCommon.h>
 
-struct GPWrapItem {
+struct GPWrapItem { // a graphics physics wrapper that stores the transform of the entity and the entity itself.
 	glm::vec3 Position;
 	glm::quat Rotation;
 	Entity* entity;
 };
 
+// the Communication_Layer stores and exchanges data between different sub-systems. for now, GLM is needed to store
+// mathematic data and functions.
 class Communication_Layer
 {
 private:
@@ -26,11 +28,10 @@ public:
 
 	bool CanChangeLevel = true;
 	int CurrentLevel = 0;
-	//glm::vec3 Debug_
 	int Debug_Line_Vertices_Counter = 0;
 	Communication_Layer();
 	void GPWrap(btTransform trans, Entity* entity);
-	//void SetNetworkPlayerAndEnemy(std::string playTag, std::string EnemyTag)
+	// resets the buffers
 	void ResetBuffers();
 };
 

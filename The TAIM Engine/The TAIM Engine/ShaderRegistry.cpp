@@ -8,13 +8,14 @@ ShaderRegistry::ShaderRegistry() {
 ShaderRegistry::~ShaderRegistry() {
 
 }
-
+// makes sure only one shader program is made for each type.
 Shader* ShaderRegistry::CreateShader(std::string name, const char* vertexPath, const char* fragmentPath) {
 	shaderList[name] = Shader(vertexPath, fragmentPath);
 	list.push_back(&shaderList[name]);
 	shaderList[name].name = name;
 	return &shaderList[name];
 }
+
 
 Shader* ShaderRegistry::GetShader(std::string name) {
 	if (shaderList.count(name)) {

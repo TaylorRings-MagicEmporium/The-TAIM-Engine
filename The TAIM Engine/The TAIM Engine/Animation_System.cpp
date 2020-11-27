@@ -29,6 +29,7 @@ void Animation_System::Update()
 	method_function method_pointer[EVENT_TYPE_COUNT];
 	method_pointer[(int)EventType::GunShot] = &Animation_System::BeginAnimation;
 	method_pointer[(int)EventType::AnimationBegin] = &Animation_System::BeginAnimation;
+
 	while (Event* e = Event_Queue->PollEvents(SubSystemType::Animation)) {
 		method_function func = method_pointer[(int)e->GetType()];
 		(this->*func)(e);
@@ -37,7 +38,7 @@ void Animation_System::Update()
 	for (int i = 0; i < ListOfAnimators.size(); i++) {
 		ListOfAnimators[i].UpdateAnimation(deltaTime);
 
-		if (ListOfAnimators[i].AnimationEnd && ListOfAnimators[i].announced) {
+		if (ListOfAnimators[i].AnimationEnd && ListOfAnimators[i].announced) { // if the animation has ended and it needs to be announced to the event.
 			ListOfAnimators[i].announced = false;
 			Event* ev = new AnimationEnd();
 			ev->SubSystemOrder.push_back(SubSystemType::Graphics);

@@ -1,5 +1,7 @@
 #pragma once
 #include "Camera.h"
+
+// StaticCamera is a child of Camera that with the transform's positions, makes it look at a specific vector3 target.
 class StaticCamera : public Camera
 {
 private:

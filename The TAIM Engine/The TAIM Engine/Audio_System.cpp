@@ -7,7 +7,6 @@ Audio_System::~Audio_System() {
 }
 
 void Audio_System::SetComponentSize(int size) {
-	// if the list was not reserved, then this will cause a game breaking issue of pointers becoming null.
 	ListOfAudioPlayers.reserve(size);
 }
 void Audio_System::Startup()

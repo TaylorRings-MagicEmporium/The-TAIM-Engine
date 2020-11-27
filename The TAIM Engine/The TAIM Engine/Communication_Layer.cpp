@@ -5,7 +5,7 @@ Communication_Layer::Communication_Layer() {
 
 };
 
-void Communication_Layer::GPWrap(btTransform trans, Entity* entity) {
+void Communication_Layer::GPWrap(btTransform trans, Entity* entity) { // adds a GPWrapItem to the buffer.
 	GPWrapItem temp = GPWrapItem();
 	temp.Position = glm::vec3(trans.getOrigin().getX(),trans.getOrigin().getY(),trans.getOrigin().getZ());
 	temp.entity = entity;

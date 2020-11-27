@@ -12,6 +12,9 @@
 #include "SubSystem.h"
 
 #include "Profiling_System.h"
+
+// the Physics_System is responsible for all physics-related inquires from itself or from events.
+// it stores rigidbodies and colliders.
 class Physics_System : public SubSystem
 {
 private:
@@ -36,6 +39,8 @@ private:
 	void ResetTransformEv(Event* e);
 	void TestGunShot(Event* e);
 	void HideRigidbodyComponent(Event* e);
+
+
 public:
 	Physics_System();
 	~Physics_System();
@@ -53,8 +58,10 @@ public:
 	Component* CreateCubeCollider(glm::vec3 axisExtents);
 	Component* CreateSphereCollider(float radius);
 
+	// sets the boolean to hide the rigidbody of that entity.
 	void ToggleHidingComponent(ComponentType c, Entity* e);
 	
+	// hides the rigidbody of that entity.
 	void HideAdjust(ComponentType c, Entity* e);
 	void SetupRigidbodies();
 };

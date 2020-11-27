@@ -17,7 +17,7 @@ void Camera_System::SetComponentSize(int size) {
 }
 
 void Camera_System::Update() {
-	if (ActiveCamera != nullptr) {
+	if (ActiveCamera != nullptr) { // if there is no activeCamera (during level reset) do nothing
 		ActiveCamera->UpdateCamera(WindowSize);
 		Comm_Layer->proj = ActiveCamera->GetProj();
 		Comm_Layer->UIProj = ActiveCamera->GetUIProj();
@@ -61,7 +61,6 @@ Component* Camera_System::CreateFirstCamera(glm::vec3 offset) {
 	FirstCamera* c = new FirstCamera();
 	c->SetOffset(offset);
 	CameraList.push_back(c);
-	//ActiveCamera = CameraList.back();
 	return CameraList.back();
 }
 

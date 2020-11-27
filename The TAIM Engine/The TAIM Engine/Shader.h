@@ -8,7 +8,6 @@
 #include <iostream>
 
 // a shader is a specific object that links with openGL and shader files. 
-// multiple shaders can be created, and hopefully a whole dictonary can be created with it.
 class Shader
 {
 public:

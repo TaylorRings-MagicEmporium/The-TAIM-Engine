@@ -6,7 +6,9 @@
 #include "SubSystem.h"
 
 
-
+// The Camera_System is responsible for managing the multiple cameras in the scene.
+// for now, each scene needs a third person camera to operate fully. any other cameras can be added
+// and swapped.
 class Camera_System : public SubSystem
 {
 	glm::vec2 WindowSize;

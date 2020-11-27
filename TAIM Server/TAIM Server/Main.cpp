@@ -3,10 +3,6 @@
 #include <enet/enet.h>
 #include <SDL2/SDL.h>
 
-//struct Vector2 {
-//	float x, y;
-//};
-
 struct TransformPacket {
 	float x, y, z;
 	float qx, qy, qz, qw;
@@ -76,7 +72,9 @@ int main(int argc, char* args[]) {
 	if (enet_initialize() != 0) {
 		std::cout << "Enet failed to initialise!" << "\n\n";
 	}
+	
 
+	//setups enet properties for the server
 	ENetAddress address;
 	ENetHost* server;
 	ENetEvent enetEvent;
@@ -97,8 +95,8 @@ int main(int argc, char* args[]) {
 	}
 
 	int FirstClient = -1;
-	// PhysicsData contains each client's position data at start. when a client is connected, they will update their packet,
-	// while it recieves the default data of the other client.
+
+	// the placeholder creation of PhysicsData
 	PhysicsData* physicsData = new PhysicsData;
 
 	physicsData->transforms[0].x = 0;
@@ -117,12 +115,7 @@ int main(int argc, char* args[]) {
 	physicsData->transforms[1].qz = 0;
 	physicsData->transforms[1].qw = 1.0f;
 
-	// used to store incoming data
 	ClientPacket* clientPacket = new ClientPacket;
-
-	clientPacket->clientIndex = 0;
-	//clientPacket->position.x = 0.0f;
-	//clientPacket->position.y = 0.0f;
 
 	clientPacket->clientIndex = 0;
 	clientPacket->transform.x = 0;
@@ -133,7 +126,7 @@ int main(int argc, char* args[]) {
 	clientPacket->transform.qz = 0;
 	clientPacket->transform.qw = 1.0f;
 
-
+	// creates placeholders for data and packets
 	ClientData* clientData = new ClientData;
 	TargetHitPacket* targetPacket = new TargetHitPacket;
 	TargetHitData* targetData = new TargetHitData;
@@ -156,57 +149,55 @@ int main(int argc, char* args[]) {
 
 		while (enet_host_service(server, &enetEvent, 0) > 0) {
 			switch (enetEvent.type) {
-				// when a client connects for the first time
-			case ENET_EVENT_TYPE_CONNECT:
+
+				
+			case ENET_EVENT_TYPE_CONNECT:						// when a client connects for the first time
 
 				std::cout << "a client connected from address " << enetEvent.peer->address.host << ":" << enetEvent.peer->address.port << ".\n";
 				clientData->clientIndex = clientCount;
-				if (FirstClient == -1) {
-					FirstClient = clientData->clientIndex;
+				if (FirstClient == -1) {								// determines if the client is the first client to connect to the server.
+					FirstClient = clientData->clientIndex;				// stores the data of the first client connected.
 					clientData->FirstClient = true;
 				}
 				else {
 					clientData->FirstClient = false;
 				}
-				// we send a packet to the client that connected to say that connection is successful.
-				dataPacket = enet_packet_create(clientData, sizeof(ClientData), ENET_PACKET_FLAG_RELIABLE);
+				
+				dataPacket = enet_packet_create(clientData, sizeof(ClientData), ENET_PACKET_FLAG_RELIABLE);		// we send a packet to the client that connected to say that connection is successful.
 				enet_peer_send(enetEvent.peer, 0, dataPacket);
 
-				//enetEvent.peer->data = (void*)"This is a client";
 				clientCount++;
 
 				break;
-				// when a client disconnects for the first time
-			case ENET_EVENT_TYPE_DISCONNECT:
+
+			case ENET_EVENT_TYPE_DISCONNECT:					// when a client disconnects for the first time
 				std::cout << "the client from address " << enetEvent.peer->address.host << ":" << enetEvent.peer->address.port << " disconnected \n";
 				enetEvent.peer->data = NULL;
-				clientCount--;
+				clientCount--;									// decrements the client count
 
 				if (clientCount == 0) {
-					FirstClient = false;
+					FirstClient = false;						// if all clients have been disconnected, then it can be considered that the clients has resetted.
+																// in that case, firstclient is reset to false;
 				}
 
 				break;
-				// when a client sends a packet and the server recieves it
-			case ENET_EVENT_TYPE_RECEIVE:
+				
+			case ENET_EVENT_TYPE_RECEIVE:						// when a client sends a packet and the server recieves it
 
-				memcpy(packetType, enetEvent.packet->data, enetEvent.packet->dataLength);
-				if (*packetType == 0) {
-					// memcpy copies the actual data (1's and 0's) to a position pointer. as the data is the same length as "transform",
-					// we can access it with ease with clientPacket acting as our safe buffer.
+				memcpy(packetType, enetEvent.packet->data, enetEvent.packet->dataLength);								//determines which packet has been recieved for this event.
+				if (*packetType == 0) {			//transforms
 					memcpy(clientPacket, enetEvent.packet->data, enetEvent.packet->dataLength);
 					int currentClient = clientPacket->clientIndex;
-					//physicsData->transforms[clientPacket->clientIndex] = clientPacket->transform;
 					physicsData->transforms[clientPacket->clientIndex] = clientPacket->transform;
 				}
-				else if (*packetType == 1) {
+				else if (*packetType == 1) {	//target hit data
 					memcpy(targetPacket, enetEvent.packet->data, enetEvent.packet->dataLength);
 					targetData->clientIndex = targetPacket->clientIndex;
 					targetData->TargetName = targetPacket->TargetName;
 					dataPacket = enet_packet_create(targetData, sizeof(TargetHitData), ENET_PACKET_FLAG_RELIABLE);
 					enet_host_broadcast(server, 0, dataPacket);
 				}
-				else if (*packetType == 2) {
+				else if (*packetType == 2) {	//level change data
 					memcpy(LCP, enetEvent.packet->data, enetEvent.packet->dataLength);
 					currentLevel = LCP->LevelSelect;
 
@@ -221,7 +212,6 @@ int main(int argc, char* args[]) {
 			enet_packet_destroy(enetEvent.packet);
 
 		}
-		// this creates a packet that calls on all channels and contains ALL of the transforms. the client will then pick the transform that isn't their own.
 
 		if (clientCount > 0) {
 			dataPacket = enet_packet_create(physicsData, sizeof(PhysicsData), ENET_PACKET_FLAG_RELIABLE);
@@ -229,10 +219,7 @@ int main(int argc, char* args[]) {
 		}
 
 	}
-
-
-	// delete it all!
-
+	// closes the server and SDL2 window.
 	delete physicsData;
 	delete clientData;
 	delete clientPacket;

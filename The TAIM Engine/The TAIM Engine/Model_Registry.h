@@ -2,6 +2,8 @@
 #include <map>
 #include <string>
 #include "Model.h"
+
+// Model_Registry is a manager that stores models and only once
 class Model_Registry
 {
 private:

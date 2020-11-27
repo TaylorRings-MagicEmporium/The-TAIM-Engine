@@ -5,7 +5,7 @@
 #include "Entity.h"
 #include "SubSystem.h"
 
-//class SubSystem;
+// the Entity_System is responsible for storing entities in an organised manner (tags)
 class Entity_System : public SubSystem
 {
 private:

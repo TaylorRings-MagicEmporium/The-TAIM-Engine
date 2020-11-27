@@ -13,6 +13,7 @@ struct KeyFrame {
 	float duration = 1;
 };
 
+// the animator is a component that tells an entity to go through an animation.
 class Animator : public Component
 {
 private:
@@ -48,7 +49,5 @@ public:
 	bool IsPlaying() { return AnimationPlaying; };
 
 	glm::vec3 Vec3Lerp(glm::vec3 start, glm::vec3 end, float percent);
-
-	//float EaseinoutQuad(float currTime, glm::vec3 start, glm::vec3 end, float duration);
 };
 

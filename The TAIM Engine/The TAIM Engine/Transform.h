@@ -3,6 +3,8 @@
 #include <glm/gtx/quaternion.hpp>
 #include <string>
 
+
+// basic data structure that contains default, current transforms, and directional vectors
 struct Transform {
 	glm::vec3 position;
 	glm::quat Rotation;

@@ -112,6 +112,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
 	return textures;
 }
 
+// loads textures from the file into textureIDs for OpenGL
 unsigned int Model::TextureFromFile(char* path, std::string& directory) {
 
 	std::string filename = std::string(path);
@@ -120,7 +121,6 @@ unsigned int Model::TextureFromFile(char* path, std::string& directory) {
 	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
-	//std::cout << "hopefully working?" << std::endl;
 	stbi_set_flip_vertically_on_load(Flip);
 	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 	stbi_set_flip_vertically_on_load(false);

@@ -30,7 +30,6 @@ int The_TAIM_Engine::SetupEngine() {
 
 	SubSystemsList = std::vector<SubSystem*>{ &NS,&IS,&PS,&AnS,&ES,&CS,&GS,&AS};
 
-
 	//Initialization flag
 	bool success = true;
 
@@ -107,17 +106,17 @@ int The_TAIM_Engine::SetupEngine() {
 	FLS.CS = &CS;
 	FLS.AnS = &AnS;
 
-
 	for (int i = 0; i < SubSystemsList.size(); i++) {
 		SubSystemsList[i]->SetComponentSize(100);
 	}
+
 
 	// (in file) "basic" is the engine's own shader in the case that no shader specified is found. MAKE INTO CODE INSTEAD
 	SR.CreateShader("basic", "Shaders/BasicVertex.glsl", "Shaders/BasicFragment.glsl"); // ENGINE NEEDED
 	SR.CreateShader("model_loading", "Shaders/model_loadingV.glsl", "Shaders/model_loadingF.glsl");
 	SR.CreateShader("DebugLine", "Shaders/DebugLineVertex.glsl", "Shaders/DebugLineFragment.glsl");
 
-	FLS.LoadEntities();
+	FLS.LoadEntities(); // load the entities from the file into the specified subsystems
 
 	for (int i = 0; i < SubSystemsList.size(); i++) {
 		SubSystemsList[i]->AssignLayers(&Event_Queue, &CL);
@@ -137,22 +136,14 @@ int The_TAIM_Engine::SetupEngine() {
 int The_TAIM_Engine::StartEngine() {
 
 
+	bool quit = false; 	//used to exit the loop if needed
+	SDL_Event e;		//used for polling the SDL events
 
-	//used to exit the loop if needed
-	bool quit = false;
-
-	//used for polling the SDL events
-	SDL_Event e;
-
-	// the main game loop of the program
-	int count = 0;
 	while (!quit)
 	{
 
-		// for each event on SDL_queue
 		while (SDL_PollEvent(&e) != 0)
 		{
-			// if the user closes the current window...
 			if (e.type == SDL_QUIT)
 			{
 				quit = true;
@@ -161,6 +152,7 @@ int The_TAIM_Engine::StartEngine() {
 
 		CL.ResetBuffers();
 
+		//SHADER UPDATE	
 		SR.GetShader("model_loading")->Use();
 		SR.GetShader("model_loading")->SetMat4("Proj", CL.proj);
 		SR.GetShader("model_loading")->SetMat4("View", CL.view);
@@ -172,23 +164,12 @@ int The_TAIM_Engine::StartEngine() {
 		SR.GetShader("DebugLine")->SetMat4("Proj", CL.proj);
 		SR.GetShader("DebugLine")->SetMat4("View", CL.view);
 
-		// ENGINE LOOP
-		// in the future, the camera will be within a camera system for better control
-
-		std::vector<float> timeList;
-
 		for (int i = 0; i < SubSystemsList.size(); i++) {
-			timeList.push_back(SDL_GetTicks());
 			SubSystemsList[i]->Update();
 		}
 		Profiling_System::GetInstance()->Update();
 
-		//std::cout << "PHYSICS: " << (t2 - t1) / 1000.0f << "Seconds. " << "GRAPHICS: " << (t3 - t2) / 1000.0f << "Seconds" << std::endl;
-
-
-		//finds out the total events in the queue.
-		//std::cout << Event_Queue.GetTotalEvents() << " event in the queue" << std::endl;
-			
+		//EVENT HANDLING
 		typedef void (The_TAIM_Engine::* method_function)(Event*);
 		method_function method_pointer[EVENT_TYPE_COUNT];
 		method_pointer[(int)EventType::ChangeLevel] = &The_TAIM_Engine::ChangeLevels;
@@ -198,28 +179,16 @@ int The_TAIM_Engine::StartEngine() {
 			(this->*func)(e);
 		}
 
-		// removes events that are not needed anymore
 		Event_Queue.RemoveEmptyEvents();
-
-		//updates the window by double buffering.
-
-		//SDL_GL_
 
 		for (int i = 0; i < SubSystemsList.size(); i++) {
 			SubSystemsList[i]->LateUpdate();
 		}
 
-
-		
-
 		SDL_GL_SwapWindow(gWindow);
 	}
 
-
-
-
 	close();
-	//delete ev;
 	return 0;
 }
 

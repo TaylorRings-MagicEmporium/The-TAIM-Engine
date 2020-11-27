@@ -13,9 +13,6 @@ void Physics_System::SetComponentSize(int size) {
 }
 
 void Physics_System::Startup() {
-
-
-
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	dispacher = new btCollisionDispatcher(collisionConfiguration);
 	overlappingPairCache = new btDbvtBroadphase();
@@ -28,7 +25,7 @@ void Physics_System::Startup() {
 
 	SetupRigidbodies();
 
-
+	// connects the physics debugger with the physics system's dynamic worl.d
 	BDD.CL = Comm_Layer;
 	dynamicWorld->setDebugDrawer(&BDD);
 	dynamicWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
@@ -62,7 +59,6 @@ void Physics_System::ShutDown(){
 
 void Physics_System::Update()
 {
-
 	typedef void (Physics_System::* method_function)(Event*);
 	method_function method_pointer[EVENT_TYPE_COUNT];
 	method_pointer[(int)EventType::MoveForward] = &Physics_System::MoveForward;
@@ -80,21 +76,17 @@ void Physics_System::Update()
 		(this->*func)(e);
 	}
 
-
+	// a fixed-time step is used to have constant time. in networking, whether the player is fast or slow, is still displayed in the other client.
 	dynamicWorld->stepSimulation(1.0f / 60.0f, 10);
 
-	//ColliderCallBack();
 
+	// wraps the physics data into GPWrap
 	dynamicWorld->debugDrawWorld();
 	for (int j = 0; j < ListOfRigidbodies.size(); j++) {
 		btTransform trans;
 		if (ListOfRigidbodies[j].body && ListOfRigidbodies[j].body->getMotionState()) {
 			ListOfRigidbodies[j].body->getMotionState()->getWorldTransform(trans);
 			Comm_Layer->GPWrap(trans, ListOfRigidbodies[j].GO);
-			//if (j == 0) {
-			//	//printf("world pos object %d = %f,%f,%f\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
-
-			//}
 		}
 	}
 }
@@ -137,8 +129,6 @@ void Physics_System::MoveLeft(Event* e) {
 		Rigidbody* r = (Rigidbody*)m->ListOfEntities[i]->GetComponent(ComponentType::Rigidbody);
 		r->body->activate(true);
 
-		//r->body->applyTorque(btVector3(m->MoveAmount.x, m->MoveAmount.y, m->MoveAmount.z));
-		//r->body->applyTorque(btVector3(0, 1.4, 0));
 		r->body->applyCentralForce(btVector3(m->MoveAmount.x, m->MoveAmount.y, m->MoveAmount.z));
 	}
 }
@@ -174,7 +164,7 @@ void Physics_System::ResetTransformEv(Event* e) {
 	ResetTransform* m = (ResetTransform*)(e);
 	for (int i = 0; i < m->ListOfEntities.size(); i++) {
 		Rigidbody* r = (Rigidbody*)m->ListOfEntities[i]->GetComponent(ComponentType::Rigidbody);
-		r->body->activate(true);
+		r->body->activate(true); // needed to force the rigidbody to react (island sleeping)
 		btTransform t;
 		r->motionState->getWorldTransform(t);
 		t.setOrigin(btVector3(m->ListOfEntities[i]->transform.position.x, m->ListOfEntities[i]->transform.position.y, m->ListOfEntities[i]->transform.position.z));
@@ -192,7 +182,6 @@ void Physics_System::ResetTransformEv(Event* e) {
 }
 
 void Physics_System::TestGunShot(Event* e) {
-	//std::cout << "PHYSICS SYSTEM: RECIEVED" << std::endl;
 	Gunshot* g = (Gunshot*)(e);
 	btVector3 startPoint = btVector3(g->startingPoint.x, g->startingPoint.y, g->startingPoint.z);
 	btVector3 EndPoint = startPoint + g->length * btVector3(g->direction.x, g->direction.y, g->direction.z);
@@ -200,7 +189,7 @@ void Physics_System::TestGunShot(Event* e) {
 
 	btCollisionWorld::ClosestRayResultCallback closestResults(startPoint, EndPoint);
 	closestResults.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
-	if (startPoint != EndPoint) {
+	if (startPoint != EndPoint) { // if the startpoint is the same as the endpoint, then do not compute the raycast as an error will occur.
 		dynamicWorld->rayTest(startPoint, EndPoint, closestResults);
 	}
 
@@ -248,15 +237,16 @@ void Physics_System::ToggleHidingComponent(ComponentType c, Entity* e) {
 
 void Physics_System::HideAdjust(ComponentType c, Entity* e) {
 
-
+	//if hidden, the rigidbody is removed from the dynamic world so no collisions occur.
 	if (c == ComponentType::Rigidbody) {
 		if (e->GetComponent(c)->hide) {
 			Rigidbody* r = (Rigidbody*)e->GetComponent(c);
 			r->body->setCollisionFlags(r->body->getCollisionFlags() | btRigidBody::CF_DISABLE_VISUALIZE_OBJECT);
-			dynamicWorld->removeRigidBody(r->body);
+			dynamicWorld->removeRigidBody(r->body); 
 
 		}
 		else {
+			// re-add the rigidbody to the dynamic world.
 			Rigidbody* r = (Rigidbody*)e->GetComponent(c);
 			r->body->setCollisionFlags(r->body->getCollisionFlags() & ~btRigidBody::CF_DISABLE_VISUALIZE_OBJECT);
 			dynamicWorld->addRigidBody(r->body);

@@ -43,6 +43,7 @@ private:
 	std::vector<std::string> LevelFiles;
 	int fileCount = 0;
 public:
+	
 	Graphics_System* GS;
 	Physics_System* PS;
 	ShaderRegistry* SR;
@@ -51,10 +52,16 @@ public:
 	Camera_System* CS;
 	Animation_System* AnS;
 
+
 	FileLoader_System();
+	// function doesn't exist
 	void LoadShaders();
+
+	// load entities from a file and puts their components in the respective places.
 	void LoadEntities();
 	ConfigData LoadConfig();
+
+	//swaps the main file to the specified level in the vector
 	void SwapFile(int level);
 };
 
