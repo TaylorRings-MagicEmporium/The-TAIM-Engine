@@ -72,6 +72,7 @@ void Physics_System::Update()
 	method_pointer[(int)EventType::Jump] = &Physics_System::FJump;
 	method_pointer[(int)EventType::ResetTransform] = &Physics_System::ResetTransformEv;
 	method_pointer[(int)EventType::GunShot] = &Physics_System::TestGunShot;
+	method_pointer[(int)EventType::HideComponent] = &Physics_System::HideRigidbodyComponent;
 
 
 	while (Event* e = Event_Queue->PollEvents(SubSystemType::Physics)) {
@@ -246,6 +247,7 @@ void Physics_System::ToggleHidingComponent(ComponentType c, Entity* e) {
 
 void Physics_System::HideAdjust(ComponentType c, Entity* e) {
 
+
 	if (c == ComponentType::Rigidbody) {
 		if (e->GetComponent(c)->hide) {
 			Rigidbody* r = (Rigidbody*)e->GetComponent(c);
@@ -281,4 +283,11 @@ void Physics_System::SetupRigidbodies() {
 
 void Physics_System::SyncComponentsToSystem() {
 	SetupRigidbodies();
+}
+
+void Physics_System::HideRigidbodyComponent(Event* e) {
+	for (int i = 0; i < e->ListOfEntities.size(); i++) {
+		ToggleHidingComponent(ComponentType::Rigidbody, e->ListOfEntities[i]);
+
+	}
 }

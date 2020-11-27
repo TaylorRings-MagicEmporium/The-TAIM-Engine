@@ -189,7 +189,7 @@ int The_TAIM_Engine::StartEngine() {
 			
 		typedef void (The_TAIM_Engine::* method_function)(Event*);
 		method_function method_pointer[EVENT_TYPE_COUNT];
-		method_pointer[(int)EventType::ResetAllSystems] = &The_TAIM_Engine::ResetSystems;
+		method_pointer[(int)EventType::ChangeLevel] = &The_TAIM_Engine::ChangeLevels;
 
 		while (Event* e = Event_Queue.PollEvents(SubSystemType::System)) {
 			method_function func = method_pointer[(int)e->GetType()];
@@ -222,12 +222,14 @@ int The_TAIM_Engine::StartEngine() {
 }
 
 
-void The_TAIM_Engine::ResetSystems(Event* e)
+void The_TAIM_Engine::ChangeLevels(Event* e)
 {
 	for (int i = 0; i < SubSystemsList.size(); i++) {
 		SubSystemsList[i]->ResetSystem();
 	}
-	FLS.SwapFile();
+	ChangeLevel* l = (ChangeLevel*)(e);
+
+	FLS.SwapFile(l->level);
 	FLS.LoadEntities();
 
 	for (int i = 0; i < SubSystemsList.size(); i++) {

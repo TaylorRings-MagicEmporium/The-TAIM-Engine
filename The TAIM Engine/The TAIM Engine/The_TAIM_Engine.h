@@ -76,7 +76,7 @@ class The_TAIM_Engine {
 
 	std::vector<SubSystem*> SubSystemsList;
 
-	void ResetSystems(Event* e);
+	void ChangeLevels(Event* e);
 
 public:
 	// used for engine initialisation. 

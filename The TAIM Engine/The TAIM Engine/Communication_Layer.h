@@ -24,6 +24,8 @@ public:
 	glm::mat4 proj = glm::mat4(1.0f);
 	glm::mat4 UIProj = glm::mat4(1.0f);
 
+	bool CanChangeLevel = true;
+	int CurrentLevel = 0;
 	//glm::vec3 Debug_
 	int Debug_Line_Vertices_Counter = 0;
 	Communication_Layer();

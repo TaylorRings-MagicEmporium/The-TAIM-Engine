@@ -30,8 +30,9 @@ enum class KeyCode {
 // to keep the abstraction between the window's inputs and gameplay functionality, the input system has it's own keycode for the gameplay to use.
 class Input_System : public SubSystem
 {
-
 private:
+	int count = 0;
+
 	SDL_Window* Window;
 
 	// an array holds the boolean state of the keypresses (is it pressed?)

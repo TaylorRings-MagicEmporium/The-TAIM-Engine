@@ -123,8 +123,20 @@ void Input_System::CreateEvents() {
 		Event_Queue->AddEventToStack(ev);
 	}
 	if (GetKeyPressed(KeyCode::KEY_0) && !GetPrevKeyPressed(KeyCode::KEY_0)) {
-		ev = new ResetAllSystems();
-		ev->SubSystemOrder.push_back(SubSystemType::System);
-		Event_Queue->AddEventToStack(ev);
+		if (Comm_Layer->CanChangeLevel) {
+			count++;
+			if (count > 1) {
+				count = 0;
+			}
+			ev = new ChangeLevel();
+			ChangeLevel* l = (ChangeLevel*)(ev);
+			l->level = count;
+			ev->SubSystemOrder.push_back(SubSystemType::System);
+			ev->SubSystemOrder.push_back(SubSystemType::Network);
+			Event_Queue->AddEventToStack(ev);
+		}
+		else {
+			std::cout << "Sorry! only the first client can change levels" << std::endl;
+		}
 	}
 }

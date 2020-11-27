@@ -20,12 +20,42 @@ struct PhysicsData {
 struct ClientData {
 	int packetType = 0;
 	int clientIndex;
+	bool FirstClient;
+	int CurrentLevel = 0;
+};
+
+
+struct TargetHitData {
+	int packetType = 2;
+	int clientIndex = -1;
+	std::string TargetName = "";
 };
 
 struct ClientPacket {
+	int packetType = 0;
 	int clientIndex;
 	TransformPacket transform;
 };
+
+struct TargetHitPacket
+{
+	int packetType = 1;
+	int clientIndex;
+	std::string TargetName;
+};
+
+struct LevelChangePacket {
+	int packetType = 2;
+	int clientIndex;
+	int LevelSelect = 0;
+};
+
+struct LevelChangeData {
+	int packetType = 3;
+	int clientIndex;
+	int LevelSelect;
+};
+
 
 int main(int argc, char* args[]) {
 	SDL_Window* gWindow = NULL;
@@ -66,6 +96,7 @@ int main(int argc, char* args[]) {
 		std::cout << "Server is active!" << std::endl;
 	}
 
+	int FirstClient = -1;
 	// PhysicsData contains each client's position data at start. when a client is connected, they will update their packet,
 	// while it recieves the default data of the other client.
 	PhysicsData* physicsData = new PhysicsData;
@@ -104,6 +135,13 @@ int main(int argc, char* args[]) {
 
 
 	ClientData* clientData = new ClientData;
+	TargetHitPacket* targetPacket = new TargetHitPacket;
+	TargetHitData* targetData = new TargetHitData;
+	targetData->clientIndex = 0;
+
+	LevelChangePacket* LCP = new LevelChangePacket;
+	LevelChangeData* LCD = new LevelChangeData;
+	int currentLevel = 0;
 
 	bool quit = false;
 	SDL_Event e;
@@ -123,6 +161,13 @@ int main(int argc, char* args[]) {
 
 				std::cout << "a client connected from address " << enetEvent.peer->address.host << ":" << enetEvent.peer->address.port << ".\n";
 				clientData->clientIndex = clientCount;
+				if (FirstClient == -1) {
+					FirstClient = clientData->clientIndex;
+					clientData->FirstClient = true;
+				}
+				else {
+					clientData->FirstClient = false;
+				}
 				// we send a packet to the client that connected to say that connection is successful.
 				dataPacket = enet_packet_create(clientData, sizeof(ClientData), ENET_PACKET_FLAG_RELIABLE);
 				enet_peer_send(enetEvent.peer, 0, dataPacket);
@@ -140,14 +185,33 @@ int main(int argc, char* args[]) {
 				// when a client sends a packet and the server recieves it
 			case ENET_EVENT_TYPE_RECEIVE:
 
-				//memcpy(packetType, enetEvent.packet->data, enetEvent.packet->dataLength);
-				//if(*packetType == 0)
-				// memcpy copies the actual data (1's and 0's) to a position pointer. as the data is the same length as "transform",
-				// we can access it with ease with clientPacket acting as our safe buffer.
-				memcpy(clientPacket, enetEvent.packet->data, enetEvent.packet->dataLength);
-				int currentClient = clientPacket->clientIndex;
-				//physicsData->transforms[clientPacket->clientIndex] = clientPacket->transform;
-				physicsData->transforms[clientPacket->clientIndex] = clientPacket->transform;
+				memcpy(packetType, enetEvent.packet->data, enetEvent.packet->dataLength);
+				if (*packetType == 0) {
+					// memcpy copies the actual data (1's and 0's) to a position pointer. as the data is the same length as "transform",
+					// we can access it with ease with clientPacket acting as our safe buffer.
+					memcpy(clientPacket, enetEvent.packet->data, enetEvent.packet->dataLength);
+					int currentClient = clientPacket->clientIndex;
+					//physicsData->transforms[clientPacket->clientIndex] = clientPacket->transform;
+					physicsData->transforms[clientPacket->clientIndex] = clientPacket->transform;
+				}
+				else if (*packetType == 1) {
+					memcpy(targetPacket, enetEvent.packet->data, enetEvent.packet->dataLength);
+					targetData->clientIndex = targetPacket->clientIndex;
+					targetData->TargetName = targetPacket->TargetName;
+					dataPacket = enet_packet_create(targetData, sizeof(TargetHitData), ENET_PACKET_FLAG_RELIABLE);
+					enet_host_broadcast(server, 0, dataPacket);
+				}
+				else if (*packetType == 2) {
+					memcpy(LCP, enetEvent.packet->data, enetEvent.packet->dataLength);
+					currentLevel = LCP->LevelSelect;
+
+					LCD->clientIndex = LCP->clientIndex;
+					LCD->LevelSelect = currentLevel;
+
+					dataPacket = enet_packet_create(LCD, sizeof(LevelChangeData), ENET_PACKET_FLAG_RELIABLE);
+					enet_host_broadcast(server, 0, dataPacket);
+				}
+
 			}
 			enet_packet_destroy(enetEvent.packet);
 

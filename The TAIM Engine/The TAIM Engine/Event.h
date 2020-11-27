@@ -10,15 +10,15 @@ enum class EventType {
 	//Physics_Engine
 	MoveForward,MoveBackward,MoveLeft,MoveRight,Jump, ResetTransform,
 	UpdateTransform, GunShot, ChangeCamera, AnimationBegin, AnimationEnd,
-	ResetAllSystems,
+	ChangeLevel,HideComponent,
 	
-	PlaySound};
+	PlaySoundEv};
 
 // the system enum is used to indicate which system should react to this specific event.
 enum class SubSystemType {Windows, Graphics, Physics, Audio, Network, System, Camera, EntityS, Animation};
 
 //for effective function pointing, the size of the EventType has to be recorded.
-const int EVENT_TYPE_COUNT = 13;
+const int EVENT_TYPE_COUNT = 14;
 
 
 // the Event is a special container that is essential for the communication of systems by storing information needed for systems to evaluate it.
@@ -88,7 +88,7 @@ public:
 class PlaySoundEv : public Event {
 public:
 	PlaySoundEv() {
-		MyType = EventType::PlaySound;
+		MyType = EventType::PlaySoundEv;
 		SubSystemOrder.push_back(SubSystemType::Audio);
 	}
 };
@@ -147,9 +147,15 @@ public:
 	AnimationEnd() { MyType = EventType::AnimationEnd; };
 };
 
-class ResetAllSystems : public Event {
+class ChangeLevel : public Event {
 public:
-	ResetAllSystems() { MyType = EventType::ResetAllSystems; };
+	ChangeLevel() { MyType = EventType::ChangeLevel; };
+	int level = 0;
+};
+
+class HideComponent : public Event {
+public:
+	HideComponent() { MyType = EventType::HideComponent; };
 };
 
 

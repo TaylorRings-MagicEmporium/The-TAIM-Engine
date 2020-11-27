@@ -55,6 +55,6 @@ public:
 	void LoadShaders();
 	void LoadEntities();
 	ConfigData LoadConfig();
-	void SwapFile();
+	void SwapFile(int level);
 };
 

@@ -10,8 +10,8 @@ Network_System::~Network_System() {
 }
 
 void Network_System::Update() {
-	int count = 0;
-	bool PacketPass[3] = { false,false, false }; // PacketPass ensures that only one packet can be recieved for each packet.
+
+	bool PacketPass[4] = { false,false, false, false }; // PacketPass ensures that only one packet can be recieved for each packet.
 	// if this didn't exist, then hundreds of events would be added, even when they do the same thing.
 	while (enet_host_service(client, &enetEvent, 0) > 0) {
 		switch (enetEvent.type) {
@@ -20,11 +20,21 @@ void Network_System::Update() {
 
 			memcpy(packetType, enetEvent.packet->data, sizeof(int)); // all pachets have int as their first value, this means the "type" of packet can be figured out before copying the rest.
 			if (*packetType == 0 && !PacketPass[0]) {
+				Comm_Layer->CanChangeLevel = false;
 				memcpy(clientData, enetEvent.packet->data, sizeof(ClientData)); // memcpy copies actual data into memory, but it is a risky move to do.
 				std::cout << "connection Packet Recieved!" << std::endl;
 				clientIndex = clientData->clientIndex;
 				serverConnect = true;
-
+				FirstClient = clientData->FirstClient;
+				Comm_Layer->CanChangeLevel = FirstClient;
+				if (FirstClient) {
+					std::cout << "YAY! I'm the first client!" << std::endl;
+				}
+				if (clientData->CurrentLevel != Comm_Layer->CurrentLevel) {
+					ChangeLevel* ev = new ChangeLevel();
+					ev->level = clientData->CurrentLevel;
+					Event_Queue->AddEventToStack(ev);
+				}
 				PacketPass[0] = true;
 			}
 			else if (*packetType == 1 && !PacketPass[1]) {
@@ -39,7 +49,7 @@ void Network_System::Update() {
 						// the data from the packet it put into a "update transform" event with the ghost object target.
 						Event* ev = new UpdateTransform();
 						ev->ListOfEntities.insert(ev->ListOfEntities.end(), ghostEntities.begin(), ghostEntities.end());
-						std::cout << serverData->transforms[i].x << ", " << serverData->transforms[i].y << ", " << serverData->transforms[i].z << std::endl;
+						//std::cout << serverData->transforms[i].x << ", " << serverData->transforms[i].y << ", " << serverData->transforms[i].z << std::endl;
 						static_cast<UpdateTransform*>(ev)->pos = glm::vec3(serverData->transforms[i].x, serverData->transforms[i].y, serverData->transforms[i].z);
 						static_cast<UpdateTransform*>(ev)->rot = glm::quat(serverData->transforms[i].qw, serverData->transforms[i].qx, serverData->transforms[i].qy, serverData->transforms[i].qz);
 						Event_Queue->AddEventToStack(ev);
@@ -48,7 +58,40 @@ void Network_System::Update() {
 				PacketPass[1] = true;
 			}
 			else if (*packetType == 2 && !PacketPass[2]) {
-				//memcpy()
+
+				memcpy(targetData, enetEvent.packet->data, sizeof(TargetHitData));
+				if (targetData->clientIndex != clientIndex) {
+					count++;
+					std::cout << count << std::endl;
+					std::cout << "target name:" << targetData->TargetName << std::endl;
+					Entity* hit = ES->GetEntityWithName(targetData->TargetName);
+					AnimationBegin* ev1 = new AnimationBegin();
+					ev1->ListOfEntities.push_back(hit);
+					ev1->SubSystemOrder.push_back(SubSystemType::Animation);
+					Event_Queue->AddEventToStack(ev1);
+
+					Profiling_System::GetInstance()->IncrementPlayer2Hit();
+
+					HideComponent* ev2 = new HideComponent();
+					ev2->ListOfEntities.push_back(hit);
+					ev2->SubSystemOrder.push_back(SubSystemType::Physics);
+					Event_Queue->AddEventToStack(ev2);
+
+					PlaySoundEv* ev3 = new PlaySoundEv();
+					ev3->ListOfEntities.push_back(ES->GetEntitiesWithTag("Player")[0]);
+					Event_Queue->AddEventToStack(ev3);
+						
+				}
+			}
+			else if (*packetType == 3 && !PacketPass[3]) {
+
+				memcpy(LCD, enetEvent.packet->data, sizeof(LevelChangeData));
+				if (LCD->clientIndex != clientIndex) {
+					ChangeLevel* ev = new ChangeLevel();
+					ev->SubSystemOrder.push_back(SubSystemType::System);
+					ev->level = LCD->LevelSelect;
+					Event_Queue->AddEventToStack(ev);
+				}
 			}
 
 			break;
@@ -98,11 +141,17 @@ void Network_System::LateUpdate() {
 
 		SendTranformPacket();
 
-		//typedef void (Network_System::* method_function)(Event*);
-		//method_function method_pointer[EVENT_TYPE_COUNT];
-		//method_pointer[(int)EventType::GunShot] = &Network_System::SendTargetPacket;
-
-
+		typedef void (Network_System::* method_function)(Event*);
+		method_function method_pointer[EVENT_TYPE_COUNT];
+		method_pointer[(int)EventType::GunShot] = &Network_System::SendTargetPacket;
+		method_pointer[(int)EventType::ChangeLevel] = &Network_System::SendLevelChangePacket;
+		while (Event* e = Event_Queue->PollEvents(SubSystemType::Network)) {
+			method_function func = method_pointer[(int)e->GetType()];
+			(this->*func)(e);
+		}
+	}
+	else {
+		while (Event* e = Event_Queue->PollEvents(SubSystemType::Network));
 	}
 }
 
@@ -126,9 +175,18 @@ void Network_System::SendTranformPacket()
 
 void Network_System::SendTargetPacket(Event* e)
 {
-	//Gunshot* g = (Gunshot*)(e);
-	//targetPacket->TargetName = g->ListOfEntities[0]->GetName();
-	//targetPacket->clientIndex = clientIndex;
-	//dataPacket = enet_packet_create(targetPacket, sizeof(TargetHitPacket), ENET_PACKET_FLAG_RELIABLE);
-	//
+	Gunshot* g = (Gunshot*)(e);
+	targetPacket->TargetName = g->ListOfEntities[0]->GetName();
+	targetPacket->clientIndex = clientIndex;
+	dataPacket = enet_packet_create(targetPacket, sizeof(TargetHitPacket), ENET_PACKET_FLAG_RELIABLE);
+	enet_peer_send(peer, 0, dataPacket);
+}
+
+void Network_System::SendLevelChangePacket(Event* e)
+{
+	ChangeLevel* l = (ChangeLevel*)(e);
+	LCP->clientIndex = clientIndex;
+	LCP->LevelSelect = l->level;
+	dataPacket = enet_packet_create(LCP, sizeof(LevelChangePacket), ENET_PACKET_FLAG_RELIABLE);
+	enet_peer_send(peer, 0, dataPacket);
 }

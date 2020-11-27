@@ -35,6 +35,7 @@ private:
 	void FJump(Event* e);
 	void ResetTransformEv(Event* e);
 	void TestGunShot(Event* e);
+	void HideRigidbodyComponent(Event* e);
 public:
 	Physics_System();
 	~Physics_System();

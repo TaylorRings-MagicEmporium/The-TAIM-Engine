@@ -87,33 +87,21 @@ void FileLoader_System::LoadEntities()
 				TTD.position.y = Position["y"].cast<float>();
 				TTD.position.z = Position["z"].cast<float>();
 			}
-			else {
-				//std::cout << "NO POSITION" << std::endl;
-			}
 			if (!Rotation.isNil()) {
 				TTD.degrees = Rotation["degrees"].cast<float>();
 				TTD.rotateAxis.x = Rotation["axisX"].cast<float>();
 				TTD.rotateAxis.y = Rotation["axisY"].cast<float>();
 				TTD.rotateAxis.z = Rotation["axisZ"].cast<float>();
 			}
-			else {
-				//std::cout << "NO ROTATION" << std::endl;
-			}
 			if (!Scale.isNil()) {
 				TTD.scale.x = Scale["x"].cast<float>();
 				TTD.scale.y = Scale["y"].cast<float>();
 				TTD.scale.z = Scale["z"].cast<float>();
 			}
-			else {
-				//std::cout << "NO SCALE" << std::endl;
-			}
 			
 			if (!tag.isNil()) {
 				TTD.tag = tag.cast<std::string>();
 			}
-		}
-		else {
-			//std::cout << "NO TRANSFORM" << std::endl;
 		}
 
 		Entity* object = ES->CreateEntity(TTD.position, glm::angleAxis(glm::radians(TTD.degrees), glm::normalize(TTD.rotateAxis)),TTD.scale,TTD.tag, TTD.FileTag, TTD.name);
@@ -123,7 +111,6 @@ void FileLoader_System::LoadEntities()
 		if (!meshRend.isNil()) {
 			Component* temp = GS->CreateMeshRenderer(meshRend["MeshPath"].cast<std::string>(), SR->GetShader(meshRend["ShaderName"].cast<std::string>()), meshRend["flipImage"].cast<bool>());
 			object->SetComponent(temp);
-			//std::cout << meshRend["MeshPath"].cast<std::string>() << ", " << meshRend["ShaderName"].cast<std::string>() << ", " << meshRend["flipImage"].cast<bool>() << std::endl;
 			
 			if (meshRend["ShaderName"].cast<std::string>() == "basic") {
 				glm::vec4 col;
@@ -149,7 +136,6 @@ void FileLoader_System::LoadEntities()
 
 			}
 			
-			std::cout << Rigid["mass"].cast<float>() << std::endl;
 			Component* temp = PS->CreateRigidbody(glm::vec3(offset["x"].cast<float>(), offset["y"].cast<float>(), offset["z"].cast<float>()), Rigid["mass"].cast<float>());
 			object->SetComponent(temp);
 		
@@ -157,7 +143,6 @@ void FileLoader_System::LoadEntities()
 			LuaRef lockX = Rigid["LockX"];
 			LuaRef lockY = Rigid["LockY"];
 			LuaRef lockZ = Rigid["LockZ"];
-			std::cout << Rigid["LockX"].cast<bool>() << std::endl;
 			if (!lockX.isNil()) {
 				locks[0] = lockX.cast<bool>();
 			}
@@ -176,14 +161,12 @@ void FileLoader_System::LoadEntities()
 		if (!CuColl.isNil()) {
 			object->SetComponent(PS->CreateCubeCollider(glm::vec3(CuColl["sizeX"].cast<float>(), CuColl["sizeY"].cast<float>(), CuColl["sizeZ"].cast<float>())));
 		}
-		std::cout << std::endl;
 
 		//SPHERECOLLIDER
 		LuaRef SphColl = ComponentView["SphereCollider"];
 		if (!SphColl.isNil()) {
 			object->SetComponent(PS->CreateSphereCollider(SphColl["radius"].cast<float>()));
 		}
-		std::cout << std::endl;
 
 		//AUDIOPLAYER
 		LuaRef AudPla = ComponentView["AudioPlayer"];
@@ -248,9 +231,6 @@ ConfigData FileLoader_System::LoadConfig()
 	return CD;
 }
 
-void FileLoader_System::SwapFile() {
-	fileCount++;
-	if (fileCount > LevelFiles.size() - 1) {
-		fileCount = 0;
-	}
+void FileLoader_System::SwapFile(int level) {
+	fileCount = level;
 }

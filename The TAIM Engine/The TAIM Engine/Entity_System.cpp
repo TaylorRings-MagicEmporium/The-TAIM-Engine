@@ -82,4 +82,6 @@ Entity* Entity_System::GetEntityWithName(std::string name)
 			return ALL_ENTITIES[i];
 		}
 	}
+	std::cout << "No entity with name <" << name << ">. returning null." << std::endl;
+	return nullptr;
 }

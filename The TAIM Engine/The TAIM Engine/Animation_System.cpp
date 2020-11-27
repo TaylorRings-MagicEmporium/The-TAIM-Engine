@@ -28,7 +28,7 @@ void Animation_System::Update()
 	typedef void (Animation_System::* method_function)(Event*);
 	method_function method_pointer[EVENT_TYPE_COUNT];
 	method_pointer[(int)EventType::GunShot] = &Animation_System::BeginAnimation;
-
+	method_pointer[(int)EventType::AnimationBegin] = &Animation_System::BeginAnimation;
 	while (Event* e = Event_Queue->PollEvents(SubSystemType::Animation)) {
 		method_function func = method_pointer[(int)e->GetType()];
 		(this->*func)(e);
