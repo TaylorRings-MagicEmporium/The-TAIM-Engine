@@ -141,7 +141,7 @@ int main(int argc, char* args[]) {
 
 	while (!quit) {
 
-		while (SDL_PollEvent(&e) != 0) {
+		while (SDL_PollEvent(&e) != 0) {			// unlikely, but this will cause an error with an unpredicted pattern. however, this happens at the end of the server's program
 			if (e.type == SDL_QUIT) {
 				quit = true;
 			}
