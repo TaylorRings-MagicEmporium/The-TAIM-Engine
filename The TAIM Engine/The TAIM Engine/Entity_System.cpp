@@ -60,7 +60,7 @@ void Entity_System::Update() {
 
 void Entity_System::GunshotInfo(Event* e)
 {
-	std::cout << "ENTITY SYSTEM: RECIEVED" << std::endl;
+	//std::cout << "ENTITY SYSTEM: RECIEVED" << std::endl;
 	Gunshot* g = (Gunshot*)(e);
 	g->startingPoint = g->startEntity->transform.position + g->startEntity->transform.forwardVector + glm::vec3(0,0.6,0);
 	g->direction = g->startEntity->transform.forwardVector;

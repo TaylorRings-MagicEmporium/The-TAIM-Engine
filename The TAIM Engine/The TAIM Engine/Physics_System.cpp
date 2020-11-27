@@ -192,7 +192,7 @@ void Physics_System::ResetTransformEv(Event* e) {
 }
 
 void Physics_System::TestGunShot(Event* e) {
-	std::cout << "PHYSICS SYSTEM: RECIEVED" << std::endl;
+	//std::cout << "PHYSICS SYSTEM: RECIEVED" << std::endl;
 	Gunshot* g = (Gunshot*)(e);
 	btVector3 startPoint = btVector3(g->startingPoint.x, g->startingPoint.y, g->startingPoint.z);
 	btVector3 EndPoint = startPoint + g->length * btVector3(g->direction.x, g->direction.y, g->direction.z);
@@ -200,7 +200,9 @@ void Physics_System::TestGunShot(Event* e) {
 
 	btCollisionWorld::ClosestRayResultCallback closestResults(startPoint, EndPoint);
 	closestResults.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
-	dynamicWorld->rayTest(startPoint, EndPoint, closestResults);
+	if (startPoint != EndPoint) {
+		dynamicWorld->rayTest(startPoint, EndPoint, closestResults);
+	}
 
 	bool success = false;
 
@@ -242,7 +244,6 @@ void Physics_System::ToggleHidingComponent(ComponentType c, Entity* e) {
 	e->GetComponent(c)->hide = !e->GetComponent(c)->hide;
 	
 	HideAdjust(c, e);
-
 }
 
 void Physics_System::HideAdjust(ComponentType c, Entity* e) {

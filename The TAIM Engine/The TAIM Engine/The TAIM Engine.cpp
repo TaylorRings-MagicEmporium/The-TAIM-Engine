@@ -124,6 +124,7 @@ int The_TAIM_Engine::SetupEngine() {
 		SubSystemsList[i]->Startup();
 	}
 	Profiling_System::GetInstance()->Startup();
+	Profiling_System::GetInstance()->ApplyLayers(&Event_Queue, &CL);
 
 	if (!success)
 	{
@@ -163,6 +164,7 @@ int The_TAIM_Engine::StartEngine() {
 		SR.GetShader("model_loading")->Use();
 		SR.GetShader("model_loading")->SetMat4("Proj", CL.proj);
 		SR.GetShader("model_loading")->SetMat4("View", CL.view);
+		SR.GetShader("basic")->Use();
 		SR.GetShader("basic")->Use();
 		SR.GetShader("basic")->SetMat4("Proj", CL.proj);
 		SR.GetShader("basic")->SetMat4("View", CL.view);

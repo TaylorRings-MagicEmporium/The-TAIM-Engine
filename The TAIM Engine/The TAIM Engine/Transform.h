@@ -12,6 +12,6 @@ struct Transform {
 	glm::quat defaultRotation;
 	glm::vec3 defaultScale;
 
-	glm::vec3 forwardVector;
-	glm::vec3 RightVector;
+	glm::vec3 forwardVector = glm::vec3(-1,0,0);
+	glm::vec3 RightVector = glm::vec3(1,0,0);
 };

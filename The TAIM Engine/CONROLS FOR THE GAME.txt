@@ -1,0 +1,4 @@
+W,A,S,D to move duck
+enter to shoot
+space to jump!
+level switching can only be done by either standalone game or first client on the server.

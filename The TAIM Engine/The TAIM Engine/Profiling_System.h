@@ -9,6 +9,10 @@
 #include <DearIMGUI/backends/imgui_impl_sdl.h>
 #include <DearIMGUI/backends/imgui_impl_opengl3.h>
 #include <string>
+#include <iostream>
+
+#include "EventQueue.h"
+#include "Communication_Layer.h"
 
 class Profiling_System
 {
@@ -29,9 +33,13 @@ private:
 	std::string levelName = "ERROR";
 
 	static Profiling_System* SingleInstance;
+
+	EventQueue* Event_Queue;
+	Communication_Layer* Comm_layer;
 public:
 	Profiling_System();
 	void ApplySDLContext(SDL_Window* gw, SDL_GLContext gc) { gWindow = gw; gContext = gc; };
+	void ApplyLayers(EventQueue* eq, Communication_Layer* cl) { Event_Queue = eq; Comm_layer = cl; };
 	void Startup();
 	void ShutDown();
 	void Update();

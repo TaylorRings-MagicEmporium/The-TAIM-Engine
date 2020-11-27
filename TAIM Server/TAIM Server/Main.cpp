@@ -181,6 +181,11 @@ int main(int argc, char* args[]) {
 				std::cout << "the client from address " << enetEvent.peer->address.host << ":" << enetEvent.peer->address.port << " disconnected \n";
 				enetEvent.peer->data = NULL;
 				clientCount--;
+
+				if (clientCount == 0) {
+					FirstClient = false;
+				}
+
 				break;
 				// when a client sends a packet and the server recieves it
 			case ENET_EVENT_TYPE_RECEIVE:

@@ -82,7 +82,7 @@ public:
 		SubSystemOrder.push_back(SubSystemType::Physics);
 	}
 
-	glm::vec3 JumpAmount = glm::vec3(0, 30, 0);
+	glm::vec3 JumpAmount = glm::vec3(0, 400, 0);
 };
 
 class PlaySoundEv : public Event {

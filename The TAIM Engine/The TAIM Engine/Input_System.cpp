@@ -92,7 +92,7 @@ void Input_System::CreateEvents() {
 		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 		Event_Queue->AddEventToStack(ev);
 	}
-	if (GetKeyPressed(KeyCode::KEY_SPACE)) {
+	if (GetKeyPressed(KeyCode::KEY_SPACE) && !GetPrevKeyPressed(KeyCode::KEY_SPACE)) {
 		ev = new Jump();
 		ev->ListOfEntities.insert(ev->ListOfEntities.end(), playerEntites.begin(), playerEntites.end());
 		Event_Queue->AddEventToStack(ev);
@@ -108,7 +108,7 @@ void Input_System::CreateEvents() {
 		Event_Queue->AddEventToStack(ev);
 	}
 	if (GetKeyPressed(KeyCode::KEY_RETURN) && !GetPrevKeyPressed(KeyCode::KEY_RETURN)) {
-		std::cout << "INPUT SYSTEM: RECIEVED" <<std::endl;
+		//std::cout << "INPUT SYSTEM: RECIEVED" <<std::endl;
 		ev = new Gunshot();
 		Gunshot* g = (Gunshot*)(ev);
 		g->SubSystemOrder.push_back(SubSystemType::EntityS);
@@ -122,21 +122,21 @@ void Input_System::CreateEvents() {
 		ev = new ChangeCamera();
 		Event_Queue->AddEventToStack(ev);
 	}
-	if (GetKeyPressed(KeyCode::KEY_0) && !GetPrevKeyPressed(KeyCode::KEY_0)) {
-		if (Comm_Layer->CanChangeLevel) {
-			count++;
-			if (count > 1) {
-				count = 0;
-			}
-			ev = new ChangeLevel();
-			ChangeLevel* l = (ChangeLevel*)(ev);
-			l->level = count;
-			ev->SubSystemOrder.push_back(SubSystemType::System);
-			ev->SubSystemOrder.push_back(SubSystemType::Network);
-			Event_Queue->AddEventToStack(ev);
-		}
-		else {
-			std::cout << "Sorry! only the first client can change levels" << std::endl;
-		}
-	}
+	//if (GetKeyPressed(KeyCode::KEY_0) && !GetPrevKeyPressed(KeyCode::KEY_0)) {
+	//	if (Comm_Layer->CanChangeLevel) {
+	//		count++;
+	//		if (count > 1) {
+	//			count = 0;
+	//		}
+	//		ev = new ChangeLevel();
+	//		ChangeLevel* l = (ChangeLevel*)(ev);
+	//		l->level = count;
+	//		ev->SubSystemOrder.push_back(SubSystemType::System);
+	//		ev->SubSystemOrder.push_back(SubSystemType::Network);
+	//		Event_Queue->AddEventToStack(ev);
+	//	}
+	//	else {
+	//		std::cout << "Sorry! only the first client can change levels" << std::endl;
+	//	}
+	//}
 }
