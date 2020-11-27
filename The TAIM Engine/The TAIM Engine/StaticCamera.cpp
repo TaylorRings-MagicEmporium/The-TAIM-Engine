@@ -1,9 +1,6 @@
 #include "StaticCamera.h"
 
 void StaticCamera::Setup() {
-    //if (IsSet) {
-    //    EM->CC->SetMonitorCam(slot, this);
-    //}
     CamType = CameraTypes::STATIC;
     type = ComponentType::Camera;
 

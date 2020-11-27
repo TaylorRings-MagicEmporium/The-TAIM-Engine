@@ -209,7 +209,6 @@
     <ClInclude Include="Graphics_System.h" />
     <ClInclude Include="Model_Registry.h" />
     <ClInclude Include="Profiling_System.h" />
-    <ClInclude Include="TMaths.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Input_System.h" />
     <ClInclude Include="Mesh.h" />

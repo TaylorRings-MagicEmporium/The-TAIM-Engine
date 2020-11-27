@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+
+// used to generate debugging lines for the Physics_System
 class Bullet_Debug_Drawer : public btIDebugDraw
 {
 private:

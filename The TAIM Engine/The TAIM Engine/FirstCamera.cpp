@@ -9,8 +9,6 @@ void FirstCamera::Setup() {
 	CamType = CameraTypes::FIRST;
 }
 void FirstCamera::UpdateCamera(glm::vec2 size) {
-	//view = glm::lookAt(GO->pos, target, glm::vec3(0, 1, 0));
-	//view = glm::translate(glm::mat4(1), GO->pos + Offset);
 	view *= glm::toMat4(GO->transform.Rotation);
 	EyePoint = GO->transform.position + (Offset * GO->transform.Rotation);
 	CamDirection = glm::vec3(0, 0, -1) * GO->transform.position;
