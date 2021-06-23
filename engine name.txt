@@ -7,5 +7,5 @@ TAIM Engine
 
 The
 Awsome
-In
+Independent
 Modular
